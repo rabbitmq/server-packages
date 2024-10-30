@@ -2,9 +2,14 @@ name: "4.1.x beta release"
 on:
   workflow_dispatch:
     inputs:
-      version:
-        description: "Version used at build time"
+      base_version:
+        description: "Base version (e.g. 4.1.0) used at build time"
         required: true
+        default: "4.1.0"
+      preview_version:
+        description: "Preview version (e.g. beta) used at build time"
+        required: true
+        default: "beta"
 
 jobs:
   source_tarball:
@@ -27,4 +32,21 @@ jobs:
       - name: Generate source tarball
         run: |
           cd rabbitmq-server
-          gmake source-dist PROJECT_VERSION=${{ github.event.inputs.version }}
+          gmake source-dist PROJECT_VERSION=${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1
+      - name: Store source tarball
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}-source-tarball
+          path: "PACKAGES/*"
+  generic_binary_package:
+    runs-on: ubuntu-latest
+    container:
+      image: rabbitmqdevenv/build-env-26.2
+    steps:
+      - name: Fetch source tarball
+        uses: actions/download-artifact@v4
+        name: ${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}-source-tarball
+        path: ./artifacts
+      - name: Build generic binary package
+        run: |
+          gmake SOURCE_DIST_FILE=./artifacts/${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1.tar.xz PROJECT_VERSION=${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1
