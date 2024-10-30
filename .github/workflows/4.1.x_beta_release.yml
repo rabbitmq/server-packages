@@ -1,0 +1,30 @@
+name: "Beta release"
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version used at build time"
+        required: true
+
+jobs:
+  source_tarball:
+    runs-on: ubuntu-latest
+    container:
+      image: rabbitmqdevenv/build-env-26.2
+    steps:
+      - name: Clone rabbitmq/rabbitmq-server
+        uses: actions/checkout@v4
+        with:
+          repository: rabbitmq/rabbitmq-server
+          ref: main
+          path: rabbitmq-server
+      - name: Clone rabbitmq/server-packages
+        uses: actions/checkout@v4
+        with:
+          repository: rabbitmq/server-packages
+          ref: main
+          path: server-packages
+      - name: Generate source tarball
+        run: |
+          cd rabbitmq-server
+          gmake source-dist PROJECT_VERSION=${{ github.event.inputs.version }}
