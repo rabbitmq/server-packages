@@ -89,4 +89,4 @@ jobs:
         run: |
           cd rabbitmq-packaging
           gmake package-deb PROJECT_VERSION=${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1 SOURCE_DIST_FILE=../rabbitmq-server/PACKAGES/rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1.tar.xz RABBITMQ_PACKAGING_REPO=. DEBIAN_VERSION="12" SAVE_CHANGELOG=yes INSTALL_BUILD_DEPS=no
-          lha ../PACKAGES/
+          ls -lha ../PACKAGES/
