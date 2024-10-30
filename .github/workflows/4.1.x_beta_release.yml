@@ -45,8 +45,9 @@ jobs:
     steps:
       - name: Fetch source tarball
         uses: actions/download-artifact@v4
-        name: ${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}-source-tarball
-        path: ./artifacts
+        with:
+          name: ${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}-source-tarball
+          path: ./artifacts
       - name: Build generic binary package
         run: |
           gmake SOURCE_DIST_FILE=./artifacts/${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1.tar.xz PROJECT_VERSION=${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1
