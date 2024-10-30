@@ -45,12 +45,20 @@ jobs:
     container:
       image: rabbitmqdevenv/build-env-26.2
     steps:
+      - name: Clone rabbitmq/rabbitmq-server
+        uses: actions/checkout@v4
+        with:
+          repository: rabbitmq/rabbitmq-server
+          ref: main
+          path: rabbitmq-server
       - name: Fetch source tarball
         uses: actions/download-artifact@v4
         with:
           name: rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}-source-tarball
-          path: ./artifacts
+          path: ./rabbitmq-server/PACKAGES
       - name: Build generic binary package
         run: |
-          ls -lha ./artifacts
-          gmake SOURCE_DIST_FILE=./artifacts/rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1.tar.xz PROJECT_VERSION=${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1
+          cd rabbitmq-server
+          ls -lha .
+          ls -lha ./PACKAGES
+          gmake SOURCE_DIST_FILE=./PACKAGES/rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1.tar.xz PROJECT_VERSION=${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1
