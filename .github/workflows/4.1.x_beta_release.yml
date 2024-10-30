@@ -37,7 +37,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}-source-tarball
-          path: "PACKAGES/*"
+          path: "rabbitmq-server/PACKAGES/*"
   generic_binary_package:
     needs: source_tarball
     runs-on: ubuntu-latest
