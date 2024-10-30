@@ -36,7 +36,7 @@ jobs:
       - name: Store source tarball
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}-source-tarball
+          name: rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}-source-tarball
           path: "rabbitmq-server/PACKAGES/*"
           retention-days: 2
   generic_binary_package:
@@ -48,9 +48,9 @@ jobs:
       - name: Fetch source tarball
         uses: actions/download-artifact@v4
         with:
-          name: ${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}-source-tarball
+          name: rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}-source-tarball
           path: ./artifacts
       - name: Build generic binary package
         run: |
           ls -lha ./artifacts
-          gmake SOURCE_DIST_FILE=./artifacts/${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1.tar.xz PROJECT_VERSION=${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1
+          gmake SOURCE_DIST_FILE=./artifacts/rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1.tar.xz PROJECT_VERSION=${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1
