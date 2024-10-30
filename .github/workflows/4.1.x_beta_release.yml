@@ -62,3 +62,5 @@ jobs:
           ls -lha .
           ls -lha ./PACKAGES
           gmake SOURCE_DIST_FILE=./PACKAGES/rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1.tar.xz PROJECT_VERSION=${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1
+          ls -lha ./PACKAGES
+
