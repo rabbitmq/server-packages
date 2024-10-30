@@ -39,6 +39,7 @@ jobs:
           name: ${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}-source-tarball
           path: "PACKAGES/*"
   generic_binary_package:
+    needs: source_tarball
     runs-on: ubuntu-latest
     container:
       image: rabbitmqdevenv/build-env-26.2
