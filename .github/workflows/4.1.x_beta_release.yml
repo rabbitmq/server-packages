@@ -38,6 +38,7 @@ jobs:
         with:
           name: ${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}-source-tarball
           path: "rabbitmq-server/PACKAGES/*"
+          retention-days: 2
   generic_binary_package:
     needs: source_tarball
     runs-on: ubuntu-latest
@@ -51,4 +52,5 @@ jobs:
           path: ./artifacts
       - name: Build generic binary package
         run: |
+          ls -lha ./artifacts
           gmake SOURCE_DIST_FILE=./artifacts/${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1.tar.xz PROJECT_VERSION=${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1
