@@ -116,6 +116,5 @@ jobs:
       - name: Build RPM package
         run: |
           cd rabbitmq-packaging
-          gmake package-deb PROJECT_VERSION=${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1 SOURCE_DIST_FILE=../rabbitmq-server/PACKAGES/rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1.tar.xz RABBITMQ_PACKAGING_REPO=. DEBIAN_VERSION="12" SAVE_CHANGELOG=yes INSTALL_BUILD_DEPS=no
           gmake package-rpm-rhel8 RABBITMQ_VERSION=${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1 PROJECT_VERSION=${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1 RABBITMQ_PACKAGING_REPO=. RPM_VERSION="${{ github.event.inputs.base_version }}~${{ github.event.inputs.preview_version }}.1" SOURCE_DIST_FILE=../rabbitmq-server/PACKAGES/rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1.tar.xz
           ls -lha ../PACKAGES/
