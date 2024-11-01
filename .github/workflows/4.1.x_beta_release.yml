@@ -146,5 +146,5 @@ jobs:
           cd rabbitmq-packaging
           # IMPORTANT: PRODUCT_VERSION must use the A.B.C.D format where every component is a positive integer.
           #            This is an MSI and makensis build tooling requirement.
-          gmake package-windows RABBITMQ_PACKAGING_REPO="." SOURCE_DIST_FILE=../rabbitmq-server/PACKAGES/rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1.tar.xz VERSION=${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1.1 PRODUCT_VERSION=${{ github.event.inputs.base_version }}.1
+          gmake package-windows RABBITMQ_PACKAGING_REPO="." SOURCE_DIST_FILE=../rabbitmq-server/PACKAGES/rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1.tar.xz VERSION=${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1 PRODUCT_VERSION=${{ github.event.inputs.base_version }}.1
           ls -lha ../PACKAGES/
