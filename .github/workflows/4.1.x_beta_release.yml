@@ -60,7 +60,9 @@ jobs:
         run: |
           cd rabbitmq-server
           ls -lha ./PACKAGES
-          gmake package-generic-unix TARBALL_SUFFIX=generic-unix SOURCE_DIST_FILE=./PACKAGES/rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1.tar.xz PROJECT_VERSION=${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1
+          gmake package-generic-unix TARBALL_SUFFIX=generic-unix \
+                                     SOURCE_DIST_FILE=./PACKAGES/rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1.tar.xz \
+                                     PROJECT_VERSION=${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1
           ls -lha ./PACKAGES
   debian_package:
     needs: source_tarball
@@ -88,7 +90,12 @@ jobs:
       - name: Build Debian package
         run: |
           cd rabbitmq-packaging
-          gmake package-deb PROJECT_VERSION=${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1 SOURCE_DIST_FILE=../rabbitmq-server/PACKAGES/rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1.tar.xz RABBITMQ_PACKAGING_REPO=. DEBIAN_VERSION="${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1" SAVE_CHANGELOG=yes INSTALL_BUILD_DEPS=no
+          gmake package-deb PROJECT_VERSION=${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1 \
+                            SOURCE_DIST_FILE=../rabbitmq-server/PACKAGES/rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1.tar.xz \
+                            RABBITMQ_PACKAGING_REPO=. \
+                            DEBIAN_VERSION="${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1" \
+                            SAVE_CHANGELOG=yes \
+                            INSTALL_BUILD_DEPS=no
           ls -lha ../PACKAGES/
   rpm_package:
     needs: source_tarball
@@ -116,7 +123,11 @@ jobs:
       - name: Build RPM package
         run: |
           cd rabbitmq-packaging
-          gmake package-rpm-rhel8 RABBITMQ_VERSION=${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1 PROJECT_VERSION=${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1 RABBITMQ_PACKAGING_REPO=. RPM_VERSION="${{ github.event.inputs.base_version }}~${{ github.event.inputs.preview_version }}.1" SOURCE_DIST_FILE=../rabbitmq-server/PACKAGES/rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1.tar.xz
+          gmake package-rpm-rhel8 RABBITMQ_VERSION=${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1 \
+                                  PROJECT_VERSION=${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1 \
+                                  RABBITMQ_PACKAGING_REPO=. \
+                                  RPM_VERSION="${{ github.event.inputs.base_version }}~${{ github.event.inputs.preview_version }}.1" \
+                                  SOURCE_DIST_FILE=../rabbitmq-server/PACKAGES/rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1.tar.xz
           ls -lha ../PACKAGES/
   windows_packages:
     needs: source_tarball
@@ -141,10 +152,13 @@ jobs:
         with:
           name: rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}-source-tarball
           path: ./rabbitmq-server/PACKAGES
-      - name: Build RPM package
+      - name: Build Windows binary package and NSIS-based installer
         run: |
           cd rabbitmq-packaging
           # IMPORTANT: PRODUCT_VERSION must use the A.B.C.D format where every component is a positive integer.
           #            This is an MSI and makensis build tooling requirement.
-          gmake package-windows RABBITMQ_PACKAGING_REPO="." SOURCE_DIST_FILE=../rabbitmq-server/PACKAGES/rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1.tar.xz VERSION=${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1 PRODUCT_VERSION=${{ github.event.inputs.base_version }}.1
+          gmake package-windows RABBITMQ_PACKAGING_REPO="." \
+                                SOURCE_DIST_FILE=../rabbitmq-server/PACKAGES/rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1.tar.xz \
+                                VERSION=${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1 \
+                                PRODUCT_VERSION=${{ github.event.inputs.base_version }}.1
           ls -lha ../PACKAGES/
