@@ -67,7 +67,7 @@ jobs:
       - name: Store generic binary build
         uses: actions/upload-artifact@v4
         with:
-          name: rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}-generic-unix
+          name: rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1-generic-unix
           path: "rabbitmq-server/PACKAGES/rabbitmq-server-generic-unix-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1.tar.xz"
           retention-days: 2
   debian_package:
@@ -107,7 +107,7 @@ jobs:
       - name: Store Debian package and build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}-debian-package
+          name: rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1-debian-package
           path: "PACKAGES/*"
           retention-days: 2
   rpm_package:
@@ -146,7 +146,7 @@ jobs:
       - name: Store RPM package and build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}-rpm-package
+          name: rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1-rpm-package
           path: "PACKAGES/*"
           retention-days: 2
   windows_packages:
@@ -186,6 +186,6 @@ jobs:
       - name: Store Windows binary package and installer
         uses: actions/upload-artifact@v4
         with:
-          name: rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}-windows-package
+          name: rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1-windows-package
           path: "PACKAGES/*"
           retention-days: 2
