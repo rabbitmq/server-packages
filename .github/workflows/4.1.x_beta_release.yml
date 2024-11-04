@@ -44,12 +44,12 @@ jobs:
     steps:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
-      - name: Conditionall sets FULL_VERSION for a prerelease
+      - name: Conditionall sets env.FULL_VERSION for a prerelease
         run: |
           echo "Pre-release? ${{ inputs.prerelease }}"
           echo "FULL_VERSION=${{ env.FULL_PRERELEASE_VERSION }}" >> $GITHUB_ENV
         if: ${{ inputs.prerelease == 'true' || inputs.prerelease == true }}
-      - name: Conditionally sets FULL_VERSION for a final release
+      - name: Conditionally sets env.FULL_VERSION for a final release
         run: |
           echo "Pre-release? ${{ inputs.prerelease }}"
           echo "FULL_VERSION=${{ env.FULL_RELEASE_VERSION }}" >> $GITHUB_ENV
@@ -76,18 +76,6 @@ jobs:
           name: rabbitmq-server-${{ env.FULL_VERSION }}-source-tarball
           path: "rabbitmq-server/PACKAGES/*"
           retention-days: 2
-      - name: Create a GitHub release draft
-        id: create_gh_release_draft
-        uses: "marvinpinto/action-automatic-releases@latest"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          automatic_release_tag: v${{ env.FULL_VERSION }}
-          title: RabbitMQ ${{ env.FULL_VERSION }}
-          draft: true
-          prerelease: ${{ inputs.prerelease == true || inputs.prerelease == 'true' }}
-          files: "rabbitmq-server/PACKAGES/*"
   generic_binary_package:
     needs: source_tarball
     runs-on: ubuntu-latest
@@ -191,15 +179,18 @@ jobs:
     steps:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
-      - name: Conditionall sets FULL_VERSION for a prerelease
+      - name: Conditionall sets versions for a prerelease
         run: |
           echo "Pre-release? ${{ inputs.prerelease }}"
           echo "FULL_VERSION=${{ env.FULL_PRERELEASE_VERSION }}" >> $GITHUB_ENV
+          # RPM needs a tilde ~ for prelease version separator
+          echo "RPM_VERSION=${{ github.event.inputs.base_version }}~${{ github.event.inputs.prerelease_kind }}.${{ inputs.prerelease_identifier }}" >> $GITHUB_ENV
         if: ${{ inputs.prerelease == 'true' || inputs.prerelease == true }}
-      - name: Conditionally sets FULL_VERSION for a final release
+      - name: Conditionally sets versions for a final release
         run: |
           echo "Pre-release? ${{ inputs.prerelease }}"
           echo "FULL_VERSION=${{ env.FULL_RELEASE_VERSION }}" >> $GITHUB_ENV
+          echo "RPM_VERSION=${{ env.FULL_RELEASE_VERSION }}" >> $GITHUB_ENV
         if: ${{ inputs.prerelease == 'false' || inputs.prerelease == false }}
       - name: Clone rabbitmq/rabbitmq-server
         uses: actions/checkout@v4
@@ -224,7 +215,7 @@ jobs:
           gmake package-rpm-rhel8 RABBITMQ_VERSION=${{ env.FULL_VERSION }} \
                                   PROJECT_VERSION=${{ env.FULL_VERSION }} \
                                   RABBITMQ_PACKAGING_REPO=. \
-                                  RPM_VERSION="${{ github.event.inputs.base_version }}~${{ github.event.inputs.prerelease_kind }}.1" \
+                                  RPM_VERSION="${{ env.RPM_VERSION }}" \
                                   SOURCE_DIST_FILE=../rabbitmq-server/PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.tar.xz
           cd ..
           ls -lha PACKAGES/
