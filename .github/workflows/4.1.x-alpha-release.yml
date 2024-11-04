@@ -10,7 +10,7 @@ on:
         default: "1"
 
 jobs:
-  reuse:
+  release:
     uses: "./.github/workflows/reusable-release-workflow.yml"
     with:
       base_version: "4.1.0"
