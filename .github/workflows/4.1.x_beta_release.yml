@@ -328,6 +328,6 @@ jobs:
           automatic_release_tag: v${{ env.FULL_VERSION }}
           title: RabbitMQ ${{ env.FULL_VERSION }}
           draft: false
-          prerelease: $${{ inputs.prerelease == true || inputs.prerelease == 'true' }}
+          prerelease: ${{ inputs.prerelease == true || inputs.prerelease == 'true' }}
           files: ./artifacts/*
 
