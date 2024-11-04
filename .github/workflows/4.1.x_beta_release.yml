@@ -44,7 +44,7 @@ jobs:
     steps:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
-      - name: Sets FULL_VERSION for a prerelease
+      - name: Conditionall sets FULL_VERSION for a prerelease
         run: |
           echo "Pre-release? ${{ inputs.prerelease }}"
           echo "FULL_VERSION=${{ env.FULL_PRERELEASE_VERSION }}" >> $GITHUB_ENV
@@ -84,7 +84,7 @@ jobs:
     steps:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
-      - name: Sets FULL_VERSION for a prerelease
+      - name: Conditionall sets FULL_VERSION for a prerelease
         run: |
           echo "Pre-release? ${{ inputs.prerelease }}"
           echo "FULL_VERSION=${{ env.FULL_PRERELEASE_VERSION }}" >> $GITHUB_ENV
@@ -127,7 +127,7 @@ jobs:
     steps:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
-      - name: Sets FULL_VERSION for a prerelease
+      - name: Conditionall sets FULL_VERSION for a prerelease
         run: |
           echo "Pre-release? ${{ inputs.prerelease }}"
           echo "FULL_VERSION=${{ env.FULL_PRERELEASE_VERSION }}" >> $GITHUB_ENV
@@ -179,7 +179,7 @@ jobs:
     steps:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
-      - name: Sets FULL_VERSION for a prerelease
+      - name: Conditionall sets FULL_VERSION for a prerelease
         run: |
           echo "Pre-release? ${{ inputs.prerelease }}"
           echo "FULL_VERSION=${{ env.FULL_PRERELEASE_VERSION }}" >> $GITHUB_ENV
@@ -230,7 +230,7 @@ jobs:
     steps:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
-      - name: Sets FULL_VERSION for a prerelease
+      - name: Conditionall sets FULL_VERSION for a prerelease
         run: |
           echo "Pre-release? ${{ inputs.prerelease }}"
           echo "FULL_VERSION=${{ env.FULL_PRERELEASE_VERSION }}" >> $GITHUB_ENV
@@ -281,7 +281,7 @@ jobs:
     steps:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
-      - name: Sets FULL_VERSION for a prerelease
+      - name: Conditionall sets FULL_VERSION for a prerelease
         run: |
           echo "Pre-release? ${{ inputs.prerelease }}"
           echo "FULL_VERSION=${{ env.FULL_PRERELEASE_VERSION }}" >> $GITHUB_ENV
