@@ -10,6 +10,17 @@ on:
         description: "Preview version (e.g. beta) used at build time"
         required: true
         default: "beta"
+      preview_identifier:
+        description: "Preview version (e.g. beta) used at build time"
+        required: true
+        default: "1"
+
+env:
+  FULL_VERSION: ${{ inputs.base_version }}-${{ inputs.preview_version }}.${{ inputs.preview_identifier }}
+  # makensis only accepts version numbers in the A.B.C.D format where every segment
+  # is a positive integer. This means that for previews, the version can be {base}.{identifier}
+  # or just {base}
+  WINDOWS_INSTALLER_VERSION: ${{ inputs.base_version }}.${{ inputs.preview_identifier }}
 
 jobs:
   source_tarball:
@@ -32,11 +43,11 @@ jobs:
       - name: Generate source tarball
         run: |
           cd rabbitmq-server
-          gmake source-dist PROJECT_VERSION=${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1
+          gmake source-dist PROJECT_VERSION=${{ env.FULL_VERSION }}
       - name: Store source tarball
         uses: actions/upload-artifact@v4
         with:
-          name: rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1-source-tarball
+          name: rabbitmq-server-${{ env.FULL_VERSION }}-source-tarball
           path: "rabbitmq-server/PACKAGES/*"
           retention-days: 2
   generic_binary_package:
@@ -54,21 +65,21 @@ jobs:
       - name: Fetch source tarball
         uses: actions/download-artifact@v4
         with:
-          name: rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1-source-tarball
+          name: rabbitmq-server-${{ env.FULL_VERSION }}-source-tarball
           path: ./rabbitmq-server/PACKAGES
       - name: Build generic binary package
         run: |
           cd rabbitmq-server
           ls -lha ./PACKAGES
           gmake package-generic-unix TARBALL_SUFFIX=generic-unix \
-                                     SOURCE_DIST_FILE=./PACKAGES/rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1.tar.xz \
-                                     PROJECT_VERSION=${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1
+                                     SOURCE_DIST_FILE=./PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.tar.xz \
+                                     PROJECT_VERSION=${{ env.FULL_VERSION }}
           ls -lha ./PACKAGES
       - name: Store generic binary build
         uses: actions/upload-artifact@v4
         with:
-          name: rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1-generic-unix
-          path: "rabbitmq-server/PACKAGES/rabbitmq-server-generic-unix-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1.tar.xz"
+          name: rabbitmq-server-${{ env.FULL_VERSION }}-generic-unix
+          path: "rabbitmq-server/PACKAGES/rabbitmq-server-generic-unix-${{ env.FULL_VERSION }}.tar.xz"
           retention-days: 2
   debian_package:
     needs: source_tarball
@@ -91,15 +102,15 @@ jobs:
       - name: Fetch source tarball
         uses: actions/download-artifact@v4
         with:
-          name: rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1-source-tarball
+          name: rabbitmq-server-${{ env.FULL_VERSION }}-source-tarball
           path: ./rabbitmq-server/PACKAGES
       - name: Build Debian package
         run: |
           cd rabbitmq-packaging
-          gmake package-deb PROJECT_VERSION=${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1 \
-                            SOURCE_DIST_FILE=../rabbitmq-server/PACKAGES/rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1.tar.xz \
+          gmake package-deb PROJECT_VERSION=${{ env.FULL_VERSION }} \
+                            SOURCE_DIST_FILE=../rabbitmq-server/PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.tar.xz \
                             RABBITMQ_PACKAGING_REPO=. \
-                            DEBIAN_VERSION="${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1" \
+                            DEBIAN_VERSION="${{ env.FULL_VERSION }}" \
                             SAVE_CHANGELOG=yes \
                             INSTALL_BUILD_DEPS=no
           cd ..
@@ -107,7 +118,7 @@ jobs:
       - name: Store Debian package and build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1-debian-package
+          name: rabbitmq-server-${{ env.FULL_VERSION }}-debian-package
           path: "PACKAGES/*"
           retention-days: 2
   rpm_package:
@@ -131,22 +142,22 @@ jobs:
       - name: Fetch source tarball
         uses: actions/download-artifact@v4
         with:
-          name: rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1-source-tarball
+          name: rabbitmq-server-${{ env.FULL_VERSION }}-source-tarball
           path: ./rabbitmq-server/PACKAGES
       - name: Build RPM package
         run: |
           cd rabbitmq-packaging
-          gmake package-rpm-rhel8 RABBITMQ_VERSION=${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1 \
-                                  PROJECT_VERSION=${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1 \
+          gmake package-rpm-rhel8 RABBITMQ_VERSION=${{ env.FULL_VERSION }} \
+                                  PROJECT_VERSION=${{ env.FULL_VERSION }} \
                                   RABBITMQ_PACKAGING_REPO=. \
                                   RPM_VERSION="${{ github.event.inputs.base_version }}~${{ github.event.inputs.preview_version }}.1" \
-                                  SOURCE_DIST_FILE=../rabbitmq-server/PACKAGES/rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1.tar.xz
+                                  SOURCE_DIST_FILE=../rabbitmq-server/PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.tar.xz
           cd ..
           ls -lha PACKAGES/
       - name: Store RPM package and build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1-rpm-package
+          name: rabbitmq-server-${{ env.FULL_VERSION }}-rpm-package
           path: "PACKAGES/*"
           retention-days: 2
   windows_packages:
@@ -170,7 +181,7 @@ jobs:
       - name: Fetch source tarball
         uses: actions/download-artifact@v4
         with:
-          name: rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1-source-tarball
+          name: rabbitmq-server-${{ env.FULL_VERSION }}-source-tarball
           path: ./rabbitmq-server/PACKAGES
       - name: Build Windows binary package and NSIS-based installer
         run: |
@@ -178,14 +189,14 @@ jobs:
           # IMPORTANT: PRODUCT_VERSION must use the A.B.C.D format where every component is a positive integer.
           #            This is an MSI and makensis build tooling requirement.
           gmake package-windows RABBITMQ_PACKAGING_REPO="." \
-                                SOURCE_DIST_FILE=../rabbitmq-server/PACKAGES/rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1.tar.xz \
-                                VERSION=${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1 \
-                                PRODUCT_VERSION=${{ github.event.inputs.base_version }}.1
+                                SOURCE_DIST_FILE=../rabbitmq-server/PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.tar.xz \
+                                VERSION=${{ env.FULL_VERSION }} \
+                                PRODUCT_VERSION=${{ env.WINDOWS_INSTALLER_VERSION }}
           cd ..
           ls -lha PACKAGES/
       - name: Store Windows binary package and installer
         uses: actions/upload-artifact@v4
         with:
-          name: rabbitmq-server-${{ github.event.inputs.base_version }}-${{ github.event.inputs.preview_version }}.1-windows-package
+          name: rabbitmq-server-${{ env.FULL_VERSION }}-windows-package
           path: "PACKAGES/*"
           retention-days: 2
