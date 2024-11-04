@@ -44,11 +44,11 @@ jobs:
       - name: Sets FULL_VERSION for a prerelease
         run: |
           echo "FULL_VERSION=${{ env.FULL_PRERELEASE_VERSION }}" >> $GITHUB_ENV
-        if: ${{ inputs.prerelease != 'true' }}
+        if: ${{ inputs.prerelease == 'false' || inputs.prerelease == false }}
       - name: Sets FULL_VERSION for a final release
         run: |
           echo "FULL_VERSION=${{ env.FULL_RELEASE_VERSION }}" >> $GITHUB_ENV
-        if: ${{ inputs.prerelease == 'true' }}
+        if: ${{ inputs.prerelease || inputs.prerelease == 'true' }}
       - name: Clone rabbitmq/rabbitmq-server
         uses: actions/checkout@v4
         with:
@@ -82,11 +82,11 @@ jobs:
       - name: Sets FULL_VERSION for a prerelease
         run: |
           echo "FULL_VERSION=${{ env.FULL_PRERELEASE_VERSION }}" >> $GITHUB_ENV
-        if: ${{ inputs.prerelease != 'true' }}
+        if: ${{ inputs.prerelease == 'false' || inputs.prerelease == false }}
       - name: Sets FULL_VERSION for a final release
         run: |
           echo "FULL_VERSION=${{ env.FULL_RELEASE_VERSION }}" >> $GITHUB_ENV
-        if: ${{ inputs.prerelease == 'true' }}
+        if: ${{ inputs.prerelease || inputs.prerelease == 'true' }}
       - name: Clone rabbitmq/rabbitmq-server
         uses: actions/checkout@v4
         with:
@@ -123,11 +123,11 @@ jobs:
       - name: Sets FULL_VERSION for a prerelease
         run: |
           echo "FULL_VERSION=${{ env.FULL_PRERELEASE_VERSION }}" >> $GITHUB_ENV
-        if: ${{ inputs.prerelease != 'true' }}
+        if: ${{ inputs.prerelease == 'false' || inputs.prerelease == false }}
       - name: Sets FULL_VERSION for a final release
         run: |
           echo "FULL_VERSION=${{ env.FULL_RELEASE_VERSION }}" >> $GITHUB_ENV
-        if: ${{ inputs.prerelease == 'true' }}
+        if: ${{ inputs.prerelease || inputs.prerelease == 'true' }}
       - name: Clone rabbitmq/rabbitmq-server
         uses: actions/checkout@v4
         with:
@@ -173,11 +173,11 @@ jobs:
       - name: Sets FULL_VERSION for a prerelease
         run: |
           echo "FULL_VERSION=${{ env.FULL_PRERELEASE_VERSION }}" >> $GITHUB_ENV
-        if: ${{ inputs.prerelease != 'true' }}
+        if: ${{ inputs.prerelease == 'false' || inputs.prerelease == false }}
       - name: Sets FULL_VERSION for a final release
         run: |
           echo "FULL_VERSION=${{ env.FULL_RELEASE_VERSION }}" >> $GITHUB_ENV
-        if: ${{ inputs.prerelease == 'true' }}
+        if: ${{ inputs.prerelease || inputs.prerelease == 'true' }}
       - name: Clone rabbitmq/rabbitmq-server
         uses: actions/checkout@v4
         with:
@@ -222,11 +222,11 @@ jobs:
       - name: Sets FULL_VERSION for a prerelease
         run: |
           echo "FULL_VERSION=${{ env.FULL_PRERELEASE_VERSION }}" >> $GITHUB_ENV
-        if: ${{ inputs.prerelease != 'true' }}
+        if: ${{ inputs.prerelease == 'false' || inputs.prerelease == false }}
       - name: Sets FULL_VERSION for a final release
         run: |
           echo "FULL_VERSION=${{ env.FULL_RELEASE_VERSION }}" >> $GITHUB_ENV
-        if: ${{ inputs.prerelease == 'true' }}
+        if: ${{ inputs.prerelease || inputs.prerelease == 'true' }}
       - name: Clone rabbitmq/rabbitmq-server
         uses: actions/checkout@v4
         with:
@@ -271,11 +271,11 @@ jobs:
       - name: Sets FULL_VERSION for a prerelease
         run: |
           echo "FULL_VERSION=${{ env.FULL_PRERELEASE_VERSION }}" >> $GITHUB_ENV
-        if: ${{ inputs.prerelease != 'true' }}
+        if: ${{ inputs.prerelease == 'false' || inputs.prerelease == false }}
       - name: Sets FULL_VERSION for a final release
         run: |
           echo "FULL_VERSION=${{ env.FULL_RELEASE_VERSION }}" >> $GITHUB_ENV
-        if: ${{ inputs.prerelease == 'true' }}
+        if: ${{ inputs.prerelease || inputs.prerelease == 'true' }}
       - name: Fetch source tarball
         uses: actions/download-artifact@v4
         with:
