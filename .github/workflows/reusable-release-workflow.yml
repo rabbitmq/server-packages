@@ -26,6 +26,7 @@ on:
         default: "1"
 
 env:
+  GITHUB_TOKEN: ${{ secrets.RABBITMQCI_BOT_TOKEN }}
   # Overriden conditionally with a step for prereleases,
   # set here for YAML schema validation
   FULL_VERSION: ${{ inputs.base_version }}
