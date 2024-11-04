@@ -34,17 +34,19 @@ env:
   WINDOWS_INSTALLER_VERSION: ${{ inputs.base_version }}.${{ inputs.prerelease_identifier }}
 
 jobs:
-  # Actions do not support conditional expressions in the env: section,
-  # so workaround sets FULL_VERSION
-  - name: Sets FULL_VERSION for a prerelease
-    run: |
-      echo "FULL_VERSION=${{ env.FULL_PRERELEASE_VERSION }}" >> $GITHUB_ENV
-    if: ${{ inputs.prerelease != 'true' }}
-  - name: Sets FULL_VERSION for a final release
-    run: |
-      echo "FULL_VERSION=${{ env.FULL_RELEASE_VERSION }}" >> $GITHUB_ENV
-    if: ${{ inputs.prerelease == 'true' }}
-
+  set_conditional_env_vars:
+    runs-on: ubuntu-latest
+    steps:
+      # Actions do not support conditional expressions in the env: section,
+      # so workaround sets FULL_VERSION
+      - name: Sets FULL_VERSION for a prerelease
+        run: |
+          echo "FULL_VERSION=${{ env.FULL_PRERELEASE_VERSION }}" >> $GITHUB_ENV
+        if: ${{ inputs.prerelease != 'true' }}
+      - name: Sets FULL_VERSION for a final release
+        run: |
+          echo "FULL_VERSION=${{ env.FULL_RELEASE_VERSION }}" >> $GITHUB_ENV
+        if: ${{ inputs.prerelease == 'true' }}
   source_tarball:
     runs-on: ubuntu-latest
     container:
