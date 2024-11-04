@@ -11,7 +11,29 @@ unless you plan to regularly contribute to RabbitMQ and have consulted with the 
 This repository is similar in purpose to [`rabbitmq/erlang-packages`](https://github.com/rabbitmq/erlang-packages)
 but for RabbitMQ server packages.
 
-This is a work-in-progress. Nothing to see here for now, move along.
+
+## Preview Releases (Alphas, Betas, RCs)
+
+### Alphas
+
+For every merge or push to `rabbitmq/rabbitmq-server` that involves code changes, a new alpha
+release build is produced and [published as a release](https://github.com/rabbitmq/server-packages/releases) in this repository.
+
+Alpha builds are identified using a shortened commit SHA, for example, `4.1.0-alpha.af0d8206`.
+
+Alpha build artifacts are not signed and are meant to be used for development, providing feedback on pull requests,
+and so on.
+
+### Betas
+
+Beta releases are produced by manually triggering a [`4.1.x` Beta release workflow](https://github.com/rabbitmq/server-packages/actions/workflows/4.1.x-beta-release.yml).
+
+Currently this is a WIP. Beta build artifacts are not currently signed but
+they will eventually be.
+
+### Release Candates
+
+TBD
 
 
 ## License
