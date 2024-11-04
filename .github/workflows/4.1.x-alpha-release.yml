@@ -3,6 +3,9 @@ on:
   repository_dispatch:
     types: [new_4.1.x_alpha]
 
+permissions:
+  contents: write
+
 jobs:
   release:
     uses: "./.github/workflows/reusable-release-workflow.yml"

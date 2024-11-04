@@ -9,6 +9,9 @@ on:
         required: true
         default: "1"
 
+permissions:
+  contents: write
+
 jobs:
   release:
     uses: ./.github/workflows/reusable-release-workflow.yml
