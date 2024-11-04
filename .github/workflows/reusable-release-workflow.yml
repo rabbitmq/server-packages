@@ -328,9 +328,9 @@ jobs:
         id: create_gh_release
         uses: "marvinpinto/action-automatic-releases@latest"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.MK_RELEASE_AUTOMATION_TOKEN }}
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          repo_token: ${{ secrets.MK_RELEASE_AUTOMATION_TOKEN }}
           automatic_release_tag: v${{ env.FULL_VERSION }}
           title: RabbitMQ ${{ env.FULL_VERSION }}
           draft: false
