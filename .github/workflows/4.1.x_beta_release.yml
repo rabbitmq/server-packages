@@ -76,6 +76,18 @@ jobs:
           name: rabbitmq-server-${{ env.FULL_VERSION }}-source-tarball
           path: "rabbitmq-server/PACKAGES/*"
           retention-days: 2
+      - name: Create a GitHub release draft
+        id: create_gh_release_draft
+        uses: "marvinpinto/action-automatic-releases@latest"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          automatic_release_tag: v${{ env.FULL_VERSION }}
+          title: RabbitMQ ${{ env.FULL_VERSION }}
+          draft: true
+          prerelease: ${{ inputs.prerelease == true || inputs.prerelease == 'true' }}
+          files: "rabbitmq-server/PACKAGES/*"
   generic_binary_package:
     needs: source_tarball
     runs-on: ubuntu-latest
