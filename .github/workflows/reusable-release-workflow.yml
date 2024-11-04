@@ -35,7 +35,7 @@ env:
   # makensis only accepts version numbers in the A.B.C.D format where every segment
   # is a positive integer. This means that for previews, the version can be {base}.{identifier}
   # or just {base}
-  WINDOWS_INSTALLER_VERSION: ${{ inputs.base_version }}.${{ inputs.prerelease_identifier }}
+  WINDOWS_INSTALLER_VERSION: ${{ inputs.base_version }}.99
 
 jobs:
   source_tarball:
