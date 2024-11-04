@@ -3,7 +3,8 @@ on:
   repository_dispatch:
     types: [new_4.1.x_alpha]
 
-permissions: write-all
+permissions:
+  contents: write
 
 jobs:
   release:

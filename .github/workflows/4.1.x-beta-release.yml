@@ -9,7 +9,8 @@ on:
         required: true
         default: "1"
 
-permissions: write-all
+permissions:
+  contents: write
 
 jobs:
   release:

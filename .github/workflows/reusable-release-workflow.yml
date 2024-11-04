@@ -282,6 +282,8 @@ jobs:
   create_gh_release:
     needs: [source_tarball, generic_binary_package, debian_package, rpm_package, windows_packages]
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
