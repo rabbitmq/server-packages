@@ -3,14 +3,19 @@ on:
   workflow_dispatch:
     inputs:
       base_version:
+        # A base version string in the A.B.C format
+        type: string
         description: "Base version (e.g. 4.1.0) used at build time"
         required: true
         default: "4.1.0"
       preview_version:
+        type: string
         description: "Preview version (e.g. beta) used at build time"
         required: true
         default: "beta"
       preview_identifier:
+        # can be a number, a commit SHA prefix
+        type: string
         description: "Preview version (e.g. beta) used at build time"
         required: true
         default: "1"
@@ -197,6 +202,38 @@ jobs:
       - name: Store Windows binary package and installer
         uses: actions/upload-artifact@v4
         with:
+          # singular for consistency, even though it contains two packages
           name: rabbitmq-server-${{ env.FULL_VERSION }}-windows-package
           path: "PACKAGES/*"
           retention-days: 2
+  collect_artifacts:
+    needs: [source_tarball, generic_binary_package, debian_package, rpm_package, windows_packages]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch source tarball
+        uses: actions/download-artifact@v4
+        with:
+          name: rabbitmq-server-${{ env.FULL_VERSION }}-source-tarball
+          path: ./artifacts
+      - name: Fetch generic binary package
+        uses: actions/download-artifact@v4
+        with:
+          name: rabbitmq-server-${{ env.FULL_VERSION }}-generic-unix
+          path: ./artifacts
+      - name: Fetch Debian package and build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: rabbitmq-server-${{ env.FULL_VERSION }}-debian-package
+          path: ./artifacts
+      - name: Fetch RPM package
+        uses: actions/download-artifact@v4
+        with:
+          name: rabbitmq-server-${{ env.FULL_VERSION }}-rpm-package
+          path: ./artifacts
+      - name: Fetch Windows packages
+        uses: actions/download-artifact@v4
+        with:
+          name: rabbitmq-server-${{ env.FULL_VERSION }}-windows-package
+          path: ./artifacts
+      - name: List collected artifacts
+        run: ls -lha ./artifacts
