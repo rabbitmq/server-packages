@@ -26,6 +26,9 @@ on:
         default: "1"
 
 env:
+  # Overriden conditionally with a step for prereleases,
+  # set here for YAML schema validation
+  FULL_VERSION: ${{ inputs.base_version }}
   FULL_RELEASE_VERSION: ${{ inputs.base_version }}
   FULL_PRERELEASE_VERSION: ${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ inputs.prerelease_identifier }}
   # makensis only accepts version numbers in the A.B.C.D format where every segment
@@ -272,7 +275,7 @@ jobs:
           name: rabbitmq-server-${{ env.FULL_VERSION }}-windows-package
           path: "PACKAGES/*"
           retention-days: 2
-  collect_artifacts:
+  create_gh_release:
     needs: [source_tarball, generic_binary_package, debian_package, rpm_package, windows_packages]
     runs-on: ubuntu-latest
     steps:
@@ -315,3 +318,16 @@ jobs:
           path: ./artifacts
       - name: List collected artifacts
         run: ls -lha ./artifacts
+      - name: Create a GitHub release
+        id: create_gh_release
+        uses: "marvinpinto/action-automatic-releases@latest"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          automatic_release_tag: v${{ env.FULL_VERSION }}
+          title: RabbitMQ ${{ env.FULL_VERSION }}
+          draft: false
+          prerelease: $${{ inputs.prerelease == true || inputs.prerelease == 'true' }}
+          files: ./artifacts/*
+
