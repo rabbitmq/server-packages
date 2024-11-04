@@ -8,26 +8,43 @@ on:
         description: "Base version (e.g. 4.1.0) used at build time"
         required: true
         default: "4.1.0"
-      preview_version:
+      prerelease:
+        type: boolean
+        description: Is this a pre-release? (a beta, an RC)
+        required: true
+        default: true
+      prerelease_kind:
         type: string
         description: "Preview version (e.g. beta) used at build time"
-        required: true
+        required: false
         default: "beta"
-      preview_identifier:
+      prerelease_identifier:
         # can be a number, a commit SHA prefix
         type: string
         description: "Preview version (e.g. beta) used at build time"
-        required: true
+        required: false
         default: "1"
 
 env:
-  FULL_VERSION: ${{ inputs.base_version }}-${{ inputs.preview_version }}.${{ inputs.preview_identifier }}
+  FULL_RELEASE_VERSION: ${{ inputs.base_version }}
+  FULL_PRERELEASE_VERSION: ${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ inputs.prerelease_identifier }}
   # makensis only accepts version numbers in the A.B.C.D format where every segment
   # is a positive integer. This means that for previews, the version can be {base}.{identifier}
   # or just {base}
-  WINDOWS_INSTALLER_VERSION: ${{ inputs.base_version }}.${{ inputs.preview_identifier }}
+  WINDOWS_INSTALLER_VERSION: ${{ inputs.base_version }}.${{ inputs.prerelease_identifier }}
 
 jobs:
+  # Actions do not support conditional expressions in the env: section,
+  # so workaround sets FULL_VERSION
+  - name: Sets FULL_VERSION for a prerelease
+    run: |
+      echo "FULL_VERSION=${{ env.FULL_PRERELEASE_VERSION }}" >> $GITHUB_ENV
+    if: ${{ inputs.prerelease != 'true' }}
+  - name: Sets FULL_VERSION for a final release
+    run: |
+      echo "FULL_VERSION=${{ env.FULL_RELEASE_VERSION }}" >> $GITHUB_ENV
+    if: ${{ inputs.prerelease == 'true' }}
+
   source_tarball:
     runs-on: ubuntu-latest
     container:
@@ -155,7 +172,7 @@ jobs:
           gmake package-rpm-rhel8 RABBITMQ_VERSION=${{ env.FULL_VERSION }} \
                                   PROJECT_VERSION=${{ env.FULL_VERSION }} \
                                   RABBITMQ_PACKAGING_REPO=. \
-                                  RPM_VERSION="${{ github.event.inputs.base_version }}~${{ github.event.inputs.preview_version }}.1" \
+                                  RPM_VERSION="${{ github.event.inputs.base_version }}~${{ github.event.inputs.prerelease_kind }}.1" \
                                   SOURCE_DIST_FILE=../rabbitmq-server/PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.tar.xz
           cd ..
           ls -lha PACKAGES/
