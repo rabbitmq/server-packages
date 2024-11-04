@@ -8,8 +8,12 @@ unless you plan to regularly contribute to RabbitMQ and have consulted with the 
 
 ## What is This?
 
-This repository is similar in purpose to [`rabbitmq/erlang-packages`](https://github.com/rabbitmq/erlang-packages)
-but for RabbitMQ server packages.
+This repository contains Actions workflows that produce open source RabbitMQ releases. The goal of this
+automation is to eventually produce alphas (development snapshots), betas (early previews of new feature releases),
+release candidates and [signed GA releases](https://github.com/rabbitmq/rabbitmq-server/releases).
+
+It has a sibling project, [`rabbitmq/erlang-packages`](https://github.com/rabbitmq/erlang-packages), which produces
+Debian packages of Erlang and Elixir, and, in case of Erlang, RPM packages.
 
 
 ## Preview Releases (Alphas, Betas, RCs)
