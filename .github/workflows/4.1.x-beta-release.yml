@@ -1,0 +1,20 @@
+name: "4.1.x beta release"
+on:
+  workflow_dispatch:
+    inputs:
+      prerelease_identifier:
+        # can be a number, a commit SHA prefix
+        type: string
+        description: "Preview identifier (e.g. an integer or a commit SHA) to use"
+        required: true
+        default: "1"
+
+jobs:
+  call-reusable-workflow:
+    uses: ./.github/workflows/reusable-release-workflow.yml
+    with:
+      base_version: "4.1.0"
+      prerelease: true
+      prerelease_kind: "beta"
+      prerelease_identifier: ${{ inputs.prerelease_identifier }}
+    secrets: inherit

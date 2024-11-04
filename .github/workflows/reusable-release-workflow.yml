@@ -1,6 +1,6 @@
-name: "4.1.x beta release"
+name: "Reusable server release workflow"
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
       base_version:
         # A base version string in the A.B.C format
@@ -21,7 +21,7 @@ on:
       prerelease_identifier:
         # can be a number, a commit SHA prefix
         type: string
-        description: "Preview version (e.g. beta) used at build time"
+        description: "Preview identifier (e.g. an integer or a commit SHA) to use"
         required: false
         default: "1"
 
@@ -333,4 +333,3 @@ jobs:
           draft: false
           prerelease: ${{ inputs.prerelease == true || inputs.prerelease == 'true' }}
           files: ./artifacts/*
-
