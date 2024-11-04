@@ -11,12 +11,10 @@ on:
 
 jobs:
   call-reusable-workflow:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: "./.github/workflows/reusable-release-workflow.yml"
-        with:
-          base_version: "4.1.0"
-          prerelease: true
-          prerelease_kind: "alpha"
-          prerelease_identifier: ${{ inputs.prerelease_identifier }}
-        secrets: inherit
+    uses: "./.github/workflows/reusable-release-workflow.yml"
+    with:
+      base_version: "4.1.0"
+      prerelease: true
+      prerelease_kind: "alpha"
+      prerelease_identifier: ${{ inputs.prerelease_identifier }}
+    secrets: inherit
