@@ -184,7 +184,7 @@ jobs:
           echo "Pre-release? ${{ inputs.prerelease }}"
           echo "FULL_VERSION=${{ env.FULL_PRERELEASE_VERSION }}" >> $GITHUB_ENV
           # RPM needs a tilde ~ for prelease version separator
-          echo "RPM_VERSION=${{ github.event.inputs.base_version }}~${{ github.event.inputs.prerelease_kind }}.${{ inputs.prerelease_identifier }}" >> $GITHUB_ENV
+          echo "RPM_VERSION=${{ inputs.base_version }}~${{ inputs.prerelease_kind }}.${{ inputs.prerelease_identifier }}" >> $GITHUB_ENV
         if: ${{ inputs.prerelease == 'true' || inputs.prerelease == true }}
       - name: Conditionally sets versions for a final release
         run: |
@@ -325,9 +325,9 @@ jobs:
         id: create_gh_release
         uses: "marvinpinto/action-automatic-releases@latest"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.RABBITMQCI_BOT_TOKEN }}
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          repo_token: ${{ secrets.RABBITMQCI_BOT_TOKEN }}
           automatic_release_tag: v${{ env.FULL_VERSION }}
           title: RabbitMQ ${{ env.FULL_VERSION }}
           draft: false
