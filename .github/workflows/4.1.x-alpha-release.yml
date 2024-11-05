@@ -6,9 +6,6 @@ on:
 permissions:
   contents: write
 
-env:
-  RELEASE_REPOSITORY: "rabbitmq/server-packages"
-
 jobs:
   release:
     uses: "./.github/workflows/reusable-release-workflow.yml"
@@ -17,7 +14,7 @@ jobs:
       prerelease: true
       prerelease_kind: "alpha"
       prerelease_identifier: ${{ github.event.client_payload.prerelease_identifier }}
-      release_repository: ${{ env.RELEASE_REPOSITORY }}
+      release_repository: "rabbitmq/server-packages"
       release_title: ${{ github.event.client_payload.release_title }}
       release_description: ${{ github.event.client_payload.release_description }}
     secrets: inherit
