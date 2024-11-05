@@ -38,6 +38,14 @@ on:
         description: "Release description (notes)"
         required: false
         default: "A development build of open source RabbitMQ"
+      release_timestamp:
+          type: string
+          description: "Human-readable release timestamp (date and time)"
+          required: true
+      release_unix_timestamp:
+        type: string
+        description: "UNIX timestamp of the release"
+        required: true
 
 
 env:
@@ -346,7 +354,7 @@ jobs:
         with:
           token: ${{ secrets.MK_RELEASE_AUTOMATION_TOKEN }}
           repository: ${{ inputs.release_repository || env.RELEASE_REPOSITORY }}
-          tag_name: v${{ env.FULL_VERSION }}
+          tag_name: prerelease.alphas.${{ inputs.release_unix_timestamp }}.${{ inputs.prerelease_identifier }}
           name: ${{ inputs.release_title }}
           body: ${{ inputs.release_description }}
           prerelease: ${{ inputs.prerelease == true || inputs.prerelease == 'true' }}
