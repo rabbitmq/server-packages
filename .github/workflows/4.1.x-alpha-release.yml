@@ -18,3 +18,14 @@ jobs:
       release_title: ${{ github.event.client_payload.release_title }}
       release_description: ${{ github.event.client_payload.release_description }}
     secrets: inherit
+  retain_latest_n_alphas:
+    needs: [release]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete old releases
+        uses: docker://rabbitmqdevenv/delete-release-action:latest
+        with:
+          repository: "rabbitmq/server-packages"
+          token: ${{ secrets.MK_RELEASE_AUTOMATION_TOKEN }}
+          tag-filter: '^v4.1.0-alpha\..+$'
+          keep-last-n: 4

@@ -351,10 +351,4 @@ jobs:
           body: ${{ inputs.release_description }}
           prerelease: ${{ inputs.prerelease == true || inputs.prerelease == 'true' }}
           files: ./artifacts/*
-      - name: Delete old releases
-        uses: docker://rabbitmqdevenv/delete-release-action:latest
-        with:
-          repository: ${{ inputs.release_repository || env.RELEASE_REPOSITORY }}
-          token: ${{ secrets.MK_RELEASE_AUTOMATION_TOKEN }}
-          tag-filter: '^v4.1.0-alpha\..+$'
-          keep-last-n: 4
+
