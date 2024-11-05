@@ -46,6 +46,10 @@ on:
         type: string
         description: "UNIX timestamp of the release"
         required: true
+      release_tag:
+        type: string
+        description: "Release tag"
+        required: true
 
 
 env:
@@ -354,7 +358,7 @@ jobs:
         with:
           token: ${{ secrets.MK_RELEASE_AUTOMATION_TOKEN }}
           repository: ${{ inputs.release_repository || env.RELEASE_REPOSITORY }}
-          tag_name: prerelease.alphas.${{ inputs.release_unix_timestamp }}.${{ inputs.prerelease_identifier }}
+          tag_name: ${{ inputs.release_tag }}
           name: ${{ inputs.release_title }}
           body: ${{ inputs.release_description }}
           prerelease: ${{ inputs.prerelease == true || inputs.prerelease == 'true' }}
