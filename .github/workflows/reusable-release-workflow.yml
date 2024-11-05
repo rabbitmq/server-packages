@@ -24,6 +24,21 @@ on:
         description: "Preview identifier (e.g. an integer or a commit SHA) to use"
         required: false
         default: "1"
+      release_repository:
+        type: string
+        description: "Repository in which a new release will be created"
+        required: false
+        default: "rabbitmq/server-packages"
+      release_title:
+          type: string
+          description: "Release title (name)"
+          required: true
+      release_description:
+        type: string
+        description: "Release description (notes)"
+        required: false
+        default: "A development build of open source RabbitMQ"
+
 
 env:
   GITHUB_TOKEN: ${{ secrets.RABBITMQCI_BOT_TOKEN }}
@@ -36,6 +51,7 @@ env:
   # is a positive integer. This means that for previews, the version can be {base}.{identifier}
   # or just {base}
   WINDOWS_INSTALLER_VERSION: ${{ inputs.base_version }}.99
+  RELEASE_REPOSITORY: "rabbitmq/server-packages"
 
 jobs:
   source_tarball:
@@ -329,8 +345,16 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           token: ${{ secrets.MK_RELEASE_AUTOMATION_TOKEN }}
-          repository: rabbitmq/server-packages
+          repository: ${{ inputs.release_repository || env.RELEASE_REPOSITORY }}
           tag_name: v${{ env.FULL_VERSION }}
-          name: RabbitMQ ${{ env.FULL_VERSION }}
+          name: ${{ inputs.release_title }}
+          body: ${{ inputs.release_description }}
           prerelease: ${{ inputs.prerelease == true || inputs.prerelease == 'true' }}
           files: ./artifacts/*
+      - name: Delete old releases
+        uses: docker://rabbitmqdevenv/delete-release-action:latest
+        with:
+          repository: ${{ inputs.release_repository || env.RELEASE_REPOSITORY }}
+          token: ${{ secrets.MK_RELEASE_AUTOMATION_TOKEN }}
+          tag-filter: '^v4.1.0-alpha\..+$'
+          keep-last-n: 4
