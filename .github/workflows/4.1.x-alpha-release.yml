@@ -6,7 +6,8 @@ on:
 permissions:
   contents: write
 
-RELEASE_REPOSITORY: "rabbitmq/server-packages"
+env:
+  RELEASE_REPOSITORY: "rabbitmq/server-packages"
 
 jobs:
   release:
