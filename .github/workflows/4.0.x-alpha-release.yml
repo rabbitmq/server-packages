@@ -1,7 +1,7 @@
-name: "4.1.x alpha release"
+name: "4.0.x alpha release"
 on:
   repository_dispatch:
-    types: [new_4.1.x_alpha]
+    types: [new_4.0.x_alpha]
 
 permissions:
   contents: write
@@ -10,7 +10,7 @@ jobs:
   release:
     uses: "./.github/workflows/reusable-release-workflow.yml"
     with:
-      base_version: "4.1.0"
+      base_version: "4.0.4"
       prerelease: true
       prerelease_kind: "alpha"
       prerelease_identifier: ${{ github.event.client_payload.prerelease_identifier }}
@@ -19,7 +19,7 @@ jobs:
       release_description: ${{ github.event.client_payload.release_description }}
       release_timestamp: ${{ github.event.client_payload.release_timestamp }}
       release_unix_timestamp: ${{ github.event.client_payload.release_unix_timestamp }}
-      release_tag: "prerelease.41x.alphas.${{ github.event.client_payload.release_unix_timestamp }}.${{ github.event.client_payload.prerelease_identifier }}"
+      release_tag: "prerelease.40x.alphas.${{ github.event.client_payload.release_unix_timestamp }}.${{ github.event.client_payload.prerelease_identifier }}"
     secrets: inherit
   retain_latest_n_alphas:
     needs: [release]
@@ -30,5 +30,5 @@ jobs:
         with:
           repository: "rabbitmq/server-packages"
           token: ${{ secrets.MK_RELEASE_AUTOMATION_TOKEN }}
-          tag-filter: '^prerelease\.41x\.alphas\.\..+$'
+          tag-filter: '^prerelease\.40x\.alphas\..+$'
           keep-last-n: 4
