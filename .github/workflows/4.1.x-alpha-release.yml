@@ -25,7 +25,7 @@ jobs:
     needs: [release]
     runs-on: ubuntu-latest
     steps:
-      - name: Delete old releases
+      - name: Retain only N latest alpha releases
         uses: docker://rabbitmqdevenv/delete-release-action:latest
         with:
           repository: "rabbitmq/server-packages"
