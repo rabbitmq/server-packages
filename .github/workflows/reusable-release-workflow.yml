@@ -7,7 +7,7 @@ on:
         type: string
         description: "Base version (e.g. 4.1.0) used at build time"
         required: true
-        default: "4.1.0"
+        default: ${{ vars.SERVER_41_NEXT_PATCH_VERSION }}
       prerelease:
         type: boolean
         description: Is this a pre-release? (a beta, an RC)
