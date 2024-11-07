@@ -30,5 +30,5 @@ jobs:
         with:
           repository: "rabbitmq/server-packages"
           token: ${{ secrets.MK_RELEASE_AUTOMATION_TOKEN }}
-          tag-filter: '^prerelease\.41x\.alphas\..+$'
+          tag-filter: '^prerelease\.41x\.alphas'
           keep-last-n: 4
