@@ -364,6 +364,59 @@ jobs:
           body: ${{ inputs.release_description }}
           prerelease: ${{ inputs.prerelease == true || inputs.prerelease == 'true' }}
           files: ./artifacts/*
+  publish_rpm_package_to_cloudsmith:
+    if: ${{ inputs.publish_to_cloudsmith == true || inputs.publish_to_cloudsmith == 'true' }}
+    needs: [rpm_package]
+    runs-on: ubuntu-latest
+    steps:
+      # Actions do not support conditional expressions in the env: section,
+      # so workaround sets FULL_VERSION
+      - name: Conditionall sets env.FULL_VERSION for a prerelease
+        run: |
+          echo "Pre-release? ${{ inputs.prerelease }}"
+          echo "FULL_VERSION=${{ env.FULL_PRERELEASE_VERSION }}" >> $GITHUB_ENV
+        if: ${{ inputs.prerelease == 'true' || inputs.prerelease == true }}
+      - name: Conditionally sets env.FULL_VERSION for a final release
+        run: |
+          echo "Pre-release? ${{ inputs.prerelease }}"
+          echo "FULL_VERSION=${{ env.FULL_RELEASE_VERSION }}" >> $GITHUB_ENV
+        if: ${{ inputs.prerelease == 'false' || inputs.prerelease == false }}
+      - name: Fetch Debian package and build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: rabbitmq-server-${{ env.FULL_VERSION }}-debian-package
+          path: ./artifacts
+      - name: Fetch RPM package
+        uses: actions/download-artifact@v4
+        with:
+          name: rabbitmq-server-${{ env.FULL_VERSION }}-rpm-package
+          path: ./artifacts
+      - name: Publish Debian package for el/8
+        uses: docker://rabbitmqdevenv/cloudsmith-action:latest
+        with:
+          username: ${{ secrets.CLOUDSMITH_USERNAME }}
+          organization: ${{ secrets.CLOUDSMITH_ORGANIZATION }}
+          repository: ${{ inputs.cloudsmith_repository }}
+          api_key: ${{ secrets.CLOUDSMITH_API_KEY }}
+          distribution: el/8
+          action: upload
+          republish: true
+          local_path: artifacts
+          globs: '*.rpm'
+          tags: rabbitmq
+      - name: Publish Debian package for el/9
+        uses: docker://rabbitmqdevenv/cloudsmith-action:latest
+        with:
+          username: ${{ secrets.CLOUDSMITH_USERNAME }}
+          organization: ${{ secrets.CLOUDSMITH_ORGANIZATION }}
+          repository: ${{ inputs.cloudsmith_repository }}
+          api_key: ${{ secrets.CLOUDSMITH_API_KEY }}
+          distribution: el/9
+          action: upload
+          republish: true
+          local_path: artifacts
+          globs: '*.rpm'
+          tags: rabbitmq
   publish_debian_package_to_cloudsmith:
     if: ${{ inputs.publish_to_cloudsmith == true || inputs.publish_to_cloudsmith == 'true' }}
     needs: [debian_package]
