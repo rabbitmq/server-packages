@@ -386,7 +386,7 @@ jobs:
         with:
           name: rabbitmq-server-${{ env.FULL_VERSION }}-debian-package
           path: ./artifacts
-      - name: Publish Debian to Cloudsmith for ubuntu/noble
+      - name: Publish Debian package for ubuntu/noble
         uses: docker://rabbitmqdevenv/cloudsmith-action:latest
         with:
           username: ${{ secrets.CLOUDSMITH_USERNAME }}
@@ -399,7 +399,7 @@ jobs:
           local_path: artifacts
           globs: '*.deb'
           tags: rabbitmq
-      - name: Publish Debian to Cloudsmith for ubuntu/jammy
+      - name: Publish Debian package for ubuntu/jammy
         uses: docker://rabbitmqdevenv/cloudsmith-action:latest
         with:
           username: ${{ secrets.CLOUDSMITH_USERNAME }}
@@ -412,5 +412,42 @@ jobs:
           local_path: artifacts
           globs: '*.deb'
           tags: rabbitmq
-
-
+      - name: Publish Debian package for ubuntu/focal
+        uses: docker://rabbitmqdevenv/cloudsmith-action:latest
+        with:
+          username: ${{ secrets.CLOUDSMITH_USERNAME }}
+          organization: ${{ secrets.CLOUDSMITH_ORGANIZATION }}
+          repository: ${{ inputs.cloudsmith_repository }}
+          api_key: ${{ secrets.CLOUDSMITH_API_KEY }}
+          distribution: ubuntu/focal
+          action: upload
+          republish: true
+          local_path: artifacts
+          globs: '*.deb'
+          tags: rabbitmq
+      - name: Publish Debian package for debian/bookworm
+        uses: docker://rabbitmqdevenv/cloudsmith-action:latest
+        with:
+          username: ${{ secrets.CLOUDSMITH_USERNAME }}
+          organization: ${{ secrets.CLOUDSMITH_ORGANIZATION }}
+          repository: ${{ inputs.cloudsmith_repository }}
+          api_key: ${{ secrets.CLOUDSMITH_API_KEY }}
+          distribution: debian/bookworm
+          action: upload
+          republish: true
+          local_path: artifacts
+          globs: '*.deb'
+          tags: rabbitmq
+      - name: Publish Debian package for debian/bullseye
+        uses: docker://rabbitmqdevenv/cloudsmith-action:latest
+        with:
+          username: ${{ secrets.CLOUDSMITH_USERNAME }}
+          organization: ${{ secrets.CLOUDSMITH_ORGANIZATION }}
+          repository: ${{ inputs.cloudsmith_repository }}
+          api_key: ${{ secrets.CLOUDSMITH_API_KEY }}
+          distribution: debian/bullseye
+          action: upload
+          republish: true
+          local_path: artifacts
+          globs: '*.deb'
+          tags: rabbitmq
