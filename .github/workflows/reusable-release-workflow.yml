@@ -384,14 +384,14 @@ jobs:
       - name: Fetch Debian package and build artifacts
         uses: actions/download-artifact@v4
         with:
-          name: rabbitmq-server-${{ env.FULL_VERSION }}-debian-package
+          name: rabbitmq-server-${{ env.FULL_VERSION }}-rpm-package
           path: ./artifacts
       - name: Fetch RPM package
         uses: actions/download-artifact@v4
         with:
           name: rabbitmq-server-${{ env.FULL_VERSION }}-rpm-package
           path: ./artifacts
-      - name: Publish Debian package for el/8
+      - name: Publish RPM package for el/8
         uses: docker://rabbitmqdevenv/cloudsmith-action:latest
         with:
           username: ${{ secrets.CLOUDSMITH_USERNAME }}
@@ -404,7 +404,7 @@ jobs:
           local_path: artifacts
           globs: '*.rpm'
           tags: rabbitmq
-      - name: Publish Debian package for el/9
+      - name: Publish RPM package for el/9
         uses: docker://rabbitmqdevenv/cloudsmith-action:latest
         with:
           username: ${{ secrets.CLOUDSMITH_USERNAME }}
