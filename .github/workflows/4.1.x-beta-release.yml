@@ -13,13 +13,6 @@ permissions:
   contents: write
 
 jobs:
-  compute_timestamps:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Compute human-readable release timestamp
-        run: echo "PRERELEASE_TIMESTAMP=`date --rfc-3339=seconds`" >> $GITHUB_ENV
-      - name: Compute UNIX release timestamp
-        run: echo "PRERELEASE_UNIX_TIMESTAMP=`date +%s`" >> $GITHUB_ENV
   release:
     uses: ./.github/workflows/reusable-release-workflow.yml
     with:
