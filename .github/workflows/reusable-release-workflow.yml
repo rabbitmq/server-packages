@@ -38,18 +38,19 @@ on:
         description: "Release description (notes)"
         required: false
         default: "A development build of open source RabbitMQ"
-      release_timestamp:
-          type: string
-          description: "Human-readable release timestamp (date and time)"
-          required: true
-      release_unix_timestamp:
-        type: string
-        description: "UNIX timestamp of the release"
-        required: true
       release_tag:
         type: string
         description: "Release tag"
         required: true
+      publish_to_cloudsmith:
+        type: boolean
+        description: "Publish Debian and RPM packages to Cloudsmith?"
+        required: false
+        default: false
+      cloudsmith_repository:
+        type: string
+        description: Cloudsmith repository to publish Debian and RPM packages to
+        required: false
 
 
 env:
@@ -315,7 +316,7 @@ jobs:
     steps:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
-      - name: Conditionall sets FULL_VERSION for a prerelease
+      - name: Conditionally sets FULL_VERSION for a prerelease
         run: |
           echo "Pre-release? ${{ inputs.prerelease }}"
           echo "FULL_VERSION=${{ env.FULL_PRERELEASE_VERSION }}" >> $GITHUB_ENV
@@ -363,4 +364,41 @@ jobs:
           body: ${{ inputs.release_description }}
           prerelease: ${{ inputs.prerelease == true || inputs.prerelease == 'true' }}
           files: ./artifacts/*
+  publish_debian_package_to_cloudsmith:
+    if: ${{ inputs.publish_to_cloudsmith == true || inputs.publish_to_cloudsmith == 'true' }}
+    needs: [debian_package]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch Debian package and build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: rabbitmq-server-${{ env.FULL_VERSION }}-debian-package
+          path: ./artifacts
+      - name: Publish Debian to Cloudsmith for ubuntu/noble
+        uses: docker://rabbitmqdevenv/cloudsmith-action:latest
+        with:
+          username: ${{ secrets.CLOUDSMITH_USERNAME }}
+          organization: ${{ secrets.CLOUDSMITH_ORGANIZATION }}
+          repository: ${{ inputs.cloudsmith_repository }}
+          api_key: ${{ secrets.CLOUDSMITH_API_KEY }}
+          distribution: ubuntu/noble
+          action: upload
+          republish: true
+          local_path: artifacts
+          globs: '*.deb'
+          tags: rabbitmq
+      - name: Publish Debian to Cloudsmith for ubuntu/jammy
+        uses: docker://rabbitmqdevenv/cloudsmith-action:latest
+        with:
+          username: ${{ secrets.CLOUDSMITH_USERNAME }}
+          organization: ${{ secrets.CLOUDSMITH_ORGANIZATION }}
+          repository: ${{ inputs.cloudsmith_repository }}
+          api_key: ${{ secrets.CLOUDSMITH_API_KEY }}
+          distribution: ubuntu/jammy
+          action: upload
+          republish: true
+          local_path: artifacts
+          globs: '*.deb'
+          tags: rabbitmq
+
 

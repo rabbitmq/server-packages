@@ -13,6 +13,13 @@ permissions:
   contents: write
 
 jobs:
+  compute_timestamps:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Compute human-readable release timestamp
+        run: echo "PRERELEASE_TIMESTAMP=`date --rfc-3339=seconds`" >> $GITHUB_ENV
+      - name: Compute UNIX release timestamp
+        run: echo "PRERELEASE_UNIX_TIMESTAMP=`date +%s`" >> $GITHUB_ENV
   release:
     uses: ./.github/workflows/reusable-release-workflow.yml
     with:
@@ -20,4 +27,10 @@ jobs:
       prerelease: true
       prerelease_kind: "beta"
       prerelease_identifier: ${{ inputs.prerelease_identifier }}
+      release_repository: "rabbitmq/server-packages"
+      release_title: "RabbitMQ ${{ vars.SERVER_41_NEXT_PATCH_VERSION }}-beta.${{ inputs.prerelease_identifier }}"
+      release_description: "RabbitMQ ${{ vars.SERVER_41_NEXT_PATCH_VERSION }}-beta.${{ inputs.prerelease_identifier }}"
+      release_tag: "betas.41x.${{ inputs.prerelease_identifier }}"
+      publish_to_cloudsmith: true
+      cloudsmith_repository: "rabbitmq-server-prereleases"
     secrets: inherit

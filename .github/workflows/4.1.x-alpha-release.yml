@@ -20,6 +20,7 @@ jobs:
       release_timestamp: ${{ github.event.client_payload.release_timestamp }}
       release_unix_timestamp: ${{ github.event.client_payload.release_unix_timestamp }}
       release_tag: "alphas.41x.${{ github.event.client_payload.release_unix_timestamp }}.${{ github.event.client_payload.prerelease_identifier }}"
+      publish_to_cloudsmith: false
     secrets: inherit
   retain_latest_n_alphas:
     needs: [release]
