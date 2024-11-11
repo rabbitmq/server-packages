@@ -3,7 +3,13 @@ on:
   repository_dispatch:
     types: [new_4.1.x_alpha]
   workflow_dispatch:
-
+    inputs:
+      prerelease_identifier:
+        # can be a number, a commit SHA prefix
+        type: string
+        description: "Preview identifier (e.g. an integer or a commit SHA) to use"
+        required: true
+        default: "1"
 
 permissions:
   contents: write
