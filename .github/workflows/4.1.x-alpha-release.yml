@@ -35,7 +35,6 @@ jobs:
           release_description: ${{ github.event.client_payload.release_description }}
           release_tag: alphas.41x.${{ steps.compute_unix_timestamp.outputs.timestamp }}
           publish_to_cloudsmith: false
-        secrets: inherit
   retain_latest_n_alphas:
     needs: [release]
     runs-on: ubuntu-latest
