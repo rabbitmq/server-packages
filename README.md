@@ -20,24 +20,29 @@ Debian packages of Erlang and Elixir, and, in case of Erlang, RPM packages.
 
 ### Alphas
 
-For every merge or push to `rabbitmq/rabbitmq-server` that involves code changes, a new alpha
-release build is produced and [published as a release](https://github.com/rabbitmq/server-packages/releases) in this repository.
+For every merge or push to `rabbitmq/rabbitmq-server` that involves code changes, a new alpha release build, tag and preview
+release is produced and [published as a release](https://github.com/rabbitmq/server-packages/releases) in this repository.
 
 Alpha builds are identified using a shortened commit SHA, for example, `4.1.0-alpha.af0d8206`.
+Tags for alphas use a timestamp-based naming scheme. This helps keeps all releases chronologically
+ordered on the [releases page](https://github.com/rabbitmq/server-packages/releases).
 
-Alpha build artifacts are not signed and are meant to be used for development, providing feedback on pull requests,
+Only ten alpha releases are retained.
+
+Alpha build artifacts are meant to be used for development, providing feedback on pull requests,
 and so on.
 
 ### Betas
 
 Beta releases are produced by manually triggering a [`4.1.x` Beta release workflow](https://github.com/rabbitmq/server-packages/actions/workflows/4.1.x-beta-release.yml).
 
-Currently this is a WIP. Beta build artifacts are not currently signed but
-they will eventually be.
+Beta build artifacts are not currently signed but they will eventually be.
 
 ### Release Candates
 
-TBD
+RC releases are produced by manually triggering a [`4.1.x` RC release workflow](https://github.com/rabbitmq/server-packages/actions/workflows/4.1.x-rc-release.yml).
+
+RC build artifacts are not currently signed but they will eventually be.
 
 
 ## License
