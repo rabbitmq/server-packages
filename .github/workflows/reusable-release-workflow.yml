@@ -347,6 +347,9 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Get current UNIX timestamp
+        id: compute_unix_timestamp
+        uses: release-kit/unix-timestamp@v1
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
       - name: Conditionall sets env.FULL_VERSION for an alpha
