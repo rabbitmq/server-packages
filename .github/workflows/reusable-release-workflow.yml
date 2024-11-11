@@ -386,7 +386,7 @@ jobs:
         with:
           token: ${{ secrets.MK_RELEASE_AUTOMATION_TOKEN }}
           repository: ${{ inputs.release_repository || env.RELEASE_REPOSITORY }}
-          tag_name: alphas.${{  }}
+          tag_name: alphas.${{ needs.compute_unix_timestamp.outputs.timestamp }}
           name: ${{ inputs.release_title }}
           body: ${{ inputs.release_description }}
           prerelease: ${{ inputs.prerelease == true || inputs.prerelease == 'true' }}

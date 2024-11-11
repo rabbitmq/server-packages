@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  compute_timestamps:
+  compute_unix_timestamp:
     runs-on: ubuntu-latest
     steps:
       - name: Get current UNIX timestamp
@@ -31,7 +31,7 @@ jobs:
       release_repository: "rabbitmq/server-packages"
       release_title: ${{ github.event.client_payload.release_title }}
       release_description: ${{ github.event.client_payload.release_description }}
-      release_tag: alphas.41x.${{ needs.compute_timestamps.outputs.timestamp }}
+      release_tag: alphas.41x.${{ needs.compute_unix_timestamp.outputs.timestamp }}
       publish_to_cloudsmith: false
     secrets: inherit
   retain_latest_n_alphas:
