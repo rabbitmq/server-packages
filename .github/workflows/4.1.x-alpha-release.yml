@@ -18,23 +18,18 @@ jobs:
       - name: Print timestamp
         run: echo '${{ steps.compute_unix_timestamp.outputs.timestamp }}'
   release:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Get current UNIX timestamp
-        id: compute_unix_timestamp
-        uses: release-kit/unix-timestamp@v1
-      - name: Run reusable workflow
-        uses: "./.github/workflows/reusable-release-workflow.yml"
-        with:
-          base_version: ${{ vars.SERVER_41_NEXT_PATCH_VERSION }}
-          prerelease: true
-          prerelease_kind: "alpha"
-          prerelease_identifier: ${{ github.event.client_payload.prerelease_identifier }}
-          release_repository: "rabbitmq/server-packages"
-          release_title: ${{ github.event.client_payload.release_title }}
-          release_description: ${{ github.event.client_payload.release_description }}
-          release_tag: alphas.41x.${{ steps.compute_unix_timestamp.outputs.timestamp }}
-          publish_to_cloudsmith: false
+    uses: "./.github/workflows/reusable-release-workflow.yml"
+    with:
+      base_version: ${{ vars.SERVER_41_NEXT_PATCH_VERSION }}
+      prerelease: true
+      prerelease_kind: "alpha"
+      prerelease_identifier: ${{ github.event.client_payload.prerelease_identifier }}
+      release_repository: "rabbitmq/server-packages"
+      release_title: ${{ github.event.client_payload.release_title }}
+      release_description: ${{ github.event.client_payload.release_description }}
+      release_tag: "(ignored for alphas)"
+      publish_to_cloudsmith: false
+    secrets: inherit
   retain_latest_n_alphas:
     needs: [release]
     runs-on: ubuntu-latest
