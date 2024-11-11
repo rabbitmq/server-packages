@@ -67,12 +67,6 @@ env:
   RELEASE_REPOSITORY: "rabbitmq/server-packages"
 
 jobs:
-  compute_unix_timestamp:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Get current UNIX timestamp
-        id: timestamp
-        uses: release-kit/unix-timestamp@v1
   compute_prerelease_values:
     runs-on: ubuntu-latest
     steps:
@@ -82,7 +76,7 @@ jobs:
         run: echo "PRERELEASE_TIMESTAMP=`date --rfc-3339=seconds`" >> $GITHUB_ENV
   source_tarball:
     runs-on: ubuntu-latest
-    needs: [compute_unix_timestamp, compute_prerelease_values]
+    needs: [compute_prerelease_values]
     container:
       image: rabbitmqdevenv/build-env-26.2
     steps:
@@ -323,11 +317,14 @@ jobs:
           path: "PACKAGES/*"
           retention-days: 2
   create_gh_release:
-    needs: [compute_unix_timestamp, compute_prerelease_values, source_tarball, generic_binary_package, debian_package, rpm_package, windows_packages]
+    needs: [compute_prerelease_values, source_tarball, generic_binary_package, debian_package, rpm_package, windows_packages]
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
+      - name: Get current UNIX timestamp
+        id: compute_unix_timestamp
+        uses: release-kit/unix-timestamp@v1
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
       - name: Conditionally sets FULL_VERSION for a prerelease
@@ -386,7 +383,7 @@ jobs:
         with:
           token: ${{ secrets.MK_RELEASE_AUTOMATION_TOKEN }}
           repository: ${{ inputs.release_repository || env.RELEASE_REPOSITORY }}
-          tag_name: alphas.${{ needs.compute_unix_timestamp.outputs.timestamp }}
+          tag_name: alphas.${{ steps.compute_unix_timestamp.outputs.timestamp }}
           name: ${{ inputs.release_title }}
           body: ${{ inputs.release_description }}
           prerelease: ${{ inputs.prerelease == true || inputs.prerelease == 'true' }}
