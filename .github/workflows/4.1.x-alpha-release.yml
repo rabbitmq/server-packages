@@ -17,7 +17,7 @@ jobs:
       release_repository: "rabbitmq/server-packages"
       release_title: ${{ github.event.client_payload.release_title }}
       release_description: ${{ github.event.client_payload.release_description }}
-      release_tag: "alphas.41x.${{ github.event.client_payload.release_unix_timestamp }}.${{ github.event.client_payload.prerelease_identifier }}"
+      release_tag: "alphas.41x.${{ github.event.client_payload.release_unix_timestamp }}"
       publish_to_cloudsmith: false
     secrets: inherit
   retain_latest_n_alphas:
