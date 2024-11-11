@@ -2,29 +2,38 @@ name: "4.0.x alpha release"
 on:
   repository_dispatch:
     types: [new_4.0.x_alpha]
+  workflow_dispatch:
+    inputs:
+      prerelease_identifier:
+        # can be a number, a commit SHA prefix
+        type: string
+        description: "Preview identifier (e.g. an integer or a commit SHA) to use"
+        required: true
+        default: "1"
 
 permissions:
   contents: write
 
 jobs:
-  compute_timestamps:
+  print_timestamp:
     runs-on: ubuntu-latest
     steps:
-      - name: Compute human-readable release timestamp
-        run: echo "PRERELEASE_TIMESTAMP=`date --rfc-3339=seconds`" >> $GITHUB_ENV
-      - name: Compute UNIX release timestamp
-        run: echo "PRERELEASE_UNIX_TIMESTAMP=`date +%s`" >> $GITHUB_ENV
+      - name: Get current UNIX timestamp
+        id: compute_unix_timestamp
+        uses: release-kit/unix-timestamp@v1
+      - name: Print timestamp
+        run: echo '${{ steps.compute_unix_timestamp.outputs.timestamp }}'
   release:
     uses: "./.github/workflows/reusable-release-workflow.yml"
     with:
       base_version: ${{ vars.SERVER_40_NEXT_PATCH_VERSION }}
       prerelease: true
       prerelease_kind: "alpha"
-      prerelease_identifier: ${{ github.event.client_payload.prerelease_identifier }}
+      prerelease_identifier: ${{ inputs.prerelease_identifier || github.event.client_payload.prerelease_identifier }}
       release_repository: "rabbitmq/server-packages"
       release_title: ${{ github.event.client_payload.release_title }}
       release_description: ${{ github.event.client_payload.release_description }}
-      release_tag: --use-unix-timestamp
+      release_tag: "(ignored for alphas)"
       publish_to_cloudsmith: false
     secrets: inherit
   retain_latest_n_alphas:
