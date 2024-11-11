@@ -80,6 +80,7 @@ jobs:
     container:
       image: rabbitmqdevenv/build-env-26.2
     steps:
+
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
       - name: Conditionall sets env.FULL_VERSION for a prerelease

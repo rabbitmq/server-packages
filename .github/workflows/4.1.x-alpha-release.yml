@@ -9,31 +9,32 @@ permissions:
   contents: write
 
 jobs:
-  compute_unix_timestamp:
+  print_timestamp:
     runs-on: ubuntu-latest
     steps:
       - name: Get current UNIX timestamp
-        id: timestamp
+        id: compute_unix_timestamp
         uses: release-kit/unix-timestamp@v1
-  print_timestamp:
-    runs-on: ubuntu-latest
-    needs: [compute_unix_timestamp]
-    steps:
       - name: Print timestamp
-        run: echo '${{ needs.compute_timestamp.outputs.timestamp }}'
+        run: echo '${{ steps.compute_unix_timestamp.outputs.timestamp }}'
   release:
     uses: "./.github/workflows/reusable-release-workflow.yml"
-    with:
-      base_version: ${{ vars.SERVER_41_NEXT_PATCH_VERSION }}
-      prerelease: true
-      prerelease_kind: "alpha"
-      prerelease_identifier: ${{ github.event.client_payload.prerelease_identifier }}
-      release_repository: "rabbitmq/server-packages"
-      release_title: ${{ github.event.client_payload.release_title }}
-      release_description: ${{ github.event.client_payload.release_description }}
-      release_tag: alphas.41x.${{ needs.compute_unix_timestamp.outputs.timestamp }}
-      publish_to_cloudsmith: false
-    secrets: inherit
+    steps:
+      - name: Get current UNIX timestamp
+        id: compute_unix_timestamp
+      - name: Run reusable workflow
+        uses: release-kit/unix-timestamp@v1
+        with:
+          base_version: ${{ vars.SERVER_41_NEXT_PATCH_VERSION }}
+          prerelease: true
+          prerelease_kind: "alpha"
+          prerelease_identifier: ${{ github.event.client_payload.prerelease_identifier }}
+          release_repository: "rabbitmq/server-packages"
+          release_title: ${{ github.event.client_payload.release_title }}
+          release_description: ${{ github.event.client_payload.release_description }}
+          release_tag: alphas.41x.${{ steps.compute_unix_timestamp.outputs.timestamp }}
+          publish_to_cloudsmith: false
+        secrets: inherit
   retain_latest_n_alphas:
     needs: [release]
     runs-on: ubuntu-latest
