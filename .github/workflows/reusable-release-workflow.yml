@@ -40,7 +40,7 @@ on:
         default: "A development build of open source RabbitMQ"
       release_tag:
         type: string
-        description: "Release tag"
+        description: "Release tag. Ignored for alphas!"
         required: true
       publish_to_cloudsmith:
         type: boolean
@@ -365,8 +365,9 @@ jobs:
           path: ./artifacts
       - name: List collected artifacts
         run: ls -lha ./artifacts
-      - name: Create a GitHub release
+      - name: Create a GitHub release with a pre-computed version
         id: create_gh_release
+        if: ${{ !(inputs.prerelease_kind == 'alpha') }}
         uses: softprops/action-gh-release@v2
         with:
           token: ${{ secrets.MK_RELEASE_AUTOMATION_TOKEN }}
@@ -376,9 +377,9 @@ jobs:
           body: ${{ inputs.release_description }}
           prerelease: ${{ inputs.prerelease == true || inputs.prerelease == 'true' }}
           files: ./artifacts/*
-      - name: Create an alpha GitHub release
+      - name: Create a GitHub release with an alpha version
         id: create_alpha_gh_release
-        if: ${{ inputs.release_tag == '--use-unix-timestamp' }}
+        if: ${{ inputs.prerelease_kind == 'alpha' }}
         uses: softprops/action-gh-release@v2
         with:
           token: ${{ secrets.MK_RELEASE_AUTOMATION_TOKEN }}
