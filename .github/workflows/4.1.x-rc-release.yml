@@ -1,11 +1,11 @@
-name: "4.1.x release candidate"
+name: "4.1.x RC release"
 on:
   workflow_dispatch:
     inputs:
       prerelease_identifier:
         # can be a number, a commit SHA prefix
         type: string
-        description: "Preview identifier (an integer) to use"
+        description: "Preview identifier (e.g. an integer or a commit SHA) to use"
         required: true
         default: "1"
 
@@ -21,8 +21,8 @@ jobs:
       prerelease_kind: "rc"
       prerelease_identifier: ${{ inputs.prerelease_identifier }}
       release_repository: "rabbitmq/server-packages"
-      release_title: "RabbitMQ ${{ vars.SERVER_41_NEXT_PATCH_VERSION }}-beta.${{ inputs.prerelease_identifier }}"
-      release_description: "RabbitMQ ${{ vars.SERVER_41_NEXT_PATCH_VERSION }}-beta.${{ inputs.prerelease_identifier }}"
+      release_title: "RabbitMQ ${{ vars.SERVER_41_NEXT_PATCH_VERSION }}-rc.${{ inputs.prerelease_identifier }}"
+      release_description: "RabbitMQ ${{ vars.SERVER_41_NEXT_PATCH_VERSION }}-rc.${{ inputs.prerelease_identifier }}"
       release_tag: "rcs.41x.${{ inputs.prerelease_identifier }}"
       publish_to_cloudsmith: true
       cloudsmith_repository: "rabbitmq-server-prereleases"
