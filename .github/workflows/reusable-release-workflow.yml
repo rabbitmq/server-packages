@@ -379,7 +379,7 @@ jobs:
           files: ./artifacts/*
       - name: Create a GitHub release with an alpha version
         id: create_alpha_gh_release
-        if: ${{ inputs.prerelease_kind == 'alpha' }}
+        if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && inputs.prerelease_kind == 'alpha' }}
         uses: softprops/action-gh-release@v2
         with:
           token: ${{ secrets.MK_RELEASE_AUTOMATION_TOKEN }}
