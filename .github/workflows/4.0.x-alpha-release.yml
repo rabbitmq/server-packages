@@ -7,6 +7,13 @@ permissions:
   contents: write
 
 jobs:
+  compute_timestamps:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Compute human-readable release timestamp
+        run: echo "PRERELEASE_TIMESTAMP=`date --rfc-3339=seconds`" >> $GITHUB_ENV
+      - name: Compute UNIX release timestamp
+        run: echo "PRERELEASE_UNIX_TIMESTAMP=`date +%s`" >> $GITHUB_ENV
   release:
     uses: "./.github/workflows/reusable-release-workflow.yml"
     with:
@@ -17,7 +24,7 @@ jobs:
       release_repository: "rabbitmq/server-packages"
       release_title: ${{ github.event.client_payload.release_title }}
       release_description: ${{ github.event.client_payload.release_description }}
-      release_tag: "alphas.40x.${{ github.event.client_payload.release_unix_timestamp }}"
+      release_tag: "alphas.40x.${{ env.PRERELEASE_UNIX_TIMESTAMP }}"
       publish_to_cloudsmith: false
     secrets: inherit
   retain_latest_n_alphas:
