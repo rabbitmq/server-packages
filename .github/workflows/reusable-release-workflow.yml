@@ -83,7 +83,7 @@ jobs:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
       - name: Conditionall sets env.FULL_VERSION for a pre-release
-        if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind == 'alpha') }}
+        if: ${{ inputs.prerelease == 'true' || inputs.prerelease == true }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }} alpha? ${{ inputs.prerelease_kind == 'alpha' }}"
           echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ inputs.prerelease_identifier }}"
@@ -125,7 +125,7 @@ jobs:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
       - name: Conditionall sets env.FULL_VERSION for a pre-release
-        if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind == 'alpha') }}
+        if: ${{ inputs.prerelease == 'true' || inputs.prerelease == true }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }} alpha? ${{ inputs.prerelease_kind == 'alpha' }}"
           echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ inputs.prerelease_identifier }}"
@@ -170,7 +170,7 @@ jobs:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
       - name: Conditionall sets env.FULL_VERSION for a pre-release
-        if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind == 'alpha') }}
+        if: ${{ inputs.prerelease == 'true' || inputs.prerelease == true }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }} alpha? ${{ inputs.prerelease_kind == 'alpha' }}"
           echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ inputs.prerelease_identifier }}"
@@ -224,7 +224,7 @@ jobs:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
       - name: Conditionall sets env.FULL_VERSION for a pre-release
-        if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind == 'alpha') }}
+        if: ${{ inputs.prerelease == 'true' || inputs.prerelease == true }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }} alpha? ${{ inputs.prerelease_kind == 'alpha' }}"
           echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ inputs.prerelease_identifier }}"
@@ -282,7 +282,7 @@ jobs:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
       - name: Conditionall sets env.FULL_VERSION for a pre-release
-        if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind == 'alpha') }}
+        if: ${{ inputs.prerelease == 'true' || inputs.prerelease == true }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }} alpha? ${{ inputs.prerelease_kind == 'alpha' }}"
           echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ inputs.prerelease_identifier }}"
@@ -341,7 +341,7 @@ jobs:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
       - name: Conditionall sets env.FULL_VERSION for a pre-release
-        if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind == 'alpha') }}
+        if: ${{ inputs.prerelease == 'true' || inputs.prerelease == true }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }} alpha? ${{ inputs.prerelease_kind == 'alpha' }}"
           echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ inputs.prerelease_identifier }}"
@@ -411,7 +411,7 @@ jobs:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
       - name: Conditionall sets env.FULL_VERSION for a pre-release
-        if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind == 'alpha') }}
+        if: ${{ inputs.prerelease == 'true' || inputs.prerelease == true }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }} alpha? ${{ inputs.prerelease_kind == 'alpha' }}"
           echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ inputs.prerelease_identifier }}"
@@ -465,23 +465,17 @@ jobs:
     steps:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
-      - name: Get current UNIX timestamp
-        id: compute_unix_timestamp
-        uses: release-kit/unix-timestamp@v1
-      - name: Conditionall sets env.FULL_VERSION for an alpha
-        if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind == 'alpha') }}
+      - name: Conditionall sets env.FULL_VERSION for a pre-release
+        if: ${{ inputs.prerelease == 'true' || inputs.prerelease == true }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }} alpha? ${{ inputs.prerelease_kind == 'alpha' }}"
-          echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ steps.compute_unix_timestamp.outputs.timestamp }}" >> $GITHUB_ENV
-      - name: Conditionall sets env.FULL_VERSION for a pre-release (beta, RC)
-        if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind != 'alpha') }}
-        run: |
-          echo "Pre-release? ${{ inputs.prerelease }} not alpha? ${{ inputs.prerelease_kind != 'alpha' }}"
+          echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ inputs.prerelease_identifier }}"
           echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ inputs.prerelease_identifier }}" >> $GITHUB_ENV
       - name: Conditionally sets env.FULL_VERSION for a final release
-        if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind != 'alpha') }}
+        if: ${{ inputs.prerelease == 'false' || inputs.prerelease == false }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }}"
+          echo "FULL_VERSION=${{ inputs.base_version }}"
           echo "FULL_VERSION=${{ inputs.base_version }}" >> $GITHUB_ENV
       - name: Fetch Debian package and build artifacts
         uses: actions/download-artifact@v4
