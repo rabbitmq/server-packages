@@ -88,7 +88,12 @@ jobs:
       - name: Conditionall sets env.FULL_VERSION for an alpha
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind == 'alpha') }}
         run: |
-          echo "Pre-release? ${{ inputs.prerelease }}"
+          echo "Pre-release? ${{ inputs.prerelease }} alpha? ${{ inputs.prerelease_kind == 'alpha' }}"
+          echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ steps.compute_unix_timestamp.outputs.timestamp }}" >> $GITHUB_ENV
+      - name: Conditionall sets env.FULL_VERSION for a pre-release (beta, RC)
+        if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind != 'alpha') }}
+        run: |
+          echo "Pre-release? ${{ inputs.prerelease }} not alpha? ${{ inputs.prerelease_kind != 'alpha' }}"
           echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ steps.compute_unix_timestamp.outputs.timestamp }}" >> $GITHUB_ENV
       - name: Conditionally sets env.FULL_VERSION for a final release
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind != 'alpha') }}
