@@ -229,12 +229,17 @@ jobs:
           echo "Pre-release? ${{ inputs.prerelease }} alpha? ${{ inputs.prerelease_kind == 'alpha' }}"
           echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ inputs.prerelease_identifier }}"
           echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ inputs.prerelease_identifier }}" >> $GITHUB_ENV
+          # RPM needs a tilde ~ for prelease version separator
+          echo "RPM_VERSION=${{ inputs.base_version }}~${{ inputs.prerelease_kind }}.${{ inputs.prerelease_identifier }}" >> $GITHUB_ENV
       - name: Conditionally sets env.FULL_VERSION for a final release
         if: ${{ inputs.prerelease == 'false' || inputs.prerelease == false }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }}"
           echo "FULL_VERSION=${{ inputs.base_version }}"
           echo "FULL_VERSION=${{ inputs.base_version }}" >> $GITHUB_ENV
+          # RPM needs a tilde ~ for prelease version separator
+          echo "RPM_VERSION=${{ inputs.base_version }}~${{ inputs.prerelease_kind }}.${{ inputs.prerelease_identifier }}" >> $GITHUB_ENV
+
       - name: Clone rabbitmq/rabbitmq-server
         uses: actions/checkout@v4
         with:
