@@ -3,28 +3,31 @@ on:
   repository_dispatch:
     types: [new_4.1.x_alpha]
 
+
 permissions:
   contents: write
 
 jobs:
-  release:
-    runs-on: "ubuntu-latest"
+  compute_timestamps:
+    runs-on: ubuntu-latest
     steps:
       - name: Compute UNIX release timestamp
         run: echo "PRERELEASE_UNIX_TIMESTAMP=`date +%s`" >> $GITHUB_ENV
-      - name: Build and publish a release
-        uses: "./.github/workflows/reusable-release-workflow.yml"
-        with:
-          base_version: ${{ vars.SERVER_41_NEXT_PATCH_VERSION }}
-          prerelease: true
-          prerelease_kind: "alpha"
-          prerelease_identifier: ${{ github.event.client_payload.prerelease_identifier }}
-          release_repository: "rabbitmq/server-packages"
-          release_title: ${{ github.event.client_payload.release_title }}
-          release_description: ${{ github.event.client_payload.release_description }}
-          release_tag: "alphas.41x.${{ env.PRERELEASE_UNIX_TIMESTAMP }}"
-          publish_to_cloudsmith: false
-        secrets: inherit
+    outputs:
+      timestamp: ${{ env.PRERELEASE_UNIX_TIMESTAMP }}
+  release:
+    uses: "./.github/workflows/reusable-release-workflow.yml"
+    with:
+      base_version: ${{ vars.SERVER_41_NEXT_PATCH_VERSION }}
+      prerelease: true
+      prerelease_kind: "alpha"
+      prerelease_identifier: ${{ github.event.client_payload.prerelease_identifier }}
+      release_repository: "rabbitmq/server-packages"
+      release_title: ${{ github.event.client_payload.release_title }}
+      release_description: ${{ github.event.client_payload.release_description }}
+      release_tag: "--use-unix-timestamp"
+      publish_to_cloudsmith: false
+    secrets: inherit
   retain_latest_n_alphas:
     needs: [release]
     runs-on: ubuntu-latest
