@@ -20,7 +20,7 @@ jobs:
     needs: [compute_timestamps]
     steps:
       - name: Print timestamp
-        run: ${{ needs.compute_timestamp.outputs.timestamp }}
+        run: echo '${{ needs.compute_timestamp.outputs.timestamp }}'
   release:
     uses: "./.github/workflows/reusable-release-workflow.yml"
     with:
