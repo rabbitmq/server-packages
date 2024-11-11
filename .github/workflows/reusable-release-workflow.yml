@@ -55,11 +55,6 @@ on:
 
 env:
   GITHUB_TOKEN: ${{ secrets.RABBITMQCI_BOT_TOKEN }}
-  # Overriden conditionally with a step for prereleases,
-  # set here for YAML schema validation
-  FULL_VERSION: ${{ inputs.base_version }}
-  FULL_RELEASE_VERSION: ${{ inputs.base_version }}
-  FULL_PRERELEASE_VERSION: ${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ inputs.prerelease_identifier }}
   # makensis only accepts version numbers in the A.B.C.D format where every segment
   # is a positive integer. This means that for previews, the version can be {base}.{identifier}
   # or just {base}
@@ -80,11 +75,11 @@ jobs:
     container:
       image: rabbitmqdevenv/build-env-26.2
     steps:
+      # Actions do not support conditional expressions in the env: section,
+      # so workaround sets FULL_VERSION
       - name: Get current UNIX timestamp
         id: compute_unix_timestamp
         uses: release-kit/unix-timestamp@v1
-      # Actions do not support conditional expressions in the env: section,
-      # so workaround sets FULL_VERSION
       - name: Conditionall sets env.FULL_VERSION for an alpha
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind == 'alpha') }}
         run: |
@@ -94,12 +89,12 @@ jobs:
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind != 'alpha') }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }} not alpha? ${{ inputs.prerelease_kind != 'alpha' }}"
-          echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ steps.compute_unix_timestamp.outputs.timestamp }}" >> $GITHUB_ENV
+          echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ inputs.prerelease_identifier }}" >> $GITHUB_ENV
       - name: Conditionally sets env.FULL_VERSION for a final release
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind != 'alpha') }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }}"
-          echo "FULL_VERSION=${{ env.FULL_RELEASE_VERSION }}" >> $GITHUB_ENV
+          echo "FULL_VERSION=${{ inputs.base_version }}" >> $GITHUB_ENV
       - name: Clone rabbitmq/rabbitmq-server
         uses: actions/checkout@v4
         with:
@@ -133,8 +128,6 @@ jobs:
       - name: Get current UNIX timestamp
         id: compute_unix_timestamp
         uses: release-kit/unix-timestamp@v1
-      # Actions do not support conditional expressions in the env: section,
-      # so workaround sets FULL_VERSION
       - name: Conditionall sets env.FULL_VERSION for an alpha
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind == 'alpha') }}
         run: |
@@ -144,12 +137,12 @@ jobs:
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind != 'alpha') }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }} not alpha? ${{ inputs.prerelease_kind != 'alpha' }}"
-          echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ steps.compute_unix_timestamp.outputs.timestamp }}" >> $GITHUB_ENV
+          echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ inputs.prerelease_identifier }}" >> $GITHUB_ENV
       - name: Conditionally sets env.FULL_VERSION for a final release
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind != 'alpha') }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }}"
-          echo "FULL_VERSION=${{ env.FULL_RELEASE_VERSION }}" >> $GITHUB_ENV
+          echo "FULL_VERSION=${{ inputs.base_version }}" >> $GITHUB_ENV
       - name: Clone rabbitmq/rabbitmq-server
         uses: actions/checkout@v4
         with:
@@ -186,8 +179,6 @@ jobs:
       - name: Get current UNIX timestamp
         id: compute_unix_timestamp
         uses: release-kit/unix-timestamp@v1
-      # Actions do not support conditional expressions in the env: section,
-      # so workaround sets FULL_VERSION
       - name: Conditionall sets env.FULL_VERSION for an alpha
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind == 'alpha') }}
         run: |
@@ -197,12 +188,12 @@ jobs:
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind != 'alpha') }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }} not alpha? ${{ inputs.prerelease_kind != 'alpha' }}"
-          echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ steps.compute_unix_timestamp.outputs.timestamp }}" >> $GITHUB_ENV
+          echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ inputs.prerelease_identifier }}" >> $GITHUB_ENV
       - name: Conditionally sets env.FULL_VERSION for a final release
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind != 'alpha') }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }}"
-          echo "FULL_VERSION=${{ env.FULL_RELEASE_VERSION }}" >> $GITHUB_ENV
+          echo "FULL_VERSION=${{ inputs.base_version }}" >> $GITHUB_ENV
       - name: Clone rabbitmq/rabbitmq-server
         uses: actions/checkout@v4
         with:
@@ -248,8 +239,6 @@ jobs:
       - name: Get current UNIX timestamp
         id: compute_unix_timestamp
         uses: release-kit/unix-timestamp@v1
-      # Actions do not support conditional expressions in the env: section,
-      # so workaround sets FULL_VERSION
       - name: Conditionall sets env.FULL_VERSION for an alpha
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind == 'alpha') }}
         run: |
@@ -259,12 +248,12 @@ jobs:
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind != 'alpha') }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }} not alpha? ${{ inputs.prerelease_kind != 'alpha' }}"
-          echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ steps.compute_unix_timestamp.outputs.timestamp }}" >> $GITHUB_ENV
+          echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ inputs.prerelease_identifier }}" >> $GITHUB_ENV
       - name: Conditionally sets env.FULL_VERSION for a final release
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind != 'alpha') }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }}"
-          echo "FULL_VERSION=${{ env.FULL_RELEASE_VERSION }}" >> $GITHUB_ENV
+          echo "FULL_VERSION=${{ inputs.base_version }}" >> $GITHUB_ENV
       - name: Clone rabbitmq/rabbitmq-server
         uses: actions/checkout@v4
         with:
@@ -309,8 +298,6 @@ jobs:
       - name: Get current UNIX timestamp
         id: compute_unix_timestamp
         uses: release-kit/unix-timestamp@v1
-      # Actions do not support conditional expressions in the env: section,
-      # so workaround sets FULL_VERSION
       - name: Conditionall sets env.FULL_VERSION for an alpha
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind == 'alpha') }}
         run: |
@@ -320,12 +307,12 @@ jobs:
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind != 'alpha') }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }} not alpha? ${{ inputs.prerelease_kind != 'alpha' }}"
-          echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ steps.compute_unix_timestamp.outputs.timestamp }}" >> $GITHUB_ENV
+          echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ inputs.prerelease_identifier }}" >> $GITHUB_ENV
       - name: Conditionally sets env.FULL_VERSION for a final release
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind != 'alpha') }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }}"
-          echo "FULL_VERSION=${{ env.FULL_RELEASE_VERSION }}" >> $GITHUB_ENV
+          echo "FULL_VERSION=${{ inputs.base_version }}" >> $GITHUB_ENV
       - name: Clone rabbitmq/rabbitmq-server
         uses: actions/checkout@v4
         with:
@@ -367,11 +354,11 @@ jobs:
     permissions:
       contents: write
     steps:
+      # Actions do not support conditional expressions in the env: section,
+      # so workaround sets FULL_VERSION
       - name: Get current UNIX timestamp
         id: compute_unix_timestamp
         uses: release-kit/unix-timestamp@v1
-      # Actions do not support conditional expressions in the env: section,
-      # so workaround sets FULL_VERSION
       - name: Conditionall sets env.FULL_VERSION for an alpha
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind == 'alpha') }}
         run: |
@@ -381,12 +368,12 @@ jobs:
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind != 'alpha') }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }} not alpha? ${{ inputs.prerelease_kind != 'alpha' }}"
-          echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ steps.compute_unix_timestamp.outputs.timestamp }}" >> $GITHUB_ENV
+          echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ inputs.prerelease_identifier }}" >> $GITHUB_ENV
       - name: Conditionally sets env.FULL_VERSION for a final release
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind != 'alpha') }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }}"
-          echo "FULL_VERSION=${{ env.FULL_RELEASE_VERSION }}" >> $GITHUB_ENV
+          echo "FULL_VERSION=${{ inputs.base_version }}" >> $GITHUB_ENV
       - name: Fetch source tarball
         uses: actions/download-artifact@v4
         with:
@@ -448,8 +435,6 @@ jobs:
       - name: Get current UNIX timestamp
         id: compute_unix_timestamp
         uses: release-kit/unix-timestamp@v1
-      # Actions do not support conditional expressions in the env: section,
-      # so workaround sets FULL_VERSION
       - name: Conditionall sets env.FULL_VERSION for an alpha
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind == 'alpha') }}
         run: |
@@ -459,12 +444,12 @@ jobs:
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind != 'alpha') }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }} not alpha? ${{ inputs.prerelease_kind != 'alpha' }}"
-          echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ steps.compute_unix_timestamp.outputs.timestamp }}" >> $GITHUB_ENV
+          echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ inputs.prerelease_identifier }}" >> $GITHUB_ENV
       - name: Conditionally sets env.FULL_VERSION for a final release
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind != 'alpha') }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }}"
-          echo "FULL_VERSION=${{ env.FULL_RELEASE_VERSION }}" >> $GITHUB_ENV
+          echo "FULL_VERSION=${{ inputs.base_version }}" >> $GITHUB_ENV
       - name: Fetch Debian package and build artifacts
         uses: actions/download-artifact@v4
         with:
@@ -511,8 +496,6 @@ jobs:
       - name: Get current UNIX timestamp
         id: compute_unix_timestamp
         uses: release-kit/unix-timestamp@v1
-      # Actions do not support conditional expressions in the env: section,
-      # so workaround sets FULL_VERSION
       - name: Conditionall sets env.FULL_VERSION for an alpha
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind == 'alpha') }}
         run: |
@@ -522,12 +505,12 @@ jobs:
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind != 'alpha') }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }} not alpha? ${{ inputs.prerelease_kind != 'alpha' }}"
-          echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ steps.compute_unix_timestamp.outputs.timestamp }}" >> $GITHUB_ENV
+          echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ inputs.prerelease_identifier }}" >> $GITHUB_ENV
       - name: Conditionally sets env.FULL_VERSION for a final release
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind != 'alpha') }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }}"
-          echo "FULL_VERSION=${{ env.FULL_RELEASE_VERSION }}" >> $GITHUB_ENV
+          echo "FULL_VERSION=${{ inputs.base_version }}" >> $GITHUB_ENV
       - name: Fetch Debian package and build artifacts
         uses: actions/download-artifact@v4
         with:
