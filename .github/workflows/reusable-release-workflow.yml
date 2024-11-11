@@ -82,14 +82,14 @@ jobs:
     steps:
       - name: Print generated timestamp
         run: |
-          echo 'needs.compute_unix_timestamp.outputs.timestamp: ${{ needs.compute_unix_timestamp.outputs.timestamp }}'
+          echo 'needs.compute_unix_timestamp.outputs.timestamp: ${{ toJSON(needs.compute_unix_timestamp.outputs) }}'
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
       - name: Conditionall sets env.FULL_VERSION for an alpha
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind == 'alpha') }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }} alpha? ${{ inputs.prerelease_kind == 'alpha' }}"
-          echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ needs.compute_unix_timestamp.outputs.timestamp }}" >> $GITHUB_ENV
+          echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ inputs.prerelease_identifier }}" >> $GITHUB_ENV
       - name: Conditionall sets env.FULL_VERSION for a pre-release (beta, RC)
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind != 'alpha') }}
         run: |
@@ -130,14 +130,11 @@ jobs:
     steps:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
-      - name: Get current UNIX timestamp
-        id: compute_unix_timestamp
-        uses: release-kit/unix-timestamp@v1
       - name: Conditionall sets env.FULL_VERSION for an alpha
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind == 'alpha') }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }} alpha? ${{ inputs.prerelease_kind == 'alpha' }}"
-          echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ steps.compute_unix_timestamp.outputs.timestamp }}" >> $GITHUB_ENV
+          echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ inputs.prerelease_identifier }}" >> $GITHUB_ENV
       - name: Conditionall sets env.FULL_VERSION for a pre-release (beta, RC)
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind != 'alpha') }}
         run: |
@@ -181,14 +178,11 @@ jobs:
     steps:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
-      - name: Get current UNIX timestamp
-        id: compute_unix_timestamp
-        uses: release-kit/unix-timestamp@v1
       - name: Conditionall sets env.FULL_VERSION for an alpha
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind == 'alpha') }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }} alpha? ${{ inputs.prerelease_kind == 'alpha' }}"
-          echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ steps.compute_unix_timestamp.outputs.timestamp }}" >> $GITHUB_ENV
+          echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ inputs.prerelease_identifier }}" >> $GITHUB_ENV
       - name: Conditionall sets env.FULL_VERSION for a pre-release (beta, RC)
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind != 'alpha') }}
         run: |
@@ -241,14 +235,11 @@ jobs:
     steps:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
-      - name: Get current UNIX timestamp
-        id: compute_unix_timestamp
-        uses: release-kit/unix-timestamp@v1
       - name: Conditionall sets env.FULL_VERSION for an alpha
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind == 'alpha') }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }} alpha? ${{ inputs.prerelease_kind == 'alpha' }}"
-          echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ steps.compute_unix_timestamp.outputs.timestamp }}" >> $GITHUB_ENV
+          echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ inputs.prerelease_identifier }}" >> $GITHUB_ENV
       - name: Conditionall sets env.FULL_VERSION for a pre-release (beta, RC)
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind != 'alpha') }}
         run: |
@@ -300,14 +291,11 @@ jobs:
     steps:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
-      - name: Get current UNIX timestamp
-        id: compute_unix_timestamp
-        uses: release-kit/unix-timestamp@v1
       - name: Conditionall sets env.FULL_VERSION for an alpha
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind == 'alpha') }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }} alpha? ${{ inputs.prerelease_kind == 'alpha' }}"
-          echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ steps.compute_unix_timestamp.outputs.timestamp }}" >> $GITHUB_ENV
+          echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ inputs.prerelease_identifier }}" >> $GITHUB_ENV
       - name: Conditionall sets env.FULL_VERSION for a pre-release (beta, RC)
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind != 'alpha') }}
         run: |
@@ -361,14 +349,11 @@ jobs:
     steps:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
-      - name: Get current UNIX timestamp
-        id: compute_unix_timestamp
-        uses: release-kit/unix-timestamp@v1
       - name: Conditionall sets env.FULL_VERSION for an alpha
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind == 'alpha') }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }} alpha? ${{ inputs.prerelease_kind == 'alpha' }}"
-          echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ steps.compute_unix_timestamp.outputs.timestamp }}" >> $GITHUB_ENV
+          echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ inputs.prerelease_identifier }}" >> $GITHUB_ENV
       - name: Conditionall sets env.FULL_VERSION for a pre-release (beta, RC)
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind != 'alpha') }}
         run: |
@@ -437,14 +422,11 @@ jobs:
     steps:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
-      - name: Get current UNIX timestamp
-        id: compute_unix_timestamp
-        uses: release-kit/unix-timestamp@v1
       - name: Conditionall sets env.FULL_VERSION for an alpha
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind == 'alpha') }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }} alpha? ${{ inputs.prerelease_kind == 'alpha' }}"
-          echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ steps.compute_unix_timestamp.outputs.timestamp }}" >> $GITHUB_ENV
+          echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ inputs.prerelease_identifier }}" >> $GITHUB_ENV
       - name: Conditionall sets env.FULL_VERSION for a pre-release (beta, RC)
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && (inputs.prerelease_kind != 'alpha') }}
         run: |
