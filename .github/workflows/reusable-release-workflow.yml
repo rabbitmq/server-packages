@@ -232,6 +232,12 @@ jobs:
                             SIGNING_KEY=${{ secrets.GPG_SIGNING_KEY_ID }}
           cd ..
           ls -lha PACKAGES/
+          for file in PACKAGES; do
+            if test -f "$file"; then
+              gpg --default-key "${{ env.GPG_SIGNING_KEY_ID }}" --detach-sign --armor "$file"
+            end
+          end
+          ls -lha PACKAGES/
       - name: Build Debian package without GPG signing
         if: inputs.gpg_sign_release == false
         run: |
@@ -321,6 +327,12 @@ jobs:
                                   SOURCE_DIST_FILE=../rabbitmq-server/PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.tar.xz \
                                   SIGNING_KEY="${{ secrets.GPG_SIGNING_KEY_ID }}"
           cd ..
+          ls -lha PACKAGES/
+          for file in PACKAGES; do
+            if test -f "$file"; then
+              gpg --default-key "${{ env.GPG_SIGNING_KEY_ID }}" --detach-sign --armor "$file"
+            end
+          end
           ls -lha PACKAGES/
       - name: Build RPM package without GPG signing
         if: inputs.gpg_sign_release == false
