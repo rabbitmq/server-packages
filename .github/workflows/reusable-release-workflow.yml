@@ -402,8 +402,8 @@ jobs:
                                 PRODUCT_VERSION=${{ env.WINDOWS_INSTALLER_VERSION }}
           cd ..
           ls -lha PACKAGES/
-          mv "PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.exe" "PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.exe.unsigned"
 
+          mv "PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.exe" "PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.exe.unsigned"
           osslsigncode sign \
             -certs "${{ env.CODE_SIGNING_CERT }}" \
             -key "${{ env.CODE_SIGNING_KEY }}" \
@@ -413,7 +413,7 @@ jobs:
             -in "PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.exe.unsigned" \
             -out "PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.exe"
 
-          osslsigncode verify "PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.exe" -CAfile ${{ env.CODE_SIGNING_CERT }}
+          osslsigncode verify -in "PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.exe" -CAfile ${{ env.CODE_SIGNING_CERT }}
 
           rm "PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.exe.unsigned"
       - name: Build Windows binary package and NSIS-based installer without signing
