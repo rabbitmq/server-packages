@@ -392,6 +392,7 @@ jobs:
           CODE_SIGNING_CERT: ${{ env.WORKAROUND_TEMP_DIR }}/code_signing.cert
           CODE_SIGNING_KEY: ${{ env.WORKAROUND_TEMP_DIR }}/code_signing.key
         run: |
+          ls -lha ${{ env.WORKAROUND_TEMP_DIR }}
           cd rabbitmq-packaging
           # IMPORTANT: PRODUCT_VERSION must use the A.B.C.D format where every component is a positive integer.
           #            This is an MSI and makensis build tooling requirement.
