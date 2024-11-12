@@ -273,7 +273,20 @@ jobs:
           echo "FULL_VERSION=${{ inputs.base_version }}" >> $GITHUB_ENV
           # RPM needs a tilde ~ for prelease version separator
           echo "RPM_VERSION=${{ inputs.base_version }}~${{ inputs.prerelease_kind }}.${{ inputs.prerelease_identifier }}" >> $GITHUB_ENV
-
+      - name: Import GPG key
+        if: inputs.gpg_sign_release
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PRIVATE_KEY_PASSPHRASE }}
+      - name: "Export SIGNING_KEY (key ID) used by the Debian package build target"
+        if: inputs.gpg_sign_release
+        run: |
+          echo "SIGNING_KEY=${{ secrets.GPG_SIGNING_KEY_ID }}" >> $GITHUB_ENV
+      - name: "Print public GPG keys in the keychain"
+        if: inputs.gpg_sign_release
+        run: |
+          gpg --list-public-keys
       - name: Clone rabbitmq/rabbitmq-server
         uses: actions/checkout@v4
         with:
@@ -291,7 +304,21 @@ jobs:
         with:
           name: rabbitmq-server-${{ env.FULL_VERSION }}-source-tarball
           path: ./rabbitmq-server/PACKAGES
-      - name: Build RPM package
+      - name: Build RPM package with GPG signing
+        if: inputs.gpg_sign_release
+        env:
+          SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY_ID }}
+        run: |
+          cd rabbitmq-packaging
+          gmake package-rpm-rhel8 RABBITMQ_VERSION=${{ env.FULL_VERSION }} \
+                                  PROJECT_VERSION=${{ env.FULL_VERSION }} \
+                                  RABBITMQ_PACKAGING_REPO=. \
+                                  RPM_VERSION="${{ env.RPM_VERSION }}" \
+                                  SOURCE_DIST_FILE=../rabbitmq-server/PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.tar.xz
+          cd ..
+          ls -lha PACKAGES/
+      - name: Build RPM package without GPG signing
+        if: inputs.gpg_sign_release == false
         run: |
           cd rabbitmq-packaging
           gmake package-rpm-rhel8 RABBITMQ_VERSION=${{ env.FULL_VERSION }} \
