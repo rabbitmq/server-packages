@@ -537,6 +537,7 @@ jobs:
       - name: List collected artifacts
         run: ls -lha ./artifacts
       - name: Sign artifacts directly with GPG
+        if: inputs.gpg_sign_release
         env:
           SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY_ID }}
         run: |
