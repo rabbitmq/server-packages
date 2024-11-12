@@ -194,7 +194,7 @@ jobs:
       - name: "Export SIGNING_KEY (key ID) used by the Debian package build target"
         if: inputs.gpg_sign_release
         run: |
-          echo "SIGNING_KEY=${{ secrets.GPG_PRIVATE_KEY_ID }}" >> $GITHUB_ENV
+          echo "SIGNING_KEY=${{ secrets.GPG_SIGNING_KEY_ID }}" >> $GITHUB_ENV
       - name: "Print public GPG keys in the keychain"
         if: inputs.gpg_sign_release
         run: |
@@ -219,7 +219,7 @@ jobs:
       - name: Build Debian package with GPG signing
         if: inputs.gpg_sign_release
         env:
-          GPG_SIGNING_KEY_ID: ${{ secrets.GPG_SIGNING_KEY_ID }}
+          SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY_ID }}
         run: |
           cd rabbitmq-packaging
           gmake package-deb PROJECT_VERSION=${{ env.FULL_VERSION }} \
