@@ -276,6 +276,8 @@ jobs:
           echo "RPM_VERSION=${{ inputs.base_version }}~${{ inputs.prerelease_kind }}.${{ inputs.prerelease_identifier }}" >> $GITHUB_ENV
       - name: Import GPG key
         if: inputs.gpg_sign_release
+        env:
+          GNUPGHOME: ${{ env.GNUPGHOME }}
         uses: crazy-max/ghaction-import-gpg@v6
         with:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
