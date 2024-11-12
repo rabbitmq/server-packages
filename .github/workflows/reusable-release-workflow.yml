@@ -413,6 +413,8 @@ jobs:
             -in "PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.exe.unsigned" \
             -out "PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.exe"
 
+          # 'osslsigncode verify' proves that the signature is there and then fails with a chain
+          # verification error, which we do not care about here, so ignore it
           osslsigncode verify -in "PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.exe" -CAfile ${{ env.CODE_SIGNING_CERT }} || true
 
           rm "PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.exe.unsigned"
