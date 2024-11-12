@@ -26,6 +26,6 @@ jobs:
       release_tag: "betas.41x.${{ inputs.prerelease_identifier }}"
       # applies to Debian and RPM packages only
       gpg_sign_release: true
-      publish_to_cloudsmith: true
+      publish_to_cloudsmith: false
       cloudsmith_repository: "rabbitmq-server-prereleases"
     secrets: inherit
