@@ -543,8 +543,10 @@ jobs:
         run: |
           ls -lha ./artifacts
           for file in ./artifacts/*; do
-            echo "Will sign $file with key ${{ env.SIGNING_KEY }}..."
-            gpg --default-key "${{ env.SIGNING_KEY }}" --detach-sign --armor "$file"
+            if test -f "$file"; then
+              echo "Will sign $file with key ${{ env.SIGNING_KEY }}..."
+              gpg --default-key "${{ env.SIGNING_KEY }}" --detach-sign --armor "$file"
+            fi
           done
           ls -lha ./artifacts
       - name: Create a GitHub release with a pre-computed version
