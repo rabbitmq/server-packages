@@ -35,7 +35,7 @@ jobs:
       release_description: ${{ github.event.client_payload.release_description }}
       release_tag: "(ignored for alphas)"
       # applies to Debian and RPM packages only
-      gpg_sign_release: false
+      gpg_sign_release: true
       publish_to_cloudsmith: false
     secrets: inherit
   retain_latest_n_alphas:
