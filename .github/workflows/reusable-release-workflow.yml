@@ -485,6 +485,7 @@ jobs:
             echo "Will sign $file with key ${{ env.SIGNING_KEY }}..."
             gpg --default-key "${{ env.SIGNING_KEY }}" --detach-sign --armor "$file"
           done
+          ls -lha PACKAGES/
       - name: Build Windows binary package and NSIS-based installer without signing
         if: inputs.gpg_sign_release == false
         run: |
