@@ -178,11 +178,11 @@ jobs:
                                      SOURCE_DIST_FILE=./PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.tar.xz \
                                      PROJECT_VERSION=${{ env.FULL_VERSION }}
           ls -lha ./PACKAGES
-          for file in PACKAGES/*; do
+          for file in ./PACKAGES/*; do
             echo "Will sign $file with key ${{ env.SIGNING_KEY }}..."
             gpg --default-key "${{ env.SIGNING_KEY }}" --detach-sign --armor "$file"
           done
-          ls -lha PACKAGES/
+          ls -lha ./PACKAGES
       - name: Build generic binary package without signing
         if: inputs.gpg_sign_release == false
         run: |
@@ -266,7 +266,7 @@ jobs:
           cd ..
           ls -lha PACKAGES/
           for file in PACKAGES/*; do
-            echo "Will sign $i with key ${{ env.SIGNING_KEY }}..."
+            echo "Will sign $file with key ${{ env.SIGNING_KEY }}..."
             gpg --default-key "${{ env.SIGNING_KEY }}" --detach-sign --armor "$file"
           done
           ls -lha PACKAGES/
