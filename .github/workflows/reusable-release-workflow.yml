@@ -413,7 +413,9 @@ jobs:
             -in "PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.exe.unsigned" \
             -out "PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.exe"
 
-            rm "PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.exe.unsigned"
+          osslsigncode verify "PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.exe"
+
+          rm "PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.exe.unsigned"
       - name: Build Windows binary package and NSIS-based installer without signing
         if: inputs.gpg_sign_release == false
         run: |
