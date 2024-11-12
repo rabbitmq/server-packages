@@ -447,11 +447,6 @@ jobs:
           osslsigncode verify -in "PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.exe" -CAfile ${{ env.CODE_SIGNING_CERT }} || true
 
           rm "PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.exe.unsigned"
-
-          for file in PACKAGES/*; do
-            echo "Will sign $file with key ${{ env.SIGNING_KEY }}..."
-            gpg --default-key "${{ env.SIGNING_KEY }}" --detach-sign --armor "$file"
-          done
           ls -lha PACKAGES/
       - name: Build Windows binary package and NSIS-based installer without signing
         if: inputs.gpg_sign_release == false
@@ -464,12 +459,6 @@ jobs:
                                 VERSION=${{ env.FULL_VERSION }} \
                                 PRODUCT_VERSION=${{ env.WINDOWS_INSTALLER_VERSION }}
           cd ..
-          ls -lha PACKAGES/
-          for file in PACKAGES/*; do
-            if test -f "$file"; then
-              gpg --default-key "${{ env.GPG_SIGNING_KEY_ID }}" --detach-sign --armor "$file"
-            fi
-          done
           ls -lha PACKAGES/
       - name: Remove signing artifacts
         run: |
