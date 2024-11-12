@@ -375,7 +375,19 @@ jobs:
         with:
           name: rabbitmq-server-${{ env.FULL_VERSION }}-source-tarball
           path: ./rabbitmq-server/PACKAGES
-      - name: Build Windows binary package and NSIS-based installer
+      - name: "Drop public code signing key file"
+        if: inputs.gpg_sign_release
+        run: |
+          echo "${{ secrets.CODE_SIGNING_CERT }}" > ${{ github.workspace }}/code_signing.cert
+      - name: "Drop code signing key file"
+        if: inputs.gpg_sign_release
+        run: |
+          echo "${{ secrets.CODE_SIGNING_KEY }}" > ${{ github.workspace }}/code_signing.key
+      - name: Build Windows binary package and NSIS-based installer with signing
+        if: inputs.gpg_sign_release
+        env:
+          CODE_SIGNING_CERT: ${{ github.workspace }}/code_signing.cert
+          CODE_SIGNING_KEY: ${{ github.workspace }}/code_signing.key
         run: |
           cd rabbitmq-packaging
           # IMPORTANT: PRODUCT_VERSION must use the A.B.C.D format where every component is a positive integer.
@@ -386,6 +398,22 @@ jobs:
                                 PRODUCT_VERSION=${{ env.WINDOWS_INSTALLER_VERSION }}
           cd ..
           ls -lha PACKAGES/
+      - name: Build Windows binary package and NSIS-based installer without signing
+        if: inputs.gpg_sign_release == false
+        run: |
+          cd rabbitmq-packaging
+          # IMPORTANT: PRODUCT_VERSION must use the A.B.C.D format where every component is a positive integer.
+          #            This is an MSI and makensis build tooling requirement.
+          gmake package-windows RABBITMQ_PACKAGING_REPO="." \
+                                SOURCE_DIST_FILE=../rabbitmq-server/PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.tar.xz \
+                                VERSION=${{ env.FULL_VERSION }} \
+                                PRODUCT_VERSION=${{ env.WINDOWS_INSTALLER_VERSION }}
+          cd ..
+          ls -lha PACKAGES/
+      - name: Remove signing artifacts
+        run: |
+          rm -f ${{ github.workspace }}/code_signing.cert
+          rm -f ${{ github.workspace }}/code_signing.key
       - name: Store Windows binary package and installer
         uses: actions/upload-artifact@v4
         with:
