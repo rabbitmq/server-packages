@@ -389,8 +389,8 @@ jobs:
       - name: Build Windows binary package and NSIS-based installer with signing
         if: inputs.gpg_sign_release
         env:
-          CODE_SIGNING_CERT: ${{ runner.temp }}/code_signing.cert
-          CODE_SIGNING_KEY: ${{ runner.temp }}/code_signing.key
+          CODE_SIGNING_CERT: ${{ env.WORKAROUND_TEMP_DIR }}/code_signing.cert
+          CODE_SIGNING_KEY: ${{ env.WORKAROUND_TEMP_DIR }}/code_signing.key
         run: |
           cd rabbitmq-packaging
           # IMPORTANT: PRODUCT_VERSION must use the A.B.C.D format where every component is a positive integer.
