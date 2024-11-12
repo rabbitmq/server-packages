@@ -235,8 +235,8 @@ jobs:
           for file in PACKAGES; do
             if test -f "$file"; then
               gpg --default-key "${{ env.GPG_SIGNING_KEY_ID }}" --detach-sign --armor "$file"
-            end
-          end
+            fi
+          done
           ls -lha PACKAGES/
       - name: Build Debian package without GPG signing
         if: inputs.gpg_sign_release == false
@@ -331,8 +331,8 @@ jobs:
           for file in PACKAGES; do
             if test -f "$file"; then
               gpg --default-key "${{ env.GPG_SIGNING_KEY_ID }}" --detach-sign --armor "$file"
-            end
-          end
+            fi
+          done
           ls -lha PACKAGES/
       - name: Build RPM package without GPG signing
         if: inputs.gpg_sign_release == false
@@ -442,6 +442,12 @@ jobs:
                                 VERSION=${{ env.FULL_VERSION }} \
                                 PRODUCT_VERSION=${{ env.WINDOWS_INSTALLER_VERSION }}
           cd ..
+          ls -lha PACKAGES/
+          for file in PACKAGES; do
+            if test -f "$file"; then
+              gpg --default-key "${{ env.GPG_SIGNING_KEY_ID }}" --detach-sign --armor "$file"
+            fi
+          done
           ls -lha PACKAGES/
       - name: Remove signing artifacts
         run: |
