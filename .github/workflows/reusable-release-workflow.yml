@@ -64,7 +64,6 @@ env:
   # or just {base}
   WINDOWS_INSTALLER_VERSION: ${{ inputs.base_version }}.99
   RELEASE_REPOSITORY: "rabbitmq/server-packages"
-  GNUPGHOME: "${{ env.GITHUB_WORKSPACE }}/.gnupg"
 
 jobs:
   compute_unix_timestamp:
@@ -277,7 +276,7 @@ jobs:
       - name: Import GPG key
         if: inputs.gpg_sign_release
         env:
-          GNUPGHOME: ${{ env.GNUPGHOME }}
+          GNUPGHOME: "${{ github.workspace }}/.gnupg"
         uses: crazy-max/ghaction-import-gpg@v6
         with:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
@@ -311,7 +310,7 @@ jobs:
         if: inputs.gpg_sign_release
         env:
           SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY_ID }}
-          GNUPGHOME: ${{ env.GNUPGHOME }}
+          GNUPGHOME: "${{ github.workspace }}/.gnupg"
         run: |
           cd rabbitmq-packaging
           gmake package-rpm-rhel8 RABBITMQ_VERSION=${{ env.FULL_VERSION }} \
