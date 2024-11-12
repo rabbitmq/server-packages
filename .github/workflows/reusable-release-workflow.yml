@@ -219,6 +219,7 @@ jobs:
       - name: Build Debian package with GPG signing
         if: inputs.gpg_sign_release
         env:
+          DEB_SIGN_KEYID: ${{ secrets.GPG_SIGNING_KEY_ID }}
           SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY_ID }}
         run: |
           cd rabbitmq-packaging
