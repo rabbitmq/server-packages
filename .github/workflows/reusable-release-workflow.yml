@@ -64,6 +64,7 @@ env:
   # or just {base}
   WINDOWS_INSTALLER_VERSION: ${{ inputs.base_version }}.99
   RELEASE_REPOSITORY: "rabbitmq/server-packages"
+  GNUPGHOME: "${{ env.GITHUB_WORKSPACE }}/.gnupg"
 
 jobs:
   compute_unix_timestamp:
@@ -308,6 +309,7 @@ jobs:
         if: inputs.gpg_sign_release
         env:
           SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY_ID }}
+          GNUPGHOME: ${{ env.GNUPGHOME }}
         run: |
           cd rabbitmq-packaging
           gmake package-rpm-rhel8 RABBITMQ_VERSION=${{ env.FULL_VERSION }} \
