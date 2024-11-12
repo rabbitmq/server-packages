@@ -86,7 +86,7 @@ jobs:
     steps:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
-      - name: Conditionall sets env.FULL_VERSION for a pre-release
+      - name: Conditionally sets env.FULL_VERSION for a pre-release
         if: ${{ inputs.prerelease == 'true' || inputs.prerelease == true }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }} alpha? ${{ inputs.prerelease_kind == 'alpha' }}"
@@ -128,7 +128,7 @@ jobs:
     steps:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
-      - name: Conditionall sets env.FULL_VERSION for a pre-release
+      - name: Conditionally sets env.FULL_VERSION for a pre-release
         if: ${{ inputs.prerelease == 'true' || inputs.prerelease == true }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }} alpha? ${{ inputs.prerelease_kind == 'alpha' }}"
@@ -173,7 +173,7 @@ jobs:
     steps:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
-      - name: Conditionall sets env.FULL_VERSION for a pre-release
+      - name: Conditionally sets env.FULL_VERSION for a pre-release
         if: ${{ inputs.prerelease == 'true' || inputs.prerelease == true }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }} alpha? ${{ inputs.prerelease_kind == 'alpha' }}"
@@ -258,7 +258,7 @@ jobs:
     steps:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
-      - name: Conditionall sets env.FULL_VERSION for a pre-release
+      - name: Conditionally sets env.FULL_VERSION for a pre-release
         if: ${{ inputs.prerelease == 'true' || inputs.prerelease == true }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }} alpha? ${{ inputs.prerelease_kind == 'alpha' }}"
@@ -349,7 +349,7 @@ jobs:
     steps:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
-      - name: Conditionall sets env.FULL_VERSION for a pre-release
+      - name: Conditionally sets env.FULL_VERSION for a pre-release
         if: ${{ inputs.prerelease == 'true' || inputs.prerelease == true }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }} alpha? ${{ inputs.prerelease_kind == 'alpha' }}"
@@ -451,7 +451,7 @@ jobs:
         uses: release-kit/unix-timestamp@v1
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
-      - name: Conditionall sets env.FULL_VERSION for a pre-release
+      - name: Conditionally sets env.FULL_VERSION for a pre-release
         if: ${{ inputs.prerelease == 'true' || inputs.prerelease == true }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }} alpha? ${{ inputs.prerelease_kind == 'alpha' }}"
@@ -521,7 +521,7 @@ jobs:
     steps:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
-      - name: Conditionall sets env.FULL_VERSION for a pre-release
+      - name: Conditionally sets env.FULL_VERSION for a pre-release
         if: ${{ inputs.prerelease == 'true' || inputs.prerelease == true }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }} alpha? ${{ inputs.prerelease_kind == 'alpha' }}"
@@ -576,7 +576,7 @@ jobs:
     steps:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
-      - name: Conditionall sets env.FULL_VERSION for a pre-release
+      - name: Conditionally sets env.FULL_VERSION for a pre-release
         if: ${{ inputs.prerelease == 'true' || inputs.prerelease == true }}
         run: |
           echo "Pre-release? ${{ inputs.prerelease }} alpha? ${{ inputs.prerelease_kind == 'alpha' }}"
