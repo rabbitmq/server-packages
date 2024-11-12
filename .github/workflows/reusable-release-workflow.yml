@@ -232,7 +232,7 @@ jobs:
           cd ..
           ls -lha PACKAGES/
       - name: Build Debian package without GPG signing
-        if: !inputs.gpg_sign_release
+        if: inputs.gpg_sign_release == false
         run: |
           cd rabbitmq-packaging
           gmake package-deb PROJECT_VERSION=${{ env.FULL_VERSION }} \
