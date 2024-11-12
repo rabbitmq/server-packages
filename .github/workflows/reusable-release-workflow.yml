@@ -176,9 +176,8 @@ jobs:
                                      PROJECT_VERSION=${{ env.FULL_VERSION }}
           ls -lha ./PACKAGES
           for file in PACKAGES/*; do
-            if test -f "$file"; then
-              gpg --default-key "${{ env.GPG_SIGNING_KEY_ID }}" --detach-sign --armor "$file"
-            fi
+            echo "Will sign $i with key ${{ env.GPG_SIGNING_KEY_ID }}..."
+            gpg --default-key "${{ env.GPG_SIGNING_KEY_ID }}" --detach-sign --armor "$file"
           done
           ls -lha PACKAGES/
       - name: Store generic binary build
@@ -255,9 +254,8 @@ jobs:
           cd ..
           ls -lha PACKAGES/
           for file in PACKAGES/*; do
-            if test -f "$file"; then
-              gpg --default-key "${{ env.GPG_SIGNING_KEY_ID }}" --detach-sign --armor "$file"
-            fi
+            echo "Will sign $i with key ${{ env.GPG_SIGNING_KEY_ID }}..."
+            gpg --default-key "${{ env.GPG_SIGNING_KEY_ID }}" --detach-sign --armor "$file"
           done
           ls -lha PACKAGES/
       - name: Build Debian package without GPG signing
@@ -351,9 +349,8 @@ jobs:
           cd ..
           ls -lha PACKAGES/
           for file in PACKAGES/*; do
-            if test -f "$file"; then
-              gpg --default-key "${{ env.GPG_SIGNING_KEY_ID }}" --detach-sign --armor "$file"
-            fi
+            echo "Will sign $i with key ${{ env.GPG_SIGNING_KEY_ID }}..."
+            gpg --default-key "${{ env.GPG_SIGNING_KEY_ID }}" --detach-sign --armor "$file"
           done
           ls -lha PACKAGES/
       - name: Build RPM package without GPG signing
@@ -453,6 +450,11 @@ jobs:
           osslsigncode verify -in "PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.exe" -CAfile ${{ env.CODE_SIGNING_CERT }} || true
 
           rm "PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.exe.unsigned"
+
+          for file in PACKAGES/*; do
+            echo "Will sign $i with key ${{ env.GPG_SIGNING_KEY_ID }}..."
+            gpg --default-key "${{ env.GPG_SIGNING_KEY_ID }}" --detach-sign --armor "$file"
+          done
       - name: Build Windows binary package and NSIS-based installer without signing
         if: inputs.gpg_sign_release == false
         run: |
