@@ -381,11 +381,11 @@ jobs:
       - name: "Drop public code signing key file"
         if: inputs.gpg_sign_release
         run: |
-          echo "${{ secrets.CODE_SIGNING_CERT }}" > ${{ runner.temp }}/code_signing.cert
+          echo "${{ secrets.CODE_SIGNING_CERT }}" > ${{ env.WORKAROUND_TEMP_DIR }}/code_signing.cert
       - name: "Drop code signing key file"
         if: inputs.gpg_sign_release
         run: |
-          echo "${{ secrets.CODE_SIGNING_KEY }}" > ${{ runner.temp }}/code_signing.key
+          echo "${{ secrets.CODE_SIGNING_KEY }}" > ${{ env.WORKAROUND_TEMP_DIR }}/code_signing.key
       - name: Build Windows binary package and NSIS-based installer with signing
         if: inputs.gpg_sign_release
         env:
@@ -415,8 +415,8 @@ jobs:
           ls -lha PACKAGES/
       - name: Remove signing artifacts
         run: |
-          rm -f ${{ runner.temp }}/code_signing.cert
-          rm -f ${{ runner.temp }}/code_signing.key
+          rm -f ${{ env.WORKAROUND_TEMP_DIR }}/code_signing.cert
+          rm -f ${{ env.WORKAROUND_TEMP_DIR }}/code_signing.key
       - name: Store Windows binary package and installer
         uses: actions/upload-artifact@v4
         with:
