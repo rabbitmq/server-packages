@@ -140,6 +140,22 @@ jobs:
           echo "Pre-release? ${{ inputs.prerelease }}"
           echo "FULL_VERSION=${{ inputs.base_version }}"
           echo "FULL_VERSION=${{ inputs.base_version }}" >> $GITHUB_ENV
+      - name: Import GPG key
+        if: inputs.gpg_sign_release
+        env:
+          GNUPGHOME: "${{ github.workspace }}/.gnupg"
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PRIVATE_KEY_PASSPHRASE }}
+      - name: "Export SIGNING_KEY (key ID) used by the Debian package build target"
+        if: inputs.gpg_sign_release
+        run: |
+          echo "SIGNING_KEY=${{ secrets.GPG_SIGNING_KEY_ID }}" >> $GITHUB_ENV
+      - name: "Print public GPG keys in the keychain"
+        if: inputs.gpg_sign_release
+        run: |
+          gpg --list-public-keys
       - name: Clone rabbitmq/rabbitmq-server
         uses: actions/checkout@v4
         with:
@@ -159,6 +175,12 @@ jobs:
                                      SOURCE_DIST_FILE=./PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.tar.xz \
                                      PROJECT_VERSION=${{ env.FULL_VERSION }}
           ls -lha ./PACKAGES
+          for file in PACKAGES/*; do
+            if test -f "$file"; then
+              gpg --default-key "${{ env.GPG_SIGNING_KEY_ID }}" --detach-sign --armor "$file"
+            fi
+          done
+          ls -lha PACKAGES/
       - name: Store generic binary build
         uses: actions/upload-artifact@v4
         with:
@@ -232,7 +254,7 @@ jobs:
                             SIGNING_KEY=${{ secrets.GPG_SIGNING_KEY_ID }}
           cd ..
           ls -lha PACKAGES/
-          for file in PACKAGES; do
+          for file in PACKAGES/*; do
             if test -f "$file"; then
               gpg --default-key "${{ env.GPG_SIGNING_KEY_ID }}" --detach-sign --armor "$file"
             fi
@@ -328,7 +350,7 @@ jobs:
                                   SIGNING_KEY="${{ secrets.GPG_SIGNING_KEY_ID }}"
           cd ..
           ls -lha PACKAGES/
-          for file in PACKAGES; do
+          for file in PACKAGES/*; do
             if test -f "$file"; then
               gpg --default-key "${{ env.GPG_SIGNING_KEY_ID }}" --detach-sign --armor "$file"
             fi
@@ -443,7 +465,7 @@ jobs:
                                 PRODUCT_VERSION=${{ env.WINDOWS_INSTALLER_VERSION }}
           cd ..
           ls -lha PACKAGES/
-          for file in PACKAGES; do
+          for file in PACKAGES/*; do
             if test -f "$file"; then
               gpg --default-key "${{ env.GPG_SIGNING_KEY_ID }}" --detach-sign --armor "$file"
             fi
