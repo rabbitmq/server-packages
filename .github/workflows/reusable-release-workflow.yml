@@ -42,6 +42,10 @@ on:
         type: string
         description: "Release tag. Ignored for alphas!"
         required: true
+      gpg_sign_release:
+        type: boolean
+        description: "Should .deb and .rpm packages in this release be GPG-signed?"
+        default: false
       publish_to_cloudsmith:
         type: boolean
         description: "Publish Debian and RPM packages to Cloudsmith?"
@@ -181,6 +185,20 @@ jobs:
           echo "Pre-release? ${{ inputs.prerelease }}"
           echo "FULL_VERSION=${{ inputs.base_version }}"
           echo "FULL_VERSION=${{ inputs.base_version }}" >> $GITHUB_ENV
+      - name: Import GPG key
+        if: inputs.gpg_sign_release
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PRIVATE_KEY_PASSPHRASE }}
+      - name: "Export SIGNING_KEY (key ID) used by the Debian package build target"
+        if: inputs.gpg_sign_release
+        run: |
+          echo "SIGNING_KEY=${{ secrets.GPG_PRIVATE_KEY_ID }}" >> $GITHUB_ENV
+      - name: "Print public GPG keys in the keychain"
+        if: inputs.gpg_sign_release
+        run: |
+          gpg --list-public-keys
       - name: Clone rabbitmq/rabbitmq-server
         uses: actions/checkout@v4
         with:
@@ -198,7 +216,23 @@ jobs:
         with:
           name: rabbitmq-server-${{ env.FULL_VERSION }}-source-tarball
           path: ./rabbitmq-server/PACKAGES
-      - name: Build Debian package
+      - name: Build Debian package with GPG signing
+        if: inputs.gpg_sign_release
+        env:
+          GPG_SIGNING_KEY_ID: ${{ secrets.GPG_SIGNING_KEY_ID }}
+        run: |
+          cd rabbitmq-packaging
+          gmake package-deb PROJECT_VERSION=${{ env.FULL_VERSION }} \
+                            SOURCE_DIST_FILE=../rabbitmq-server/PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.tar.xz \
+                            RABBITMQ_PACKAGING_REPO=. \
+                            DEBIAN_VERSION="${{ env.FULL_VERSION }}" \
+                            SAVE_CHANGELOG=yes \
+                            INSTALL_BUILD_DEPS=no \
+                            SIGNING_KEY=${{ secrets.GPG_SIGNING_KEY_ID }}
+          cd ..
+          ls -lha PACKAGES/
+      - name: Build Debian package without GPG signing
+        if: !inputs.gpg_sign_release
         run: |
           cd rabbitmq-packaging
           gmake package-deb PROJECT_VERSION=${{ env.FULL_VERSION }} \
