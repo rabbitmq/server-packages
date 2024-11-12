@@ -140,22 +140,6 @@ jobs:
           echo "Pre-release? ${{ inputs.prerelease }}"
           echo "FULL_VERSION=${{ inputs.base_version }}"
           echo "FULL_VERSION=${{ inputs.base_version }}" >> $GITHUB_ENV
-      - name: Import GPG key
-        if: inputs.gpg_sign_release
-        env:
-          GNUPGHOME: "${{ github.workspace }}/.gnupg"
-        uses: crazy-max/ghaction-import-gpg@v6
-        with:
-          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
-          passphrase: ${{ secrets.GPG_PRIVATE_KEY_PASSPHRASE }}
-      - name: "Export SIGNING_KEY (key ID) used by the Debian package build target"
-        if: inputs.gpg_sign_release
-        run: |
-          echo "SIGNING_KEY=${{ secrets.GPG_SIGNING_KEY_ID }}" >> $GITHUB_ENV
-      - name: "Print public GPG keys in the keychain"
-        if: inputs.gpg_sign_release
-        run: |
-          gpg --list-public-keys
       - name: Clone rabbitmq/rabbitmq-server
         uses: actions/checkout@v4
         with:
@@ -169,19 +153,12 @@ jobs:
           path: ./rabbitmq-server/PACKAGES
       - name: Build generic binary package with signing
         if: inputs.gpg_sign_release
-        env:
-          SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY_ID }}
         run: |
           cd rabbitmq-server
           ls -lha ./PACKAGES
           gmake package-generic-unix TARBALL_SUFFIX=generic-unix \
                                      SOURCE_DIST_FILE=./PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.tar.xz \
                                      PROJECT_VERSION=${{ env.FULL_VERSION }}
-          ls -lha ./PACKAGES
-          for file in ./PACKAGES/*; do
-            echo "Will sign $file with key ${{ env.SIGNING_KEY }}..."
-            gpg --default-key "${{ env.SIGNING_KEY }}" --detach-sign --armor "$file"
-          done
           ls -lha ./PACKAGES
       - name: Build generic binary package without signing
         if: inputs.gpg_sign_release == false
@@ -264,11 +241,6 @@ jobs:
                             INSTALL_BUILD_DEPS=no \
                             SIGNING_KEY=${{ secrets.GPG_SIGNING_KEY_ID }}
           cd ..
-          ls -lha PACKAGES/
-          for file in PACKAGES/*; do
-            echo "Will sign $file with key ${{ env.SIGNING_KEY }}..."
-            gpg --default-key "${{ env.SIGNING_KEY }}" --detach-sign --armor "$file"
-          done
           ls -lha PACKAGES/
       - name: Build Debian package without GPG signing
         if: inputs.gpg_sign_release == false
@@ -359,11 +331,6 @@ jobs:
                                   SOURCE_DIST_FILE=../rabbitmq-server/PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.tar.xz \
                                   SIGNING_KEY="${{ secrets.GPG_SIGNING_KEY_ID }}"
           cd ..
-          ls -lha PACKAGES/
-          for file in PACKAGES/*; do
-            echo "Will sign $file with key ${{ env.SIGNING_KEY }}..."
-            gpg --default-key "${{ env.SIGNING_KEY }}" --detach-sign --armor "$file"
-          done
           ls -lha PACKAGES/
       - name: Build RPM package without GPG signing
         if: inputs.gpg_sign_release == false
@@ -539,6 +506,20 @@ jobs:
           echo "Pre-release? ${{ inputs.prerelease }}"
           echo "FULL_VERSION=${{ inputs.base_version }}"
           echo "FULL_VERSION=${{ inputs.base_version }}" >> $GITHUB_ENV
+      - name: Import GPG key
+        if: inputs.gpg_sign_release
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PRIVATE_KEY_PASSPHRASE }}
+      - name: "Export SIGNING_KEY (key ID) used by the Debian package build target"
+        if: inputs.gpg_sign_release
+        run: |
+          echo "SIGNING_KEY=${{ secrets.GPG_SIGNING_KEY_ID }}" >> $GITHUB_ENV
+      - name: "Print public GPG keys in the keychain"
+        if: inputs.gpg_sign_release
+        run: |
+          gpg --list-public-keys
       - name: Fetch source tarball
         uses: actions/download-artifact@v4
         with:
@@ -566,6 +547,16 @@ jobs:
           path: ./artifacts
       - name: List collected artifacts
         run: ls -lha ./artifacts
+      - name: Sign artifacts directly with GPG
+        env:
+          SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY_ID }}
+        run: |
+          ls -lha ./artifacts
+          for file in ./artifacts/*; do
+            echo "Will sign $file with key ${{ env.SIGNING_KEY }}..."
+            gpg --default-key "${{ env.SIGNING_KEY }}" --detach-sign --armor "$file"
+          done
+          ls -lha ./artifacts
       - name: Create a GitHub release with a pre-computed version
         id: create_gh_release
         if: ${{ !(inputs.prerelease_kind == 'alpha') }}
