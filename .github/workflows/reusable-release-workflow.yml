@@ -402,6 +402,18 @@ jobs:
                                 PRODUCT_VERSION=${{ env.WINDOWS_INSTALLER_VERSION }}
           cd ..
           ls -lha PACKAGES/
+          mv "PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.exe" "PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.exe.unsigned"
+
+          osslsigncode sign \
+            -certs "${{ env.CODE_SIGNING_CERT }}" \
+            -key "${{ env.CODE_SIGNING_KEY }}" \
+            -n "RabbitMQ Server ${{ env.FULL_VERSION }} Setup" \
+            -i http://www.rabbitmq.com/ \
+            -t http://timestamp.digicert.com \
+            -in "PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.exe.unsigned" \
+            -out "PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.exe"
+
+            rm "PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.exe.unsigned"
       - name: Build Windows binary package and NSIS-based installer without signing
         if: inputs.gpg_sign_release == false
         run: |
