@@ -345,11 +345,8 @@ jobs:
       image: rabbitmqdevenv/build-env-26.2
     env:
       # https://github.com/actions/runner/issues/1984#issuecomment-1786255099
-      WORKAROUND_TEMP_DIR: "/home/runner/work/_temp/_github_home"
+      WORKAROUND_TEMP_DIR: "/github/home"
     steps:
-      - name: mkdir workaround temporary directory
-        run: |
-          mkdir -p ${{ env.WORKAROUND_TEMP_DIR }}
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
       - name: Conditionall sets env.FULL_VERSION for a pre-release
