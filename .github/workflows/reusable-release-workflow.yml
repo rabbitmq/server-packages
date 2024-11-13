@@ -67,7 +67,7 @@ env:
   # makensis only accepts version numbers in the A.B.C.D format where every segment
   # is a positive integer. This means that for previews, the version can be {base}.{identifier}
   # or just {base}
-  WINDOWS_INSTALLER_VERSION: ${{ inputs.base_version }}.99
+  WINDOWS_INSTALLER_VERSION: ${{ inputs.base_version }}.0
   RELEASE_REPOSITORY: "rabbitmq/server-packages"
 
 jobs:
@@ -431,7 +431,9 @@ jobs:
           cd rabbitmq-packaging
           # IMPORTANT: PRODUCT_VERSION must use the A.B.C.D format where every component is a positive integer.
           #            This is an MSI and makensis build tooling requirement.
-          gmake package-windows RABBITMQ_PACKAGING_REPO="." \
+          export VERSION=${{ env.FULL_VERSION }} PRODUCT_VERSION=${{ env.WINDOWS_INSTALLER_VERSION }}
+          VERSION=${{ env.FULL_VERSION }} PRODUCT_VERSION=${{ env.WINDOWS_INSTALLER_VERSION }} gmake package-windows \
+                                RABBITMQ_PACKAGING_REPO="." \
                                 SOURCE_DIST_FILE=../rabbitmq-server/PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.tar.xz \
                                 VERSION=${{ env.FULL_VERSION }} \
                                 PRODUCT_VERSION=${{ env.WINDOWS_INSTALLER_VERSION }}
@@ -460,7 +462,8 @@ jobs:
           cd rabbitmq-packaging
           # IMPORTANT: PRODUCT_VERSION must use the A.B.C.D format where every component is a positive integer.
           #            This is an MSI and makensis build tooling requirement.
-          gmake package-windows RABBITMQ_PACKAGING_REPO="." \
+          VERSION=${{ env.FULL_VERSION }} PRODUCT_VERSION=${{ env.WINDOWS_INSTALLER_VERSION }} gmake package-windows \
+                                RABBITMQ_PACKAGING_REPO="." \
                                 SOURCE_DIST_FILE=../rabbitmq-server/PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.tar.xz \
                                 VERSION=${{ env.FULL_VERSION }} \
                                 PRODUCT_VERSION=${{ env.WINDOWS_INSTALLER_VERSION }}
