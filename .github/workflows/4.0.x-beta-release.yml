@@ -24,7 +24,7 @@ jobs:
       release_repository: "rabbitmq/server-packages"
       release_title: "RabbitMQ ${{ vars.SERVER_40_NEXT_PATCH_VERSION }}-beta.${{ inputs.prerelease_identifier }}"
       release_description: "RabbitMQ ${{ vars.SERVER_40_NEXT_PATCH_VERSION }}-beta.${{ inputs.prerelease_identifier }}"
-      release_tag: "betas.40x.${{ inputs.prerelease_identifier }}"
+      release_tag: "v${{ vars.SERVER_40_NEXT_PATCH_VERSION }}-beta.${{ inputs.prerelease_identifier }}"
       # applies to Debian and RPM packages only
       gpg_sign_release: true
       publish_to_cloudsmith: false
