@@ -27,22 +27,144 @@ Alpha builds are identified using a shortened commit SHA, for example, `4.1.0-al
 Tags for alphas use a timestamp-based naming scheme. This helps keeps all releases chronologically
 ordered on the [releases page](https://github.com/rabbitmq/server-packages/releases).
 
-Only ten alpha releases are retained.
-
 Alpha build artifacts are meant to be used for development, providing feedback on pull requests,
 and so on.
+
+Alpha builds are not published to Debian and RPM package repositories because it is arguably easier to
+install a one-off package with `dpkg -i` than set up a repository.
+
+Alpha build artifacts are signed.
+Only a certain number alpha releases are retained.
 
 ### Betas
 
 Beta releases are produced by manually triggering a [`4.1.x` Beta release workflow](https://github.com/rabbitmq/server-packages/actions/workflows/4.1.x-beta-release.yml).
 
-Beta build artifacts are not currently signed but they will eventually be.
+Beta build artifacts are signed.
 
 ### Release Candates
 
 RC releases are produced by manually triggering a [`4.1.x` RC release workflow](https://github.com/rabbitmq/server-packages/actions/workflows/4.1.x-rc-release.yml).
 
-RC build artifacts are not currently signed but they will eventually be.
+RC build artifacts are signed. They are also published to Debian and RPM repositories, primarily
+as a way to test that code path before a final release is produced.
+
+
+## Final (GA) Releases
+
+GA releases, also called final releases, are meant for end user consumption.
+
+They are signed, distributed via `rabbitmq/rabbitmq-server` releases and use the standard (for RabbitMQ)
+tag structure.
+
+
+## Workflow Structure
+
+Team RabbitMQ maintains two release series. Currently they are 4.1.0 in `main` and 4.0.x on the `v4.0.x` branch.
+
+For every series, there are workflow for producing alphas, betas, RCs and final releases. They follow a naming convention,
+for example
+
+ * `4.0.x-alpha-release`
+ * `4.1.x-beta-release`
+ * `4.1.x-rc-release`
+ * `4.0.x-ga-release`
+
+and so on.
+
+These workflow have certain differences but most of their jobs and steps are very similar or identical.
+Therefore, they use a reusable release workflow with different inputs.
+
+### Inputs
+
+#### Series Branch
+
+Defines the branch of source repositories (`rabbitmq/rabbitmq-server`, `rabbitmq/rabbitmq-packaging`) that will be
+used during the build.
+
+#### Base Version
+
+Such as `4.1.0` or `4.0.4`. Usually this value will come from
+a [repository-specific variable](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/store-information-in-variables#creating-configuration-variables-for-a-repository).
+
+This variable is meant to be updated as patch releases come out.
+
+#### Prerelease
+
+A boolean that tells the workflow that the release is a preview (an alpha, a beta or an RC)
+and not a final release.
+
+Produced GitHub releases will be marked accordingly.
+
+#### Prerelease Kind
+
+`alpha`, `beta` or `rc`
+
+#### Prerelease Identifier
+
+This is `1` in `4.1.0-beta.1` or `d46e83277` in `4.1.0-alpha.d46e83277`.
+
+This value can be any string but for `alpha` builds, it usually will be a short commit SHA
+in the RabbitMQ server repository, and for `beta` and `rc` builds, it will be a user-provided
+monotonically increasing number.
+
+#### Release Repository
+
+A GitHub repository where a release will be created. For beta, RC and final releases, this typically
+will be `rabbitmq/rabbitmq-server`.
+
+For alphas, `rabbitmq/server-packages` (this repository) will be used instead to not pollute the
+release history of a repository with thousands of visitors a month.
+
+#### Release Title
+
+What should the resulting GitHub release be entitled?
+
+#### Release Description
+
+Resulting GitHub release description.
+
+For alphas, this will include a timestamp and a link to the commit message in the
+RabbitMQ server repository.
+
+For beta, RC and final releases, it makes more sense to use a release notes file.
+
+#### Release Tag
+
+What the Git tag should be used for this release?
+
+For alpha builds, a timestamp-based tag such as `alphas.41x.{timestamp}` will be generated to preserve
+more or less chronological ordering of releases even when they are built for multiple series.
+
+#### GPG Signing of Releases
+
+Should the produced release artifacts be GPG-signed?
+
+Currently this is set to `true` for all release types.
+
+#### Publish to Debian and RPM Repositories?
+
+Should Debian and RPM packages be published to package repositories?
+
+This primarily makes sense for RC and final releases but not betas and certainly not alphas.
+
+#### Debian and RPM Repository Name
+
+Allows you to override the repository and publish RCs separately from final releases.
+
+
+### Primary Workflow Stages
+
+A release build involves a few key operations:
+
+1. Given a set of inputs, compute the version that should be used
+2. Produce a source tarball
+3. Build a generic binary package for Linux, macOS, BSD, and so on
+4. In parallel, build Debian, RPM and two Windows packages (binary Windows build and a NSIS-based Windows installer and uninstaller)
+5. Collect all artifacts and sign them
+6. If necessary, publish Debian and RPM packages to external package repositories
+7. Create a Git tag and a GitHub release with the produced artifacts and signatures
+
 
 
 ## License
