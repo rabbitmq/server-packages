@@ -166,6 +166,24 @@ A release build involves a few key operations:
 7. Create a Git tag and a GitHub release with the produced artifacts and signatures
 
 
+## Signing
+
+Artifact signing keys are used at different steps:
+
+1. When building a Debian package, by [`dpkg-buildpackage(1)`](https://man7.org/linux/man-pages/man1/dpkg-buildpackage.1.html). Given that
+   on Debian-based systems, the `apt` toolchain works with repository signatures and not package signatures, this is of limited use
+   for production deployments (where `dpkg -i` is virtually never used)
+2. When building an RPM package. Practical usefulness is generally comparable to that of Debian packages
+3. When building a Windows installer (and uninstaller), the signature is embedded using [`osslsigncode(1)`](https://github.com/mtrojnar/osslsigncode)
+4. All artifacts collected for the release are signed with `gpg` and the resulting signatures (`.asc` files) are
+   uploaded to the resulting GitHub release together with the actual packages
+
+For steps 1 and 2, the key is loaded into a temporary GPG keychain. Then Debian and RPM tooling
+fetches a key by ID from that keychain.
+
+For steps 3 and 4, the signing key used comes from GitHub secrets and is stored on disk for only for
+the relevant parts of the build.
+
 
 ## License
 
