@@ -48,5 +48,5 @@ jobs:
         with:
           repository: "rabbitmq/server-packages"
           token: ${{ secrets.MK_RELEASE_AUTOMATION_TOKEN }}
-          tag-filter: '^alphas'
+          tag-filter: '^alphas.*'
           keep-last-n: 10
