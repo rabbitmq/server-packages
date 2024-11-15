@@ -6,6 +6,8 @@ This repository contains Actions workflows that produce open source RabbitMQ rel
 automation is to eventually produce alphas (development snapshots), betas (early previews of new feature releases),
 release candidates and [signed GA releases](https://github.com/rabbitmq/rabbitmq-server/releases).
 
+Continuously produced development builds (alphas in RabbitMQ parlance) can be found [on the Releases page](https://github.com/rabbitmq/rabbitmq-server/releases).
+
 It has a sibling project, [`rabbitmq/erlang-packages`](https://github.com/rabbitmq/erlang-packages), which produces
 Debian packages of Erlang and Elixir, and, in case of Erlang, RPM packages.
 
@@ -203,6 +205,19 @@ fetches a key by ID from that keychain.
 
 For steps 3 and 4, the signing key used comes from GitHub secrets and is stored on disk for only for
 the relevant parts of the build.
+
+
+## Package Testing
+
+### Testing with Jepsen
+
+A successfully built alpha release triggers a Jepsen workflow run
+in a separate repository, [`rabbitmq/jepsen`](https://github.com/rabbitmq/jepsen).
+
+### Package Tests
+
+Team RabbitMQ's package tests (that is, they test Debian, RPM, Windows packages specifically
+and not RabbitMQ per se) are not yet moved to this repository.
 
 
 ## License
