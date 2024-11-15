@@ -50,3 +50,10 @@ jobs:
           token: ${{ secrets.MK_RELEASE_AUTOMATION_TOKEN }}
           tag-filter: '^alphas.*'
           keep-last-n: 10
+  trigger_jepsen_tests:
+    needs: [release]
+    uses: "./.github/workflows/reusable-trigger-jepsen-tests-workflow.yml"
+    with:
+      full_version: ${{ needs.release.outputs.full_version }}
+      tag_name: ${{ needs.release.outputs.tag_name }}
+    secrets: inherit

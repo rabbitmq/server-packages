@@ -1,0 +1,41 @@
+name: "Reusable workflow to trigger Jepsen tests"
+on:
+  workflow_call:
+    inputs:
+      full_version:
+        type: string
+        description: The release version (e.g. 4.1.0-alpha.3e509c9f)
+        required: true
+      tag_name:
+        type: string
+        description: The release tag name (e.g. alphas.1731626175221)
+        required: true
+
+env:
+  GITHUB_TOKEN: ${{ secrets.RABBITMQCI_BOT_TOKEN }}
+
+jobs:
+  trigger_jepsen_tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get version and tag
+        run: |
+          VERSION=${{ inputs.full_version }}
+          TAG_NAME=${{ inputs.tag_name }}
+          echo "rabbitmq_version=$VERSION"
+          echo "rabbitmq_version=$VERSION" >> $GITHUB_ENV
+          echo "tag_name=$TAG_NAME"
+          echo "tag_name=$TAG_NAME" >> $GITHUB_ENV
+          MAJOR=$(echo $VERSION | cut -f1 -d'.')
+          MINOR=$(echo $VERSION | cut -f2 -d'.')
+          BRANCH=$MAJOR$MINOR
+          echo "rabbitmq_branch=$BRANCH"
+          echo "rabbitmq_branch=$BRANCH" >> $GITHUB_ENV
+      - name: Dispatch event to trigger Jepsen tests
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          event-type: new_alpha_${{ env.rabbitmq_branch }}
+          repository: rabbitmq/jepsen
+          token: ${{ env.GITHUB_TOKEN }}
+          client-payload: >-
+            {"version": "${{ env.rabbitmq_version }}", "tag_name": "${{ env.tag_name }}"} 

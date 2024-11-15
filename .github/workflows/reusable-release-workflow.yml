@@ -60,6 +60,13 @@ on:
         type: string
         description: Cloudsmith repository to publish Debian and RPM packages to
         required: false
+    outputs:
+      full_version:
+        description: The release version (e.g. 4.1.0-alpha.3e509c9f)
+        value: ${{ jobs.create_gh_release.outputs.full_version }}
+      tag_name:
+        description: The release tag name (e.g. alphas.1731626175221)
+        value: ${{ jobs.create_gh_release.outputs.tag_name }}
 
 
 env:
@@ -481,6 +488,9 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    outputs:
+      full_version: ${{ steps.set_job_outputs.outputs.full_version }}
+      tag_name: ${{ steps.set_job_outputs.outputs.tag_name }}
     steps:
       # for tagging
       - name: Get current UNIX timestamp
@@ -554,6 +564,16 @@ jobs:
             fi
           done
           ls -lha ./artifacts
+      - name: Set up tag name for a pre-computed version
+        if: ${{ !(inputs.prerelease_kind == 'alpha') }}
+        run: |
+          echo "TAG_NAME=${{ inputs.release_tag }}"
+          echo "TAG_NAME=${{ inputs.release_tag }}" >> $GITHUB_ENV
+      - name: Set up tag name for an alpha version
+        if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && inputs.prerelease_kind == 'alpha' }}
+        run: |
+          echo "TAG_NAME=alphas.${{ steps.compute_unix_timestamp.outputs.timestamp }}"
+          echo "TAG_NAME=alphas.${{ steps.compute_unix_timestamp.outputs.timestamp }}" >> $GITHUB_ENV
       - name: Create a GitHub release with a pre-computed version
         id: create_gh_release
         if: ${{ !(inputs.prerelease_kind == 'alpha') }}
@@ -561,7 +581,7 @@ jobs:
         with:
           token: ${{ secrets.MK_RELEASE_AUTOMATION_TOKEN }}
           repository: ${{ inputs.release_repository || env.RELEASE_REPOSITORY }}
-          tag_name: ${{ inputs.release_tag }}
+          tag_name: ${{ env.TAG_NAME }}
           name: ${{ inputs.release_title }}
           body: ${{ inputs.release_description }}
           prerelease: ${{ inputs.prerelease == true || inputs.prerelease == 'true' }}
@@ -573,11 +593,18 @@ jobs:
         with:
           token: ${{ secrets.MK_RELEASE_AUTOMATION_TOKEN }}
           repository: ${{ inputs.release_repository || env.RELEASE_REPOSITORY }}
-          tag_name: alphas.${{ steps.compute_unix_timestamp.outputs.timestamp }}
+          tag_name: ${{ env.TAG_NAME }}
           name: ${{ inputs.release_title }}
           body: ${{ inputs.release_description }}
           prerelease: ${{ inputs.prerelease == true || inputs.prerelease == 'true' }}
           files: ./artifacts/*
+      - name: Set job outputs
+        id: set_job_outputs
+        run: |
+          echo "full_version=${{ env.FULL_VERSION }}"
+          echo "full_version=${{ env.FULL_VERSION }}" >> $GITHUB_OUTPUT
+          echo "tag_name=${{ env.TAG_NAME }}"
+          echo "tag_name=${{ env.TAG_NAME }}" >> $GITHUB_OUTPUT
   publish_rpm_package_to_cloudsmith:
     if: ${{ inputs.publish_to_cloudsmith == true || inputs.publish_to_cloudsmith == 'true' }}
     needs: [rpm_package]
