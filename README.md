@@ -58,6 +58,29 @@ They are signed, distributed via `rabbitmq/rabbitmq-server` releases and use the
 tag structure.
 
 
+## Version Naming
+
+Version naming is generally consistent and follows a long-established RabbitMQ tag
+naming pattern. The only exception with this iteration of our release infrastructure
+is alpha releases: instead of monotonically incrementing integers used for betas, RCs,
+alphas use a short commit SHA.
+
+The commit SHA refers to a commit in the main RabbitMQ server repository.
+
+If an alpha build is triggered manually and there's no commit SHA to use, a different preview
+identifier (such as a UNIX timestamp) can be used.
+
+
+## Tag Naming
+
+| Release type | Tag name pattern                 | Example              |
+|--------------|----------------------------------|----------------------|
+| alphas       | alphas.{timestamp}               | alphas.1731626175221 |
+| betas        | {base}-beta.{preview_identifier} | 4.1.0-beta.1         |
+| RCs          | {base}-rc.{preview_identifier}   | 4.1.0-rc.1           |
+| final        | {base}                           | 4.0.4                |
+
+
 ## Workflow Structure
 
 Team RabbitMQ maintains two release series. Currently they are 4.1.0 in `main` and 4.0.x on the `v4.0.x` branch.
