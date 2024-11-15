@@ -107,7 +107,7 @@ used during the build.
 Such as `4.1.0` or `4.0.4`. Usually this value will come from
 a [repository-specific variable](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/store-information-in-variables#creating-configuration-variables-for-a-repository).
 
-This variable is meant to be updated as patch releases come out.
+This variable is meant to be updated as releases come out.
 
 #### Prerelease
 
