@@ -215,3 +215,5 @@ the relevant parts of the build.
 
 This repository is released under the Mozilla Public License 2.0,
 same as open source RabbitMQ.
+
+SPDX-License-Identifier: MPL-2.0
