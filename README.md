@@ -57,7 +57,7 @@ tag structure.
 Version naming is generally consistent and follows a long-established RabbitMQ tag
 naming pattern. The only exception with this iteration of our release infrastructure
 is alpha releases: instead of monotonically incrementing integers used for betas, RCs,
-alphas use a short commit SHA.
+alphas use a short commit SHA, for example, `4.1.0-alpha.3e509c9f`.
 
 The commit SHA refers to a commit in the main RabbitMQ server repository.
 
