@@ -62,8 +62,8 @@ tag structure.
 
 Team RabbitMQ maintains two release series. Currently they are 4.1.0 in `main` and 4.0.x on the `v4.0.x` branch.
 
-For every series, there are workflow for producing alphas, betas, RCs and final releases. They follow a naming convention,
-for example
+With some exceptions covered below, for every series, there are workflow for producing alphas, betas, RCs and final releases.
+They follow a naming convention, for example
 
  * `4.0.x-alpha-release`
  * `4.1.x-beta-release`
@@ -74,6 +74,9 @@ and so on.
 
 These workflow have certain differences but most of their jobs and steps are very similar or identical.
 Therefore, they use a reusable release workflow with different inputs.
+
+Some workflows may be intentionally omitted, for example, betas are usually only produced for the release series
+in development (`4.1.0` at the moment of writing) and not the current generally available release.
 
 ### Inputs
 
