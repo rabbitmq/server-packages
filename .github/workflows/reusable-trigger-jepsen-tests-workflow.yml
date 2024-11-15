@@ -32,7 +32,7 @@ jobs:
           echo "rabbitmq_branch=$BRANCH"
           echo "rabbitmq_branch=$BRANCH" >> $GITHUB_ENV
       - name: Dispatch event to trigger Jepsen tests
-        uses: peter-evans/repository-dispatch@v2
+        uses: peter-evans/repository-dispatch@v3
         with:
           event-type: new_alpha_${{ env.rabbitmq_branch }}
           repository: rabbitmq/jepsen
