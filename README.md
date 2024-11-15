@@ -1,11 +1,5 @@
 # Build Open Source RabbitMQ Packages on Actions
 
-## Disclaimer
-
-This subproject is very new. Things can break, documentation will be lacking,
-design decisions will be revisited, and so on. Please do not rely on this repository
-unless you plan to regularly contribute to RabbitMQ and have consulted with the RabbitMQ Core Team.
-
 ## What is This?
 
 This repository contains Actions workflows that produce open source RabbitMQ releases. The goal of this
