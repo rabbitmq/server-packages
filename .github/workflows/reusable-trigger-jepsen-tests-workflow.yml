@@ -21,8 +21,8 @@ jobs:
       - name: Get version and tag
         run: |
           rabbitmq_binary_url="https://github.com/rabbitmq/server-packages/releases/download/${{ inputs.tag_name }}/rabbitmq-server-generic-unix-${{ inputs.full_version }}.tar.xz"
-          MAJOR=$(echo $VERSION | cut -f1 -d'.')
-          MINOR=$(echo $VERSION | cut -f2 -d'.')
+          MAJOR=$(echo ${{ inputs.full_version }} | cut -f1 -d'.')
+          MINOR=$(echo ${{ inputs.full_version }} | cut -f2 -d'.')
           BRANCH=$MAJOR$MINOR
           echo "rabbitmq_branch=$BRANCH"
           echo "rabbitmq_branch=$BRANCH" >> $GITHUB_ENV
