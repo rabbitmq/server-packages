@@ -20,17 +20,14 @@ jobs:
     steps:
       - name: Get version and tag
         run: |
-          VERSION=${{ inputs.full_version }}
-          TAG_NAME=${{ inputs.tag_name }}
-          echo "rabbitmq_version=$VERSION"
-          echo "rabbitmq_version=$VERSION" >> $GITHUB_ENV
-          echo "tag_name=$TAG_NAME"
-          echo "tag_name=$TAG_NAME" >> $GITHUB_ENV
+          rabbitmq_binary_url="https://github.com/rabbitmq/server-packages/releases/download/${{ inputs.tag_name }}/rabbitmq-server-generic-unix-${{ inputs.full_version }}.tar.xz"
           MAJOR=$(echo $VERSION | cut -f1 -d'.')
           MINOR=$(echo $VERSION | cut -f2 -d'.')
           BRANCH=$MAJOR$MINOR
           echo "rabbitmq_branch=$BRANCH"
           echo "rabbitmq_branch=$BRANCH" >> $GITHUB_ENV
+          echo "rabbitmq_binary_url=$rabbitmq_binary_url"
+          echo "rabbitmq_binary_url=$rabbitmq_binary_url" >> $GITHUB_ENV
       - name: Dispatch event to trigger Jepsen tests
         uses: peter-evans/repository-dispatch@v3
         with:
@@ -38,4 +35,4 @@ jobs:
           repository: rabbitmq/jepsen
           token: ${{ env.GITHUB_TOKEN }}
           client-payload: >-
-            {"version": "${{ env.rabbitmq_version }}", "tag_name": "${{ env.tag_name }}"} 
+            {"binary_url": "${{ env.rabbitmq_binary_url }}"}
