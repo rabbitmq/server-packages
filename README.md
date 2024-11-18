@@ -9,7 +9,7 @@ release candidates and [signed GA releases](https://github.com/rabbitmq/rabbitmq
 Continuously produced development builds (alphas in RabbitMQ parlance) can be found [on the Releases page](https://github.com/rabbitmq/rabbitmq-server/releases).
 
 It has a sibling project, [`rabbitmq/erlang-packages`](https://github.com/rabbitmq/erlang-packages), which produces
-Debian packages of Erlang and Elixir, and, in case of Erlang, RPM packages.
+Debian packages of Erlang and Elixir, as well as RPM packages of Erlang.
 
 
 ## Preview Releases (Alphas, Betas, RCs)
