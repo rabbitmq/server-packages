@@ -78,7 +78,7 @@ env:
   RELEASE_REPOSITORY: "rabbitmq/server-packages"
 
 jobs:
-  compute_prerelease_values:
+  compute_build_time_values:
     runs-on: ubuntu-latest
     steps:
       - name: Compute prerelease identifier from commit SHA
@@ -87,7 +87,7 @@ jobs:
         run: echo "PRERELEASE_TIMESTAMP=`date --rfc-3339=seconds`" >> $GITHUB_ENV
   source_tarball:
     runs-on: ubuntu-latest
-    needs: [compute_prerelease_values]
+    needs: [compute_build_time_values]
     container:
       image: rabbitmqdevenv/build-env-26.2
     steps:
@@ -545,7 +545,7 @@ jobs:
           path: "PACKAGES/*"
           retention-days: 2
   create_gh_release:
-    needs: [compute_prerelease_values, source_tarball, generic_binary_package, debian_package, rpm_package, windows_packages]
+    needs: [compute_build_time_values, source_tarball, generic_binary_package, debian_package, rpm_package, windows_packages]
     runs-on: ubuntu-latest
     permissions:
       contents: write
