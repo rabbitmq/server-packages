@@ -189,7 +189,11 @@ jobs:
     needs: source_tarball
     runs-on: ubuntu-latest
     container:
-      image: rabbitmqdevenv/build-env-27.1
+      # We need to first ship a RabbitMQ server release that is marked as Erlang 27 compatible,
+      # then wait for a bit, publish Erlang 27 packages to apt repos and sync the mirrors, then
+      # this package type can be produced on truly "latest toolchain"
+      # image: rabbitmqdevenv/build-env-27.1
+      image: rabbitmqdevenv/build-env-26.2
     steps:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
