@@ -10,7 +10,7 @@ jobs:
   release:
     uses: ./.github/workflows/reusable-release-workflow.yml
     with:
-      series_branch: "main"
+      series_branch: "v4.0.x"
       base_version: ${{ vars.SERVER_40_NEXT_PATCH_VERSION }}
       prerelease: false
       # Note: this may be intentionally overriden for periods of time for testing
