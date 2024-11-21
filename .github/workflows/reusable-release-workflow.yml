@@ -174,14 +174,71 @@ jobs:
           cd rabbitmq-server
           ls -lha ./PACKAGES
           gmake package-generic-unix TARBALL_SUFFIX=generic-unix \
-                                      SOURCE_DIST_FILE=./PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.tar.xz \
-                                      PROJECT_VERSION=${{ env.FULL_VERSION }}
+                                     SOURCE_DIST_FILE=./PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.tar.xz \
+                                     PROJECT_VERSION=${{ env.FULL_VERSION }}
           ls -lha ./PACKAGES
       - name: Store generic binary build
         uses: actions/upload-artifact@v4
         with:
           name: rabbitmq-server-${{ env.FULL_VERSION }}-generic-unix
           path: "rabbitmq-server/PACKAGES/rabbitmq-server-generic-unix-${{ env.FULL_VERSION }}.tar.xz"
+          retention-days: 2
+  # This version is built on the most recent supported Erlang version.
+  # See the container.image used as well as how TARBALL_SUFFIX has a different value.
+  generic_binary_package_latest_toolchain:
+    needs: source_tarball
+    runs-on: ubuntu-latest
+    container:
+      image: rabbitmqdevenv/build-env-27.1
+    steps:
+      # Actions do not support conditional expressions in the env: section,
+      # so workaround sets FULL_VERSION
+      - name: Conditionally sets env.FULL_VERSION for a pre-release
+        if: ${{ inputs.prerelease == 'true' || inputs.prerelease == true }}
+        run: |
+          echo "Pre-release? ${{ inputs.prerelease }} alpha? ${{ inputs.prerelease_kind == 'alpha' }}"
+          echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ inputs.prerelease_identifier }}"
+          echo "FULL_VERSION=${{ inputs.base_version }}-${{ inputs.prerelease_kind }}.${{ inputs.prerelease_identifier }}" >> $GITHUB_ENV
+      - name: Conditionally sets env.FULL_VERSION for a final release
+        if: ${{ inputs.prerelease == 'false' || inputs.prerelease == false }}
+        run: |
+          echo "Pre-release? ${{ inputs.prerelease }}"
+          echo "FULL_VERSION=${{ inputs.base_version }}"
+          echo "FULL_VERSION=${{ inputs.base_version }}" >> $GITHUB_ENV
+      - name: Clone rabbitmq/rabbitmq-server
+        uses: actions/checkout@v4
+        with:
+          repository: rabbitmq/rabbitmq-server
+          ref: ${{ inputs.series_branch }}
+          path: rabbitmq-server
+      - name: Fetch source tarball
+        uses: actions/download-artifact@v4
+        with:
+          name: rabbitmq-server-${{ env.FULL_VERSION }}-source-tarball
+          path: ./rabbitmq-server/PACKAGES
+      - name: Build generic binary package on the latest toolchain with signing
+        if: inputs.gpg_sign_release
+        run: |
+          cd rabbitmq-server
+          ls -lha ./PACKAGES
+          gmake package-generic-unix TARBALL_SUFFIX=generic-unix-latest-toolchain \
+                                     SOURCE_DIST_FILE=./PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.tar.xz \
+                                     PROJECT_VERSION=${{ env.FULL_VERSION }}
+          ls -lha ./PACKAGES
+      - name: Build generic binary packageon the latest toolchain without signing
+        if: inputs.gpg_sign_release == false
+        run: |
+          cd rabbitmq-server
+          ls -lha ./PACKAGES
+          gmake package-generic-unix TARBALL_SUFFIX=generic-unix-latest-toolchain \
+                                     SOURCE_DIST_FILE=./PACKAGES/rabbitmq-server-${{ env.FULL_VERSION }}.tar.xz \
+                                     PROJECT_VERSION=${{ env.FULL_VERSION }}
+          ls -lha ./PACKAGES
+      - name: Store generic binary package built on the latest toolchain
+        uses: actions/upload-artifact@v4
+        with:
+          name: rabbitmq-server-${{ env.FULL_VERSION }}-generic-unix-latest-toolchain
+          path: "rabbitmq-server/PACKAGES/rabbitmq-server-generic-unix-latest-toolchain-${{ env.FULL_VERSION }}.tar.xz"
           retention-days: 2
   debian_package:
     needs: source_tarball
@@ -533,6 +590,11 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: rabbitmq-server-${{ env.FULL_VERSION }}-generic-unix
+          path: ./artifacts
+      - name: Fetch generic binary package built on the latest toolchain
+        uses: actions/download-artifact@v4
+        with:
+          name: rabbitmq-server-${{ env.FULL_VERSION }}-generic-unix-latest-toolchain
           path: ./artifacts
       - name: Fetch Debian package and build artifacts
         uses: actions/download-artifact@v4
