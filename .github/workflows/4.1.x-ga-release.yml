@@ -13,13 +13,14 @@ jobs:
       series_branch: "main"
       base_version: ${{ vars.SERVER_41_NEXT_PATCH_VERSION }}
       prerelease: false
-      release_repository: "rabbitmq/server-packages"
+      # Note: this may be intentionally overriden for periods of time for testing
+      release_repository: "rabbitmq/rabbitmq-server"
       release_title: "RabbitMQ ${{ vars.SERVER_41_NEXT_PATCH_VERSION }}"
       release_description: "RabbitMQ ${{ vars.SERVER_41_NEXT_PATCH_VERSION }}"
       release_tag: "v${{ vars.SERVER_41_NEXT_PATCH_VERSION }}"
       # applies to Debian and RPM packages only
       gpg_sign_release: true
       publish_to_cloudsmith: true
-      # intentionally overriden for a period of testing
-      cloudsmith_repository: "rabbitmq-server-prereleases"
+      # Note: this may be intentionally overriden for periods of time for testing
+      cloudsmith_repository: "rabbitmq-server"
     secrets: inherit
