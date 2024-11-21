@@ -291,7 +291,7 @@ jobs:
           echo "FULL_VERSION=${{ inputs.base_version }}"
           echo "FULL_VERSION=${{ inputs.base_version }}" >> $GITHUB_ENV
           # RPM needs a tilde ~ for prelease version separator
-          echo "RPM_VERSION=${{ inputs.base_version }}~${{ inputs.prerelease_kind }}.${{ inputs.prerelease_identifier }}" >> $GITHUB_ENV
+          echo "RPM_VERSION=${{ inputs.base_version }}" >> $GITHUB_ENV
       - name: Import GPG key
         if: inputs.gpg_sign_release
         env:
