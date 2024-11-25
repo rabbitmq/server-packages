@@ -54,6 +54,14 @@ They are signed, distributed via `rabbitmq/rabbitmq-server` releases and use the
 tag structure.
 
 
+## Build Environment Images
+
+These workflows rely on a number of [OCI images built by the RabbitMQ Core Team](https://github.com/rabbitmq/build-env-images):
+
+1. All 4.1.x workflows use an Erlang 27 image
+1. All 4.0.x workflows use an Erlang 26 one
+
+
 ## Version Naming
 
 Version naming is generally consistent and follows a long-established RabbitMQ tag
