@@ -7,6 +7,12 @@ on:
         description: What branch of rabbitmq/rabbitmq-server and related repositories should be used?
         required: true
         default: "main"
+      build_env_image:
+        type: string
+        # see https://github.com/rabbitmq/build-env-images
+        description: What build environment image should be used?
+        required: true
+        default: "rabbitmqdevenv/build-env-26.2"
       base_version:
         # A base version string in the A.B.C format
         type: string
@@ -89,7 +95,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [compute_build_time_values]
     container:
-      image: rabbitmqdevenv/build-env-26.2
+      image: ${{ inputs.build_env_image }}
     steps:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
@@ -132,7 +138,7 @@ jobs:
     needs: source_tarball
     runs-on: ubuntu-latest
     container:
-      image: rabbitmqdevenv/build-env-26.2
+      image: ${{ inputs.build_env_image }}
     steps:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
@@ -193,7 +199,7 @@ jobs:
       # then wait for a bit, publish Erlang 27 packages to apt repos and sync the mirrors, then
       # this package type can be produced on truly "latest toolchain"
       # image: rabbitmqdevenv/build-env-27.1
-      image: rabbitmqdevenv/build-env-26.2
+      image: ${{ inputs.build_env_image }}
     steps:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
@@ -248,7 +254,7 @@ jobs:
     needs: source_tarball
     runs-on: ubuntu-latest
     container:
-      image: rabbitmqdevenv/build-env-26.2
+      image: ${{ inputs.build_env_image }}
     steps:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
@@ -333,7 +339,7 @@ jobs:
     needs: source_tarball
     runs-on: ubuntu-latest
     container:
-      image: rabbitmqdevenv/build-env-26.2
+      image: ${{ inputs.build_env_image }}
     steps:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
@@ -422,7 +428,7 @@ jobs:
     needs: source_tarball
     runs-on: ubuntu-latest
     container:
-      image: rabbitmqdevenv/build-env-26.2
+      image: ${{ inputs.build_env_image }}
     env:
       # https://github.com/actions/runner/issues/1984#issuecomment-1786255099
       WORKAROUND_TEMP_DIR: "/github/home"
