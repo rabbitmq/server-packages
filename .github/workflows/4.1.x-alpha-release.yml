@@ -50,8 +50,8 @@ jobs:
         with:
           repository: "rabbitmq/server-packages"
           token: ${{ secrets.MK_RELEASE_AUTOMATION_TOKEN }}
-          tag-filter: '^alphas.*'
-          keep-last-n: 10
+          name-filter-: '.*4.1.[0-9]+-alpha.*'
+          keep-last-n: 5
   trigger_jepsen_tests:
     needs: [release]
     uses: "./.github/workflows/reusable-trigger-jepsen-tests-workflow.yml"
