@@ -56,10 +56,10 @@ tag structure.
 
 ## Build Environment Images
 
-These workflows rely on a number of [OCI images built by the RabbitMQ Core Team](https://github.com/rabbitmq/build-env-images):
+These workflows rely on a number of [OCI images built by the RabbitMQ Core Team](https://github.com/rabbitmq/build-env-images).
 
-1. All 4.1.x workflows use an Erlang 27 image
-1. All 4.0.x workflows use an Erlang 26 one
+Currently all 4.1.x and 4.0.x workflows use an Erlang 26 image for most artifacts
+and Erlang 27 for the "latest toolchain" variation of the generic binary build.
 
 
 ## Version Naming
