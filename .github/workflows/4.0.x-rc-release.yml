@@ -19,6 +19,7 @@ jobs:
       series_branch: "v4.0.x"
       # see https://github.com/rabbitmq/build-env-images
       build_env_image: "rabbitmqdevenv/build-env-26.2"
+      latest_build_env_image: "rabbitmqdevenv/build-env-27.1"
       base_version: ${{ vars.SERVER_40_NEXT_PATCH_VERSION }}
       prerelease: true
       prerelease_kind: "rc"

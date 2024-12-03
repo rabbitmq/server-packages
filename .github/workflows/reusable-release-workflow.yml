@@ -13,6 +13,12 @@ on:
         description: What build environment image should be used?
         required: true
         default: "rabbitmqdevenv/build-env-26.2"
+      latest_build_env_image:
+          type: string
+          # see https://github.com/rabbitmq/build-env-images
+          description: What build environment image should be used for latest-toolchain builds?
+          required: true
+          default: "rabbitmqdevenv/build-env-27.1"
       base_version:
         # A base version string in the A.B.C format
         type: string
@@ -191,15 +197,13 @@ jobs:
           retention-days: 2
   # This version is built on the most recent supported Erlang version.
   # See the container.image used as well as how TARBALL_SUFFIX has a different value.
+  # See https://github.com/rabbitmq/build-env-images for image source.
   generic_binary_package_latest_toolchain:
     needs: source_tarball
     runs-on: ubuntu-latest
     container:
-      # We need to first ship a RabbitMQ server release that is marked as Erlang 27 compatible,
-      # then wait for a bit, publish Erlang 27 packages to apt repos and sync the mirrors, then
-      # this package type can be produced on truly "latest toolchain"
-      # image: rabbitmqdevenv/build-env-27.1
-      image: ${{ inputs.build_env_image }}
+      # N.B.: this is different from the standard generic binary build
+      image: ${{ inputs.latest_build_env_image }}
     steps:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
