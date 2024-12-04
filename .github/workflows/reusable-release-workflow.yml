@@ -92,7 +92,6 @@ env:
 jobs:
   source_tarball:
     runs-on: ubuntu-latest
-    needs: [compute_build_time_values]
     container:
       image: ${{ inputs.build_env_image }}
     steps:
