@@ -90,13 +90,6 @@ env:
   RELEASE_REPOSITORY: "rabbitmq/server-packages"
 
 jobs:
-  compute_build_time_values:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Compute prerelease identifier from commit SHA
-        run: echo "PRERELEASE_IDENTIFIER=`echo ${{ github.sha }} | cut -c1-8`" >> $GITHUB_ENV
-      - name: Compute human-readable release timestamp
-        run: echo "PRERELEASE_TIMESTAMP=`date --rfc-3339=seconds`" >> $GITHUB_ENV
   source_tarball:
     runs-on: ubuntu-latest
     needs: [compute_build_time_values]
