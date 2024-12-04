@@ -91,7 +91,7 @@ env:
 
 jobs:
   source_tarball:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     container:
       image: ${{ inputs.build_env_image }}
     steps:
@@ -134,7 +134,7 @@ jobs:
           retention-days: 2
   generic_binary_package:
     needs: source_tarball
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     container:
       image: ${{ inputs.build_env_image }}
     steps:
@@ -192,7 +192,7 @@ jobs:
   # See https://github.com/rabbitmq/build-env-images for image source.
   generic_binary_package_latest_toolchain:
     needs: source_tarball
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     container:
       # N.B.: this is different from the standard generic binary build
       image: ${{ inputs.latest_build_env_image }}
@@ -248,7 +248,7 @@ jobs:
           retention-days: 2
   debian_package:
     needs: source_tarball
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     container:
       image: ${{ inputs.build_env_image }}
     steps:
@@ -333,7 +333,7 @@ jobs:
           retention-days: 2
   rpm_package:
     needs: source_tarball
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     container:
       image: ${{ inputs.build_env_image }}
     steps:
@@ -422,7 +422,7 @@ jobs:
           retention-days: 2
   windows_packages:
     needs: source_tarball
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     container:
       image: ${{ inputs.build_env_image }}
     env:
@@ -548,7 +548,7 @@ jobs:
           retention-days: 2
   create_gh_release:
     needs: [source_tarball, generic_binary_package, generic_binary_package_latest_toolchain, debian_package, rpm_package, windows_packages]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       contents: write
     outputs:
@@ -676,7 +676,7 @@ jobs:
   publish_rpm_package_to_cloudsmith:
     if: ${{ inputs.publish_to_cloudsmith == true || inputs.publish_to_cloudsmith == 'true' }}
     needs: [rpm_package]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
@@ -731,7 +731,7 @@ jobs:
   publish_debian_package_to_cloudsmith:
     if: ${{ inputs.publish_to_cloudsmith == true || inputs.publish_to_cloudsmith == 'true' }}
     needs: [debian_package]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       # Actions do not support conditional expressions in the env: section,
       # so workaround sets FULL_VERSION
