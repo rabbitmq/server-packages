@@ -15,14 +15,6 @@ permissions:
   contents: write
 
 jobs:
-  print_timestamp:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Get current UNIX timestamp
-        id: compute_unix_timestamp
-        uses: release-kit/unix-timestamp@v1
-      - name: Print timestamp
-        run: echo '${{ steps.compute_unix_timestamp.outputs.timestamp }}'
   release:
     uses: "./.github/workflows/reusable-release-workflow.yml"
     with:
