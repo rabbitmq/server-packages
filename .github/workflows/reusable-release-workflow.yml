@@ -547,7 +547,7 @@ jobs:
           path: "PACKAGES/*"
           retention-days: 2
   create_gh_release:
-    needs: [compute_build_time_values, source_tarball, generic_binary_package, generic_binary_package_latest_toolchain, debian_package, rpm_package, windows_packages]
+    needs: [source_tarball, generic_binary_package, generic_binary_package_latest_toolchain, debian_package, rpm_package, windows_packages]
     runs-on: ubuntu-latest
     permissions:
       contents: write
