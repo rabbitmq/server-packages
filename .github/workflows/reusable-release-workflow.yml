@@ -18,7 +18,7 @@ on:
           # see https://github.com/rabbitmq/build-env-images
           description: What build environment image should be used for latest-toolchain builds?
           required: true
-          default: "rabbitmqdevenv/build-env-27.1"
+          default: "rabbitmqdevenv/build-env-27.2"
       base_version:
         # A base version string in the A.B.C format
         type: string
