@@ -662,7 +662,7 @@ jobs:
           token: ${{ secrets.MK_RELEASE_AUTOMATION_TOKEN }}
           repository: ${{ inputs.release_repository || env.RELEASE_REPOSITORY }}
           tag_name: ${{ env.TAG_NAME }}
-          tag_commitish: ${{ inputs.series_branch }}
+          target_commitish: ${{ inputs.series_branch }}
           name: ${{ inputs.release_title }}
           body: ${{ inputs.release_description }}
           prerelease: ${{ inputs.prerelease == true || inputs.prerelease == 'true' }}
