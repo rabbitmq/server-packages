@@ -45,10 +45,10 @@ jobs:
           token: ${{ secrets.MK_RELEASE_AUTOMATION_TOKEN }}
           name-filter: '.*4.1.[0-9]+-alpha.*'
           keep-last-n: 5
-  # trigger_jepsen_tests:
-  #   needs: [release]
-  #   uses: "./.github/workflows/reusable-trigger-jepsen-tests-workflow.yml"
-  #   with:
-  #     full_version: ${{ needs.release.outputs.full_version }}
-  #     tag_name: ${{ needs.release.outputs.tag_name }}
-  #   secrets: inherit
+  trigger_jepsen_tests:
+    needs: [release]
+    uses: "./.github/workflows/reusable-trigger-jepsen-tests-workflow.yml"
+    with:
+      full_version: ${{ needs.release.outputs.full_version }}
+      tag_name: ${{ needs.release.outputs.tag_name }}
+    secrets: inherit
