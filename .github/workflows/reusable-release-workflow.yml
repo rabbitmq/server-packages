@@ -641,6 +641,8 @@ jobs:
         run: |
           echo "TAG_NAME=alphas.${{ steps.compute_unix_timestamp.outputs.timestamp }}"
           echo "TAG_NAME=alphas.${{ steps.compute_unix_timestamp.outputs.timestamp }}" >> $GITHUB_ENV
+          echo "TIMESTAMP_IN_SECONDS=$(echo '${{ steps.compute_unix_timestamp.outputs.timestamp }}' | awk '{print substr($0, 1, length($0)-3)}')"
+          echo "TIMESTAMP_IN_SECONDS=$(echo '${{ steps.compute_unix_timestamp.outputs.timestamp }}' | awk '{print substr($0, 1, length($0)-3)}')" >> $GITHUB_ENV
       - name: Create a GitHub release with a pre-computed version
         id: create_gh_release
         if: ${{ !(inputs.prerelease_kind == 'alpha') }}
@@ -663,8 +665,9 @@ jobs:
           repository: ${{ inputs.release_repository || env.RELEASE_REPOSITORY }}
           tag_name: ${{ env.TAG_NAME }}
           target_commitish: ${{ inputs.series_branch }}
-          name: ${{ inputs.release_title }}
-          body: ${{ inputs.release_description }}
+          name: ${{ inputs.release_title != '' && inputs.release_title || format('RabbitMQ {0} (from {1})', env.FULL_VERSION, env.TIMESTAMP_IN_SECONDS) }}
+          body: |
+            ${{ inputs.release_description != '' && inputs.release_description || format('Triggered manually, pushed at: {0}', env.TIMESTAMP_IN_SECONDS) }}
           prerelease: ${{ inputs.prerelease == true || inputs.prerelease == 'true' }}
           files: ./artifacts/*
       - name: Set job outputs
