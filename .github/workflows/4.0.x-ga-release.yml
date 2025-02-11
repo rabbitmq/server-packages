@@ -17,7 +17,7 @@ jobs:
       base_version: ${{ vars.SERVER_40_NEXT_PATCH_VERSION }}
       prerelease: false
       # Note: this may be intentionally overriden for periods of time for testing
-      release_repository: "rabbitmq/server-packages"
+      release_repository: "rabbitmq/rabbitmq-server"
       release_title: "RabbitMQ ${{ vars.SERVER_40_NEXT_PATCH_VERSION }}"
       release_description: "RabbitMQ ${{ vars.SERVER_40_NEXT_PATCH_VERSION }}"
       release_tag: "v${{ vars.SERVER_40_NEXT_PATCH_VERSION }}"
