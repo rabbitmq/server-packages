@@ -2,11 +2,11 @@
 
 ## What is This?
 
-This repository contains Actions workflows that produce open source RabbitMQ releases. The goal of this
-automation is to eventually produce alphas (development snapshots), betas (early previews of new feature releases),
+This repository contains Actions workflows that produce open source RabbitMQ releases. They produce
+alphas (development snapshots), betas (early previews of new feature releases),
 release candidates and [signed GA releases](https://github.com/rabbitmq/rabbitmq-server/releases).
 
-Continuously produced development builds (alphas in RabbitMQ parlance) can be found [on the Releases page](https://github.com/rabbitmq/rabbitmq-server/releases).
+Continuously produced development builds (alphas in RabbitMQ parlance) can be found [on the Releases page](https://github.com/rabbitmq/server-packages/releases).
 
 It has a sibling project, [`rabbitmq/erlang-packages`](https://github.com/rabbitmq/erlang-packages), which produces
 Debian packages of Erlang and Elixir, as well as RPM packages of Erlang.
