@@ -58,7 +58,7 @@ tag structure.
 
 These workflows rely on a number of [OCI images built by the RabbitMQ Core Team](https://github.com/rabbitmq/build-env-images).
 
-Currently all 4.1.x and 4.0.x workflows use an Erlang 26 image for most artifacts
+At the moment all 4.x workflows use an Erlang 26 image for most artifacts
 and Erlang 27 for the "latest toolchain" variation of the generic binary build.
 
 
@@ -84,16 +84,30 @@ identifier (such as a UNIX timestamp) can be used.
 | RCs          | {base}-rc.{preview_identifier}   | 4.1.0-rc.1           |
 | final        | {base}                           | 4.0.4                |
 
+All tags are created on the same branch as the `rabbitmq/rabbitmq-server` branch they
+check out before building the source tarball, e.g. `v4.1.x` or `v4.0.x` or `main`.
+
+For the preview releases (namely alphas) published in this repository, this means a branch
+in this repository. Therefore, when a new series is introduced (say, `main` becomes `4.2.x` because
+`4.1.x` now uses `v4.1.x`), a new branch with the same name as the `rabbitmq/rabbitmq-server` one
+must be created in this repository.
+
 
 ## Workflow Structure
 
-Team RabbitMQ maintains two release series. Currently they are 4.1.0 in `main` and 4.0.x on the `v4.0.x` branch.
+Team RabbitMQ works on two open source release series in parallel.
+Currently they are
+
+ * 4.0.x on the `v4.0.x` branch
+ * Future 4.1.x on the `v4.1.x` branch
+
+`main` currently uses `4.2.0` for release series to differentiate itself from `v4.1.x`.
 
 With some exceptions covered below, for every series, there are workflow for producing alphas, betas, RCs and final releases.
 They follow a naming convention, for example
 
  * `4.0.x-alpha-release`
- * `4.1.x-beta-release`
+ * `4.2.x-beta-release`
  * `4.1.x-rc-release`
  * `4.0.x-ga-release`
 
