@@ -16,10 +16,10 @@ jobs:
   release:
     uses: ./.github/workflows/reusable-release-workflow.yml
     with:
-      series_branch: "main"
+      series_branch: "v4.1.x"
       # see https://github.com/rabbitmq/build-env-images
       build_env_image: "rabbitmqdevenv/build-env-26.2"
-      latest_build_env_image: "rabbitmqdevenv/build-env-27.2"
+      latest_build_env_image: "rabbitmqdevenv/build-env-27.3"
       base_version: ${{ vars.SERVER_41_NEXT_PATCH_VERSION }}
       prerelease: true
       prerelease_kind: "beta"

@@ -1,4 +1,4 @@
-name: "4.1.x release"
+name: "4.2.x GA release"
 on:
   workflow_dispatch:
     inputs:
@@ -10,17 +10,17 @@ jobs:
   release:
     uses: ./.github/workflows/reusable-release-workflow.yml
     with:
-      series_branch: "v4.1.x"
+      series_branch: "main"
       # see https://github.com/rabbitmq/build-env-images
       build_env_image: "rabbitmqdevenv/build-env-26.2"
       latest_build_env_image: "rabbitmqdevenv/build-env-27.3"
-      base_version: ${{ vars.SERVER_41_NEXT_PATCH_VERSION }}
+      base_version: ${{ vars.SERVER_42_NEXT_PATCH_VERSION }}
       prerelease: false
       # Note: this may be intentionally overriden for periods of time for testing
       release_repository: "rabbitmq/server-packages"
-      release_title: "RabbitMQ ${{ vars.SERVER_41_NEXT_PATCH_VERSION }}"
-      release_description: "RabbitMQ ${{ vars.SERVER_41_NEXT_PATCH_VERSION }}"
-      release_tag: "v${{ vars.SERVER_41_NEXT_PATCH_VERSION }}"
+      release_title: "RabbitMQ ${{ vars.SERVER_42_NEXT_PATCH_VERSION }}"
+      release_description: "RabbitMQ ${{ vars.SERVER_42_NEXT_PATCH_VERSION }}"
+      release_tag: "v${{ vars.SERVER_42_NEXT_PATCH_VERSION }}"
       # applies to Debian and RPM packages only
       gpg_sign_release: true
       publish_to_cloudsmith: true
