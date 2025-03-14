@@ -87,7 +87,7 @@ identifier (such as a UNIX timestamp) can be used.
 All tags are created on the same branch as the `rabbitmq/rabbitmq-server` branch they
 check out before building the source tarball, e.g. `v4.1.x` or `v4.0.x` or `main`.
 
-For the preview releases (namely alphas) published in this repository, this means a branch
+For the preview releases (namely alphas) published to this repository, this means a branch
 in this repository. Therefore, when a new series is introduced (say, `main` becomes `4.2.x` because
 `4.1.x` now uses `v4.1.x`), a new branch with the same name as the `rabbitmq/rabbitmq-server` one
 must be created in this repository.
