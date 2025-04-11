@@ -12,7 +12,7 @@ on:
         required: true
 
 env:
-  GITHUB_TOKEN: ${{ secrets.RABBITMQCI_BOT_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.MK_RELEASE_AUTOMATION_TOKEN }}
 
 jobs:
   trigger_jepsen_tests:

@@ -81,7 +81,7 @@ on:
 
 
 env:
-  GITHUB_TOKEN: ${{ secrets.RABBITMQCI_BOT_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.MK_RELEASE_AUTOMATION_TOKEN }}
   # makensis only accepts version numbers in the A.B.C.D format where every segment
   # is a positive integer. This means that for previews, the version can be {base}.{identifier}
   # or just {base}
