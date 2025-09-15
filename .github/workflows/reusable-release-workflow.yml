@@ -795,6 +795,19 @@ jobs:
           local_path: artifacts
           globs: '*.deb'
           tags: rabbitmq
+      - name: Publish Debian package for debian/trixie
+        uses: docker://rabbitmqdevenv/cloudsmith-action:latest
+        with:
+          username: ${{ secrets.CLOUDSMITH_USERNAME }}
+          organization: ${{ secrets.CLOUDSMITH_ORGANIZATION }}
+          repository: ${{ inputs.cloudsmith_repository }}
+          api_key: ${{ secrets.CLOUDSMITH_API_KEY }}
+          distribution: debian/trixie
+          action: upload
+          republish: true
+          local_path: artifacts
+          globs: '*.deb'
+          tags: rabbitmq
       - name: Publish Debian package for debian/bookworm
         uses: docker://rabbitmqdevenv/cloudsmith-action:latest
         with:
@@ -803,19 +816,6 @@ jobs:
           repository: ${{ inputs.cloudsmith_repository }}
           api_key: ${{ secrets.CLOUDSMITH_API_KEY }}
           distribution: debian/bookworm
-          action: upload
-          republish: true
-          local_path: artifacts
-          globs: '*.deb'
-          tags: rabbitmq
-      - name: Publish Debian package for debian/bullseye
-        uses: docker://rabbitmqdevenv/cloudsmith-action:latest
-        with:
-          username: ${{ secrets.CLOUDSMITH_USERNAME }}
-          organization: ${{ secrets.CLOUDSMITH_ORGANIZATION }}
-          repository: ${{ inputs.cloudsmith_repository }}
-          api_key: ${{ secrets.CLOUDSMITH_API_KEY }}
-          distribution: debian/bullseye
           action: upload
           republish: true
           local_path: artifacts
