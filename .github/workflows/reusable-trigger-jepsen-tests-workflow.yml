@@ -29,7 +29,7 @@ jobs:
           echo "rabbitmq_binary_url=$rabbitmq_binary_url"
           echo "rabbitmq_binary_url=$rabbitmq_binary_url" >> $GITHUB_ENV
       - name: Dispatch event to trigger Jepsen tests
-        uses: peter-evans/repository-dispatch@v3
+        uses: peter-evans/repository-dispatch@v4
         with:
           event-type: new_alpha_${{ env.rabbitmq_branch }}
           repository: rabbitmq/jepsen
