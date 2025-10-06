@@ -1,0 +1,65 @@
+name: "4.3.x beta release"
+on:
+  workflow_dispatch:
+    inputs:
+      prerelease_identifier:
+        # can be a number, a commit SHA prefix
+        type: string
+        description: "Preview identifier (e.g. an integer or a commit SHA) to use"
+        required: true
+        default: "1"
+
+permissions:
+  contents: write
+
+jobs:
+  check-test-status:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Test Mixed with 3.13 workflow status
+        run: |
+          # Get the most recent run of the "Test Mixed with 3.13" workflow
+          WORKFLOW_STATUS=$(gh run list --repo rabbitmq/rabbitmq-server --workflow="Test Mixed with 3.13" --limit=1 --json status --jq '.[0].status')
+
+          echo "Most recent 'Test Mixed with 3.13' workflow status: $WORKFLOW_STATUS"
+
+          if [ "$WORKFLOW_STATUS" != "completed" ]; then
+            echo "::error::The most recent 'Test Mixed with 3.13' workflow has not completed successfully. Current status: $WORKFLOW_STATUS"
+            exit 1
+          fi
+
+          # Also check the conclusion to ensure it was successful
+          WORKFLOW_CONCLUSION=$(gh run list --repo rabbitmq/rabbitmq-server --workflow="Test Mixed with 3.13" --limit=1 --json conclusion --jq '.[0].conclusion')
+          echo "Most recent 'Test Mixed with 3.13' workflow conclusion: $WORKFLOW_CONCLUSION"
+
+          if [ "$WORKFLOW_CONCLUSION" != "success" ]; then
+            echo "::error::The most recent 'Test Mixed with 3.13' workflow did not complete successfully. Conclusion: $WORKFLOW_CONCLUSION"
+            exit 1
+          fi
+
+          echo "The most recent 'Test Mixed with 3.13' workflow completed successfully. Proceeding with release."
+        env:
+          GITHUB_TOKEN: ${{ secrets.MK_RELEASE_AUTOMATION_TOKEN }}
+
+  release:
+    needs: check-test-status
+    uses: ./.github/workflows/reusable-release-workflow.yml
+    with:
+      series_branch: "main"
+      # see https://github.com/rabbitmq/build-env-images
+      build_env_image: "rabbitmqdevenv/build-env-26.2"
+      latest_build_env_image: "rabbitmqdevenv/build-env-27.3"
+      base_version: ${{ vars.SERVER_43_NEXT_PATCH_VERSION }}
+      prerelease: true
+      prerelease_kind: "beta"
+      prerelease_identifier: ${{ inputs.prerelease_identifier }}
+      # "rabbitmq/server-packages" is used for development; switch to "rabbitmq/rabbitmq-server" before producing a release
+      release_repository: "rabbitmq/rabbitmq-server"
+      release_title: "RabbitMQ ${{ vars.SERVER_43_NEXT_PATCH_VERSION }}-beta.${{ inputs.prerelease_identifier }}"
+      release_description: "RabbitMQ ${{ vars.SERVER_43_NEXT_PATCH_VERSION }}-beta.${{ inputs.prerelease_identifier }}"
+      release_tag: "v${{ vars.SERVER_43_NEXT_PATCH_VERSION }}-beta.${{ inputs.prerelease_identifier }}"
+      # applies to Debian and RPM packages only
+      gpg_sign_release: true
+      publish_to_cloudsmith: true
+      cloudsmith_repository: "rabbitmq-server-prereleases"
+    secrets: inherit

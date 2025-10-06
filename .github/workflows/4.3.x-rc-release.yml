@@ -1,0 +1,36 @@
+name: "4.3.x RC release"
+on:
+  workflow_dispatch:
+    inputs:
+      prerelease_identifier:
+        # can be a number, a commit SHA prefix
+        type: string
+        description: "Preview identifier (e.g. an integer or a commit SHA) to use"
+        required: true
+        default: "1"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    uses: ./.github/workflows/reusable-release-workflow.yml
+    with:
+      series_branch: "main"
+      # see https://github.com/rabbitmq/build-env-images
+      build_env_image: "rabbitmqdevenv/build-env-26.2"
+      latest_build_env_image: "rabbitmqdevenv/build-env-27.3"
+      base_version: ${{ vars.SERVER_43_NEXT_PATCH_VERSION }}
+      prerelease: true
+      prerelease_kind: "rc"
+      prerelease_identifier: ${{ inputs.prerelease_identifier }}
+      # used for development; reset to "rabbitmq/rabbitmq-server" before producing a release
+      release_repository: "rabbitmq/server-packages"
+      release_title: "RabbitMQ ${{ vars.SERVER_43_NEXT_PATCH_VERSION }}-rc.${{ inputs.prerelease_identifier }}"
+      release_description: "RabbitMQ ${{ vars.SERVER_43_NEXT_PATCH_VERSION }}-rc.${{ inputs.prerelease_identifier }}"
+      release_tag: "v${{ vars.SERVER_43_NEXT_PATCH_VERSION }}-rc.${{ inputs.prerelease_identifier }}"
+      # applies to Debian and RPM packages only
+      gpg_sign_release: true
+      publish_to_cloudsmith: true
+      cloudsmith_repository: "rabbitmq-server-prereleases"
+    secrets: inherit
