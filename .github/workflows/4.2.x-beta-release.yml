@@ -45,7 +45,7 @@ jobs:
     needs: check-test-status
     uses: ./.github/workflows/reusable-release-workflow.yml
     with:
-      series_branch: "main"
+      series_branch: "v4.2.x"
       # see https://github.com/rabbitmq/build-env-images
       build_env_image: "rabbitmqdevenv/build-env-26.2"
       latest_build_env_image: "rabbitmqdevenv/build-env-27.3"
