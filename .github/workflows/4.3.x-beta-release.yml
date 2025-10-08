@@ -54,7 +54,7 @@ jobs:
       prerelease_kind: "beta"
       prerelease_identifier: ${{ inputs.prerelease_identifier }}
       # "rabbitmq/server-packages" is used for development; switch to "rabbitmq/rabbitmq-server" before producing a release
-      release_repository: "rabbitmq/rabbitmq-server"
+      release_repository: "rabbitmq/server-packages"
       release_title: "RabbitMQ ${{ vars.SERVER_43_NEXT_PATCH_VERSION }}-beta.${{ inputs.prerelease_identifier }}"
       release_description: "RabbitMQ ${{ vars.SERVER_43_NEXT_PATCH_VERSION }}-beta.${{ inputs.prerelease_identifier }}"
       release_tag: "v${{ vars.SERVER_43_NEXT_PATCH_VERSION }}-beta.${{ inputs.prerelease_identifier }}"
