@@ -17,7 +17,7 @@ jobs:
       base_version: ${{ vars.SERVER_42_NEXT_PATCH_VERSION }}
       prerelease: false
       # Note: this may be intentionally overriden for periods of time for testing
-      release_repository: "rabbitmq/server-packages"
+      release_repository: "rabbitmq/rabbitmq-server"
       release_title: "RabbitMQ ${{ vars.SERVER_42_NEXT_PATCH_VERSION }}"
       release_description: "RabbitMQ ${{ vars.SERVER_42_NEXT_PATCH_VERSION }}"
       release_tag: "v${{ vars.SERVER_42_NEXT_PATCH_VERSION }}"
@@ -25,5 +25,5 @@ jobs:
       gpg_sign_release: true
       publish_to_cloudsmith: true
       # Note: this may be intentionally overriden for periods of time for testing
-      cloudsmith_repository: "rabbitmq-server-prereleases"
+      cloudsmith_repository: "rabbitmq-server"
     secrets: inherit
