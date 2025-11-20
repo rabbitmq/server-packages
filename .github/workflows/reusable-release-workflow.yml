@@ -109,13 +109,13 @@ jobs:
           echo "FULL_VERSION=${{ inputs.base_version }}"
           echo "FULL_VERSION=${{ inputs.base_version }}" >> $GITHUB_ENV
       - name: Clone rabbitmq/rabbitmq-server
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           repository: rabbitmq/rabbitmq-server
           ref: ${{ inputs.series_branch }}
           path: rabbitmq-server
       - name: Clone rabbitmq/server-packages
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           repository: rabbitmq/server-packages
           # this DOES NOT have to match inputs.series_branch, this is this repository
@@ -152,7 +152,7 @@ jobs:
           echo "FULL_VERSION=${{ inputs.base_version }}"
           echo "FULL_VERSION=${{ inputs.base_version }}" >> $GITHUB_ENV
       - name: Clone rabbitmq/rabbitmq-server
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           repository: rabbitmq/rabbitmq-server
           ref: ${{ inputs.series_branch }}
@@ -211,7 +211,7 @@ jobs:
           echo "FULL_VERSION=${{ inputs.base_version }}"
           echo "FULL_VERSION=${{ inputs.base_version }}" >> $GITHUB_ENV
       - name: Clone rabbitmq/rabbitmq-server
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           repository: rabbitmq/rabbitmq-server
           ref: ${{ inputs.series_branch }}
@@ -280,13 +280,13 @@ jobs:
         run: |
           gpg --list-public-keys
       - name: Clone rabbitmq/rabbitmq-server
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           repository: rabbitmq/rabbitmq-server
           ref: ${{ inputs.series_branch }}
           path: rabbitmq-server
       - name: Clone rabbitmq/rabbitmq-packaging
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           repository: rabbitmq/rabbitmq-packaging
           ref: ${{ inputs.series_branch }}
@@ -371,13 +371,13 @@ jobs:
         run: |
           gpg --list-public-keys
       - name: Clone rabbitmq/rabbitmq-server
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           repository: rabbitmq/rabbitmq-server
           ref: ${{ inputs.series_branch }}
           path: rabbitmq-server
       - name: Clone rabbitmq/rabbitmq-packaging
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           repository: rabbitmq/rabbitmq-packaging
           ref: ${{ inputs.series_branch }}
@@ -461,13 +461,13 @@ jobs:
         run: |
           gpg --list-public-keys
       - name: Clone rabbitmq/rabbitmq-server
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           repository: rabbitmq/rabbitmq-server
           ref: ${{ inputs.series_branch }}
           path: rabbitmq-server
       - name: Clone rabbitmq/rabbitmq-packaging
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           repository: rabbitmq/rabbitmq-packaging
           ref: ${{ inputs.series_branch }}
