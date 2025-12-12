@@ -158,7 +158,7 @@ jobs:
           ref: ${{ inputs.series_branch }}
           path: rabbitmq-server
       - name: Fetch source tarball
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: rabbitmq-server-${{ env.FULL_VERSION }}-source-tarball
           path: ./rabbitmq-server/PACKAGES
@@ -217,7 +217,7 @@ jobs:
           ref: ${{ inputs.series_branch }}
           path: rabbitmq-server
       - name: Fetch source tarball
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: rabbitmq-server-${{ env.FULL_VERSION }}-source-tarball
           path: ./rabbitmq-server/PACKAGES
@@ -292,7 +292,7 @@ jobs:
           ref: ${{ inputs.series_branch }}
           path: rabbitmq-packaging
       - name: Fetch source tarball
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: rabbitmq-server-${{ env.FULL_VERSION }}-source-tarball
           path: ./rabbitmq-server/PACKAGES
@@ -383,7 +383,7 @@ jobs:
           ref: ${{ inputs.series_branch }}
           path: rabbitmq-packaging
       - name: Fetch source tarball
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: rabbitmq-server-${{ env.FULL_VERSION }}-source-tarball
           path: ./rabbitmq-server/PACKAGES
@@ -473,7 +473,7 @@ jobs:
           ref: ${{ inputs.series_branch }}
           path: rabbitmq-packaging
       - name: Fetch source tarball
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: rabbitmq-server-${{ env.FULL_VERSION }}-source-tarball
           path: ./rabbitmq-server/PACKAGES
@@ -587,32 +587,32 @@ jobs:
         run: |
           gpg --list-public-keys
       - name: Fetch source tarball
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: rabbitmq-server-${{ env.FULL_VERSION }}-source-tarball
           path: ./artifacts
       - name: Fetch generic binary package
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: rabbitmq-server-${{ env.FULL_VERSION }}-generic-unix
           path: ./artifacts
       - name: Fetch generic binary package built on the latest toolchain
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: rabbitmq-server-${{ env.FULL_VERSION }}-generic-unix-latest-toolchain
           path: ./artifacts
       - name: Fetch Debian package and build artifacts
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: rabbitmq-server-${{ env.FULL_VERSION }}-debian-package
           path: ./artifacts
       - name: Fetch RPM package
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: rabbitmq-server-${{ env.FULL_VERSION }}-rpm-package
           path: ./artifacts
       - name: Fetch Windows packages
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: rabbitmq-server-${{ env.FULL_VERSION }}-windows-package
           path: ./artifacts
@@ -697,12 +697,12 @@ jobs:
           echo "FULL_VERSION=${{ inputs.base_version }}"
           echo "FULL_VERSION=${{ inputs.base_version }}" >> $GITHUB_ENV
       - name: Fetch Debian package and build artifacts
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: rabbitmq-server-${{ env.FULL_VERSION }}-rpm-package
           path: ./artifacts
       - name: Fetch RPM package
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: rabbitmq-server-${{ env.FULL_VERSION }}-rpm-package
           path: ./artifacts
@@ -752,7 +752,7 @@ jobs:
           echo "FULL_VERSION=${{ inputs.base_version }}"
           echo "FULL_VERSION=${{ inputs.base_version }}" >> $GITHUB_ENV
       - name: Fetch Debian package and build artifacts
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: rabbitmq-server-${{ env.FULL_VERSION }}-debian-package
           path: ./artifacts
