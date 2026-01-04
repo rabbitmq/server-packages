@@ -709,8 +709,8 @@ jobs:
       - name: Publish RPM package for el/8
         uses: docker://rabbitmqdevenv/cloudsmith-action:latest
         with:
-          username: ${{ secrets.CLOUDSMITH_USERNAME }}
-          organization: ${{ secrets.CLOUDSMITH_ORGANIZATION }}
+          username: ${{ vars.CLOUDSMITH_USERNAME }}
+          organization: ${{ vars.CLOUDSMITH_ORGANIZATION }}
           repository: ${{ inputs.cloudsmith_repository }}
           api_key: ${{ secrets.CLOUDSMITH_API_KEY }}
           distribution: el/8
@@ -722,8 +722,8 @@ jobs:
       - name: Publish RPM package for el/9
         uses: docker://rabbitmqdevenv/cloudsmith-action:latest
         with:
-          username: ${{ secrets.CLOUDSMITH_USERNAME }}
-          organization: ${{ secrets.CLOUDSMITH_ORGANIZATION }}
+          username: ${{ vars.CLOUDSMITH_USERNAME }}
+          organization: ${{ vars.CLOUDSMITH_ORGANIZATION }}
           repository: ${{ inputs.cloudsmith_repository }}
           api_key: ${{ secrets.CLOUDSMITH_API_KEY }}
           distribution: el/9
@@ -759,8 +759,8 @@ jobs:
       - name: Publish Debian package for ubuntu/noble
         uses: docker://rabbitmqdevenv/cloudsmith-action:latest
         with:
-          username: ${{ secrets.CLOUDSMITH_USERNAME }}
-          organization: ${{ secrets.CLOUDSMITH_ORGANIZATION }}
+          username: ${{ vars.CLOUDSMITH_USERNAME }}
+          organization: ${{ vars.CLOUDSMITH_ORGANIZATION }}
           repository: ${{ inputs.cloudsmith_repository }}
           api_key: ${{ secrets.CLOUDSMITH_API_KEY }}
           distribution: ubuntu/noble
@@ -772,8 +772,8 @@ jobs:
       - name: Publish Debian package for ubuntu/jammy
         uses: docker://rabbitmqdevenv/cloudsmith-action:latest
         with:
-          username: ${{ secrets.CLOUDSMITH_USERNAME }}
-          organization: ${{ secrets.CLOUDSMITH_ORGANIZATION }}
+          username: ${{ vars.CLOUDSMITH_USERNAME }}
+          organization: ${{ vars.CLOUDSMITH_ORGANIZATION }}
           repository: ${{ inputs.cloudsmith_repository }}
           api_key: ${{ secrets.CLOUDSMITH_API_KEY }}
           distribution: ubuntu/jammy
@@ -785,8 +785,8 @@ jobs:
       - name: Publish Debian package for ubuntu/focal
         uses: docker://rabbitmqdevenv/cloudsmith-action:latest
         with:
-          username: ${{ secrets.CLOUDSMITH_USERNAME }}
-          organization: ${{ secrets.CLOUDSMITH_ORGANIZATION }}
+          username: ${{ vars.CLOUDSMITH_USERNAME }}
+          organization: ${{ vars.CLOUDSMITH_ORGANIZATION }}
           repository: ${{ inputs.cloudsmith_repository }}
           api_key: ${{ secrets.CLOUDSMITH_API_KEY }}
           distribution: ubuntu/focal
@@ -798,8 +798,8 @@ jobs:
       - name: Publish Debian package for debian/trixie
         uses: docker://rabbitmqdevenv/cloudsmith-action:latest
         with:
-          username: ${{ secrets.CLOUDSMITH_USERNAME }}
-          organization: ${{ secrets.CLOUDSMITH_ORGANIZATION }}
+          username: ${{ vars.CLOUDSMITH_USERNAME }}
+          organization: ${{ vars.CLOUDSMITH_ORGANIZATION }}
           repository: ${{ inputs.cloudsmith_repository }}
           api_key: ${{ secrets.CLOUDSMITH_API_KEY }}
           distribution: debian/trixie
@@ -811,8 +811,8 @@ jobs:
       - name: Publish Debian package for debian/bookworm
         uses: docker://rabbitmqdevenv/cloudsmith-action:latest
         with:
-          username: ${{ secrets.CLOUDSMITH_USERNAME }}
-          organization: ${{ secrets.CLOUDSMITH_ORGANIZATION }}
+          username: ${{ vars.CLOUDSMITH_USERNAME }}
+          organization: ${{ vars.CLOUDSMITH_ORGANIZATION }}
           repository: ${{ inputs.cloudsmith_repository }}
           api_key: ${{ secrets.CLOUDSMITH_API_KEY }}
           distribution: debian/bookworm
