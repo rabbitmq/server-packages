@@ -24,8 +24,7 @@ jobs:
       prerelease: true
       prerelease_kind: "rc"
       prerelease_identifier: ${{ inputs.prerelease_identifier }}
-      # used for development; reset to "rabbitmq/rabbitmq-server" before producing a release
-      release_repository: "rabbitmq/server-packages"
+      release_repository: "rabbitmq/rabbitmq-server"
       release_title: "RabbitMQ ${{ vars.SERVER_43_NEXT_PATCH_VERSION }}-rc.${{ inputs.prerelease_identifier }}"
       release_description: "RabbitMQ ${{ vars.SERVER_43_NEXT_PATCH_VERSION }}-rc.${{ inputs.prerelease_identifier }}"
       release_tag: "v${{ vars.SERVER_43_NEXT_PATCH_VERSION }}-rc.${{ inputs.prerelease_identifier }}"
