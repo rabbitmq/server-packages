@@ -7,7 +7,36 @@ permissions:
   contents: write
 
 jobs:
+  check-test-status:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Test Mixed with 3.13 workflow status
+        run: |
+          # Get the most recent run of the "Test Mixed with 3.13" workflow
+          WORKFLOW_STATUS=$(gh run list --repo rabbitmq/rabbitmq-server --workflow="Test Mixed with 3.13" --limit=1 --json status --jq '.[0].status')
+
+          echo "Most recent 'Test Mixed with 3.13' workflow status: $WORKFLOW_STATUS"
+
+          if [ "$WORKFLOW_STATUS" != "completed" ]; then
+            echo "::error::The most recent 'Test Mixed with 3.13' workflow has not completed successfully. Current status: $WORKFLOW_STATUS"
+            exit 1
+          fi
+
+          # Also check the conclusion to ensure it was successful
+          WORKFLOW_CONCLUSION=$(gh run list --repo rabbitmq/rabbitmq-server --workflow="Test Mixed with 3.13" --limit=1 --json conclusion --jq '.[0].conclusion')
+          echo "Most recent 'Test Mixed with 3.13' workflow conclusion: $WORKFLOW_CONCLUSION"
+
+          if [ "$WORKFLOW_CONCLUSION" != "success" ]; then
+            echo "::error::The most recent 'Test Mixed with 3.13' workflow did not complete successfully. Conclusion: $WORKFLOW_CONCLUSION"
+            exit 1
+          fi
+
+          echo "The most recent 'Test Mixed with 3.13' workflow completed successfully. Proceeding with release."
+        env:
+          GITHUB_TOKEN: ${{ secrets.MK_RELEASE_AUTOMATION_TOKEN }}
+
   release:
+    needs: check-test-status
     uses: ./.github/workflows/reusable-release-workflow.yml
     with:
       series_branch: "v4.2.x"
