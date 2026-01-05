@@ -697,7 +697,7 @@ jobs:
           echo "FULL_VERSION=${{ inputs.base_version }}"
           echo "FULL_VERSION=${{ inputs.base_version }}" >> $GITHUB_ENV
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Install Cloudsmith CLI
         if: ${{ inputs.publish_to_cloudsmith == true || inputs.publish_to_cloudsmith == 'true' }}
         run: pip install cloudsmith-cli
