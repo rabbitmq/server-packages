@@ -34,13 +34,13 @@ Only a certain number alpha releases are retained.
 
 ### Betas
 
-Beta releases are produced by manually triggering a [`4.1.x` Beta release workflow](https://github.com/rabbitmq/server-packages/actions/workflows/4.1.x-beta-release.yml).
+Beta releases are produced by manually triggering a [`4.3.x` Beta release workflow](https://github.com/rabbitmq/server-packages/actions/workflows/4.3.x-beta-release.yml).
 
 Beta build artifacts are signed.
 
 ### Release Candates
 
-RC releases are produced by manually triggering a [`4.1.x` RC release workflow](https://github.com/rabbitmq/server-packages/actions/workflows/4.1.x-rc-release.yml).
+RC releases are produced by manually triggering a [`4.3.x` RC release workflow](https://github.com/rabbitmq/server-packages/actions/workflows/4.3.x-rc-release.yml).
 
 RC build artifacts are signed. They are also published to Debian and RPM repositories, primarily
 as a way to test that code path before a final release is produced.
@@ -80,16 +80,16 @@ identifier (such as a UNIX timestamp) can be used.
 | Release type | Tag name pattern                 | Example              |
 |--------------|----------------------------------|----------------------|
 | alphas       | alphas.{timestamp}               | alphas.1731626175221 |
-| betas        | {base}-beta.{preview_identifier} | 4.1.0-beta.1         |
-| RCs          | {base}-rc.{preview_identifier}   | 4.1.0-rc.1           |
+| betas        | {base}-beta.{preview_identifier} | 4.3.0-beta.1         |
+| RCs          | {base}-rc.{preview_identifier}   | 4.3.0-rc.1           |
 | final        | {base}                           | 4.0.4                |
 
 All tags are created on the same branch as the `rabbitmq/rabbitmq-server` branch they
-check out before building the source tarball, e.g. `v4.1.x` or `v4.0.x` or `main`.
+check out before building the source tarball, e.g. `v4.3.x` or `v4.2.x` or `main`.
 
 For the preview releases (namely alphas) published to this repository, this means a branch
-in this repository. Therefore, when a new series is introduced (say, `main` becomes `4.2.x` because
-`4.1.x` now uses `v4.1.x`), a new branch with the same name as the `rabbitmq/rabbitmq-server` one
+in this repository. Therefore, when a new series is introduced (say, `main` becomes `4.3.x` because
+`4.2.x` now uses `v4.2.x`), a new branch with the same name as the `rabbitmq/rabbitmq-server` one
 must be created in this repository.
 
 
@@ -98,18 +98,18 @@ must be created in this repository.
 Team RabbitMQ works on two open source release series in parallel.
 Currently they are
 
- * 4.0.x on the `v4.0.x` branch
- * Future 4.1.x on the `v4.1.x` branch
+ * 4.2.x on the `v4.2.x` branch
+ * Future 4.3.x on the `main` branch
 
-`main` currently uses `4.2.0` for release series to differentiate itself from `v4.1.x`.
+`main` currently uses `4.3.0` for release series to differentiate itself from `v4.2.x`.
 
 With some exceptions covered below, for every series, there are workflow for producing alphas, betas, RCs and final releases.
 They follow a naming convention, for example
 
- * `4.0.x-alpha-release`
- * `4.2.x-beta-release`
- * `4.1.x-rc-release`
- * `4.0.x-ga-release`
+ * `4.3.x-alpha-release`
+ * `4.3.x-beta-release`
+ * `4.3.x-rc-release`
+ * `4.2.x-ga-release`
 
 and so on.
 
@@ -117,7 +117,7 @@ These workflow have certain differences but most of their jobs and steps are ver
 Therefore, they use a reusable release workflow with different inputs.
 
 Some workflows may be intentionally omitted, for example, betas are usually only produced for the release series
-in development (`4.1.0` at the moment of writing) and not the current generally available release.
+in development (`4.3.0` at the moment of writing) and not the current generally available release.
 
 ### Inputs
 
@@ -128,7 +128,7 @@ used during the build.
 
 #### Base Version
 
-Such as `4.1.0` or `4.0.4`. Usually this value will come from
+Such as `4.2.2` or `4.1.7`. Usually this value will come from
 a [repository-specific variable](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/store-information-in-variables#creating-configuration-variables-for-a-repository).
 
 This variable is meant to be updated as releases come out.
