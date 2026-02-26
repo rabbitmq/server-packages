@@ -126,7 +126,7 @@ jobs:
           cd rabbitmq-server
           gmake source-dist PROJECT_VERSION=${{ env.FULL_VERSION }}
       - name: Store source tarball
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: rabbitmq-server-${{ env.FULL_VERSION }}-source-tarball
           path: "rabbitmq-server/PACKAGES/*"
@@ -181,7 +181,7 @@ jobs:
                                      PROJECT_VERSION=${{ env.FULL_VERSION }}
           ls -lha ./PACKAGES
       - name: Store generic binary build
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: rabbitmq-server-${{ env.FULL_VERSION }}-generic-unix
           path: "rabbitmq-server/PACKAGES/rabbitmq-server-generic-unix-${{ env.FULL_VERSION }}.tar.xz"
@@ -240,7 +240,7 @@ jobs:
                                      PROJECT_VERSION=${{ env.FULL_VERSION }}
           ls -lha ./PACKAGES
       - name: Store generic binary package built on the latest toolchain
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: rabbitmq-server-${{ env.FULL_VERSION }}-generic-unix-latest-toolchain
           path: "rabbitmq-server/PACKAGES/rabbitmq-server-generic-unix-latest-toolchain-${{ env.FULL_VERSION }}.tar.xz"
@@ -325,7 +325,7 @@ jobs:
           cd ..
           ls -lha PACKAGES/
       - name: Store Debian package and build artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: rabbitmq-server-${{ env.FULL_VERSION }}-debian-package
           path: "PACKAGES/*"
@@ -414,7 +414,7 @@ jobs:
           cd ..
           ls -lha PACKAGES/
       - name: Store RPM package and build artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: rabbitmq-server-${{ env.FULL_VERSION }}-rpm-package
           path: "PACKAGES/*"
@@ -539,7 +539,7 @@ jobs:
           rm -f ${{ env.WORKAROUND_TEMP_DIR }}/code_signing.cert
           rm -f ${{ env.WORKAROUND_TEMP_DIR }}/code_signing.key
       - name: Store Windows binary package and installer
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           # singular for consistency, even though it contains two packages
           name: rabbitmq-server-${{ env.FULL_VERSION }}-windows-package
