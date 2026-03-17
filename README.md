@@ -19,7 +19,7 @@ Debian packages of Erlang and Elixir, as well as RPM packages of Erlang.
 For every merge or push to `rabbitmq/rabbitmq-server` that involves code changes, a new alpha release build, tag and preview
 release is produced and [published as a release](https://github.com/rabbitmq/server-packages/releases) in this repository.
 
-Alpha builds are identified using a shortened commit SHA, for example, `4.1.0-alpha.af0d8206`.
+Alpha builds are identified using a shortened commit SHA, for example, `4.2.0-alpha.af0d8206`.
 Tags for alphas use a timestamp-based naming scheme. This helps keeps all releases chronologically
 ordered on the [releases page](https://github.com/rabbitmq/server-packages/releases).
 
@@ -38,7 +38,7 @@ Beta releases are produced by manually triggering a [`4.3.x` Beta release workfl
 
 Beta build artifacts are signed.
 
-### Release Candates
+### Release Candidates
 
 RC releases are produced by manually triggering a [`4.3.x` RC release workflow](https://github.com/rabbitmq/server-packages/actions/workflows/4.3.x-rc-release.yml).
 
@@ -67,7 +67,7 @@ and Erlang 27 for the "latest toolchain" variation of the generic binary build.
 Version naming is generally consistent and follows a long-established RabbitMQ tag
 naming pattern. The only exception with this iteration of our release infrastructure
 is alpha releases: instead of monotonically incrementing integers used for betas, RCs,
-alphas use a short commit SHA, for example, `4.1.0-alpha.3e509c9f`.
+alphas use a short commit SHA, for example, `4.2.0-alpha.3e509c9f`.
 
 The commit SHA refers to a commit in the main RabbitMQ server repository.
 
@@ -82,14 +82,14 @@ identifier (such as a UNIX timestamp) can be used.
 | alphas       | alphas.{timestamp}               | alphas.1731626175221 |
 | betas        | {base}-beta.{preview_identifier} | 4.3.0-beta.1         |
 | RCs          | {base}-rc.{preview_identifier}   | 4.3.0-rc.1           |
-| final        | {base}                           | 4.0.4                |
+| final        | {base}                           | 4.2.1                |
 
 All tags are created on the same branch as the `rabbitmq/rabbitmq-server` branch they
 check out before building the source tarball, e.g. `v4.3.x` or `v4.2.x` or `main`.
 
 For the preview releases (namely alphas) published to this repository, this means a branch
-in this repository. Therefore, when a new series is introduced (say, `main` becomes `4.3.x` because
-`4.2.x` now uses `v4.2.x`), a new branch with the same name as the `rabbitmq/rabbitmq-server` one
+in this repository. Therefore, when a new series is introduced (say, `main` becomes `4.4.x` because
+`4.3.x` now uses `v4.3.x`), a new branch with the same name as the `rabbitmq/rabbitmq-server` one
 must be created in this repository.
 
 
@@ -98,10 +98,8 @@ must be created in this repository.
 Team RabbitMQ works on two open source release series in parallel.
 Currently they are
 
+ * 4.3.x on the `v4.3.x` branch
  * 4.2.x on the `v4.2.x` branch
- * Future 4.3.x on the `main` branch
-
-`main` currently uses `4.3.0` for release series to differentiate itself from `v4.2.x`.
 
 With some exceptions covered below, for every series, there are workflow for producing alphas, betas, RCs and final releases.
 They follow a naming convention, for example
@@ -109,7 +107,7 @@ They follow a naming convention, for example
  * `4.3.x-alpha-release`
  * `4.3.x-beta-release`
  * `4.3.x-rc-release`
- * `4.2.x-ga-release`
+ * `4.3.x-ga-release`
 
 and so on.
 
@@ -117,7 +115,7 @@ These workflow have certain differences but most of their jobs and steps are ver
 Therefore, they use a reusable release workflow with different inputs.
 
 Some workflows may be intentionally omitted, for example, betas are usually only produced for the release series
-in development (`4.3.0` at the moment of writing) and not the current generally available release.
+in development and not the current generally available release.
 
 ### Inputs
 
@@ -128,7 +126,7 @@ used during the build.
 
 #### Base Version
 
-Such as `4.2.2` or `4.1.7`. Usually this value will come from
+Such as `4.3.0` or `4.2.5`. Usually this value will come from
 a [repository-specific variable](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/store-information-in-variables#creating-configuration-variables-for-a-repository).
 
 This variable is meant to be updated as releases come out.
@@ -146,7 +144,7 @@ Produced GitHub releases will be marked accordingly.
 
 #### Prerelease Identifier
 
-This is `1` in `4.1.0-beta.1` or `d46e83277` in `4.1.0-alpha.d46e83277`.
+This is `1` in `4.2.0-beta.1` or `d46e83277` in `4.2.0-alpha.d46e83277`.
 
 This value can be any string but for `alpha` builds, it usually will be a short commit SHA
 in the RabbitMQ server repository, and for `beta` and `rc` builds, it will be a user-provided
@@ -177,7 +175,7 @@ For beta, RC and final releases, it makes more sense to use a release notes file
 
 What the Git tag should be used for this release?
 
-For alpha builds, a timestamp-based tag such as `alphas.41x.{timestamp}` will be generated to preserve
+For alpha builds, a timestamp-based tag such as `alphas.{timestamp}` will be generated to preserve
 more or less chronological ordering of releases even when they are built for multiple series.
 
 #### GPG Signing of Releases
