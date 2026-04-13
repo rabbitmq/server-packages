@@ -646,7 +646,7 @@ jobs:
       - name: Create a GitHub release with a pre-computed version
         id: create_gh_release
         if: ${{ !(inputs.prerelease_kind == 'alpha') }}
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           token: ${{ secrets.MK_RELEASE_AUTOMATION_TOKEN }}
           repository: ${{ inputs.release_repository || env.RELEASE_REPOSITORY }}
@@ -659,7 +659,7 @@ jobs:
       - name: Create a GitHub release with an alpha version
         id: create_alpha_gh_release
         if: ${{ (inputs.prerelease == 'true' || inputs.prerelease == true) && inputs.prerelease_kind == 'alpha' }}
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           token: ${{ secrets.MK_RELEASE_AUTOMATION_TOKEN }}
           repository: ${{ inputs.release_repository || env.RELEASE_REPOSITORY }}
