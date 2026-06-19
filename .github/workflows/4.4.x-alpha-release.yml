@@ -1,4 +1,4 @@
-name: "4.3.x alpha release"
+name: "4.4.x alpha release"
 on:
   repository_dispatch:
     types: [new_4.4.x_alpha]
@@ -20,7 +20,7 @@ jobs:
     with:
       series_branch: "main"
       # see https://github.com/rabbitmq/build-env-images
-      build_env_image: "rabbitmqdevenv/build-env-26.2"
+      build_env_image: "rabbitmqdevenv/build-env-27.3"
       latest_build_env_image: "rabbitmqdevenv/build-env-27.3"
       base_version: ${{ vars.SERVER_44_NEXT_PATCH_VERSION }}
       prerelease: true

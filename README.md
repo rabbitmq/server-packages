@@ -98,8 +98,8 @@ must be created in this repository.
 Team RabbitMQ works on two open source release series in parallel.
 Currently they are
 
+ * Future 4.4.x on the `main` branch
  * 4.3.x on the `v4.3.x` branch
- * 4.2.x on the `v4.2.x` branch
 
 With some exceptions covered below, for every series, there are workflow for producing alphas, betas, RCs and final releases.
 They follow a naming convention, for example
