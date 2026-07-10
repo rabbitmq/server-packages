@@ -58,8 +58,9 @@ tag structure.
 
 These workflows rely on a number of [OCI images built by the RabbitMQ Core Team](https://github.com/rabbitmq/build-env-images).
 
-At the moment all 4.x workflows use an Erlang 26 image for most artifacts
-and Erlang 27 for the "latest toolchain" variation of the generic binary build.
+At the moment all 4.x workflows use an Erlang 27.3 image for all artifacts,
+including the "latest toolchain" variation of the generic binary build. Erlang 26
+has reached its end of life and is no longer used.
 
 
 ## Version Naming
