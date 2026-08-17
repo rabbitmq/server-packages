@@ -6,6 +6,11 @@ on:
         type: string
         description: What branch of rabbitmq/rabbitmq-server and related repositories should be used?
         required: true
+      packaging_series_branch:
+        type: string
+        description: "What branch/tag of rabbitmq/rabbitmq-packaging should be used? Defaults to series_branch when not set"
+        required: false
+        default: ""
       build_env_image:
         type: string
         # see https://github.com/rabbitmq/build-env-images
@@ -89,7 +94,24 @@ env:
   RELEASE_REPOSITORY: "rabbitmq/server-packages"
 
 jobs:
+  check_release_tag:
+    runs-on: ubuntu-24.04
+    steps:
+      # Only GA tags are computed from the org-wide version variable ahead of time,
+      # so only GA runs can silently overwrite an existing release
+      - name: Fail if the release tag already exists
+        if: ${{ inputs.prerelease == false || inputs.prerelease == 'false' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.MK_RELEASE_AUTOMATION_TOKEN }}
+        run: |
+          REPO="${{ inputs.release_repository || env.RELEASE_REPOSITORY }}"
+          TAG="${{ inputs.release_tag }}"
+          if gh api "repos/$REPO/git/refs/tags/$TAG" >/dev/null 2>&1; then
+            echo "::error::Tag $TAG already exists in $REPO. This workflow does not rebuild an existing tag."
+            exit 1
+          fi
   source_tarball:
+    needs: [check_release_tag]
     runs-on: ubuntu-24.04
     container:
       image: ${{ inputs.build_env_image }}
@@ -289,7 +311,7 @@ jobs:
         uses: actions/checkout@v7
         with:
           repository: rabbitmq/rabbitmq-packaging
-          ref: ${{ inputs.series_branch }}
+          ref: ${{ inputs.packaging_series_branch != '' && inputs.packaging_series_branch || inputs.series_branch }}
           path: rabbitmq-packaging
       - name: Fetch source tarball
         uses: actions/download-artifact@v8
@@ -380,7 +402,7 @@ jobs:
         uses: actions/checkout@v7
         with:
           repository: rabbitmq/rabbitmq-packaging
-          ref: ${{ inputs.series_branch }}
+          ref: ${{ inputs.packaging_series_branch != '' && inputs.packaging_series_branch || inputs.series_branch }}
           path: rabbitmq-packaging
       - name: Fetch source tarball
         uses: actions/download-artifact@v8
@@ -470,7 +492,7 @@ jobs:
         uses: actions/checkout@v7
         with:
           repository: rabbitmq/rabbitmq-packaging
-          ref: ${{ inputs.series_branch }}
+          ref: ${{ inputs.packaging_series_branch != '' && inputs.packaging_series_branch || inputs.series_branch }}
           path: rabbitmq-packaging
       - name: Fetch source tarball
         uses: actions/download-artifact@v8
