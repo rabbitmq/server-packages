@@ -107,7 +107,7 @@ jobs:
           REPO="${{ inputs.release_repository || env.RELEASE_REPOSITORY }}"
           TAG="${{ inputs.release_tag }}"
           if gh api "repos/$REPO/git/refs/tags/$TAG" >/dev/null 2>&1; then
-            echo "::error::Tag $TAG already exists in $REPO. This workflow does not rebuild an existing tag."
+            echo "::error::Tag $TAG already exists in $REPO. This workflow will not rebuild and clobber an existing tag."
             exit 1
           fi
   source_tarball:
