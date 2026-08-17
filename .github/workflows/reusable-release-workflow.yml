@@ -6,19 +6,6 @@ on:
         type: string
         description: What branch of rabbitmq/rabbitmq-server and related repositories should be used?
         required: true
-      packaging_series_branch:
-        type: string
-        description: "What branch/tag of rabbitmq/rabbitmq-packaging should be used? Defaults to series_branch when not set"
-        required: false
-        default: ""
-      release_target_commitish:
-        type: string
-        # GitHub rejects changing target_commitish on a release whose tag already exists,
-        # so a re-run against an existing tag must reuse whatever target_commitish that
-        # release was originally created with
-        description: "target_commitish for the GitHub release. Defaults to series_branch when not set"
-        required: false
-        default: ""
       build_env_image:
         type: string
         # see https://github.com/rabbitmq/build-env-images
@@ -302,7 +289,7 @@ jobs:
         uses: actions/checkout@v7
         with:
           repository: rabbitmq/rabbitmq-packaging
-          ref: ${{ inputs.packaging_series_branch != '' && inputs.packaging_series_branch || inputs.series_branch }}
+          ref: ${{ inputs.series_branch }}
           path: rabbitmq-packaging
       - name: Fetch source tarball
         uses: actions/download-artifact@v8
@@ -393,7 +380,7 @@ jobs:
         uses: actions/checkout@v7
         with:
           repository: rabbitmq/rabbitmq-packaging
-          ref: ${{ inputs.packaging_series_branch != '' && inputs.packaging_series_branch || inputs.series_branch }}
+          ref: ${{ inputs.series_branch }}
           path: rabbitmq-packaging
       - name: Fetch source tarball
         uses: actions/download-artifact@v8
@@ -483,7 +470,7 @@ jobs:
         uses: actions/checkout@v7
         with:
           repository: rabbitmq/rabbitmq-packaging
-          ref: ${{ inputs.packaging_series_branch != '' && inputs.packaging_series_branch || inputs.series_branch }}
+          ref: ${{ inputs.series_branch }}
           path: rabbitmq-packaging
       - name: Fetch source tarball
         uses: actions/download-artifact@v8
@@ -664,7 +651,7 @@ jobs:
           token: ${{ secrets.MK_RELEASE_AUTOMATION_TOKEN }}
           repository: ${{ inputs.release_repository || env.RELEASE_REPOSITORY }}
           tag_name: ${{ env.TAG_NAME }}
-          target_commitish: ${{ inputs.release_target_commitish != '' && inputs.release_target_commitish || inputs.series_branch }}
+          target_commitish: ${{ inputs.series_branch }}
           name: ${{ inputs.release_title }}
           body: ${{ inputs.release_description }}
           prerelease: ${{ inputs.prerelease == true || inputs.prerelease == 'true' }}
@@ -677,7 +664,7 @@ jobs:
           token: ${{ secrets.MK_RELEASE_AUTOMATION_TOKEN }}
           repository: ${{ inputs.release_repository || env.RELEASE_REPOSITORY }}
           tag_name: ${{ env.TAG_NAME }}
-          target_commitish: ${{ inputs.release_target_commitish != '' && inputs.release_target_commitish || inputs.series_branch }}
+          target_commitish: ${{ inputs.series_branch }}
           name: ${{ inputs.release_title != '' && inputs.release_title || format('RabbitMQ {0} (from {1})', env.FULL_VERSION, env.TIMESTAMP_IN_SECONDS) }}
           body: |
             ${{ inputs.release_description != '' && inputs.release_description || format('Triggered manually, pushed at: {0}', env.TIMESTAMP_IN_SECONDS) }}

@@ -10,12 +10,7 @@ jobs:
   release:
     uses: ./.github/workflows/reusable-release-workflow.yml
     with:
-      series_branch: "v4.3.4"
-      # rabbitmq-packaging has no per-patch tags, only the series branch
-      packaging_series_branch: "v4.3.x"
-      # the existing v4.3.4 release's target_commitish is already "v4.3.x" and GitHub
-      # rejects changing target_commitish once a release's tag exists, so keep it as-is
-      release_target_commitish: "v4.3.x"
+      series_branch: "v4.3.x"
       # see https://github.com/rabbitmq/build-env-images
       build_env_image: "rabbitmqdevenv/build-env-27.3"
       latest_build_env_image: "rabbitmqdevenv/build-env-27.3"
