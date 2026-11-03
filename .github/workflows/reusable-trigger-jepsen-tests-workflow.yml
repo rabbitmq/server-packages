@@ -16,7 +16,7 @@ env:
 
 jobs:
   trigger_jepsen_tests:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
       - name: Get version and tag
         run: |
